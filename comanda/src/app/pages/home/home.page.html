@@ -1,0 +1,18 @@
+
+<ion-content [fullscreen]="true" style="--background: rgb(255, 196, 189)">
+  <div style="width: 90vw; margin: auto">
+    <p style="font-size: 13vw; color: rgb(255, 109, 92); font-weight: 700;">Bienvenido,</p>
+    <p style="font-size: 8vw; color: white; margin-top: -8%; font-weight: 600;">{{usuario.nombre}}</p>
+    <div style="text-align: center;" *ngIf="usuario.perfil == 'cliente'">
+      <ion-button style="--background: rgb(255, 109, 92); margin: 0 auto; margin-top: 30%; ">Comenzar</ion-button>
+    </div>
+    <div style="text-align: center;" *ngIf="usuario.perfil == 'empleado'">
+      <ion-button style="--background: rgb(255, 109, 92); margin: 0 auto; margin-top: 30%; ">Comenzar</ion-button>
+    </div>
+    <div style="text-align: center;" *ngIf="usuario.perfil == 'dueño' || usuario.perfil == 'supervisor'">
+      <ion-button style="--background: rgb(255, 109, 92); margin: 0 auto; margin-top: 30%; ">Comenzar</ion-button>
+    </div>
+  </div>
+
+  <ion-button routerLink="/alta-usuario">Test alta</ion-button>
+</ion-content>
