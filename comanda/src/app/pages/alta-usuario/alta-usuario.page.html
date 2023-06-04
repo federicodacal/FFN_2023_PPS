@@ -1,0 +1,104 @@
+<ion-content [fullscreen]="true" style="--background: rgb(255, 196, 189)">
+  <div style="text-align: center;">
+  <p style="font-size: 8vw; font-weight: 700; color: rgb(255, 109, 92);">Registrarse</p>
+  <ion-checkbox [(ngModel)]="esAnonimo" (ionChange)="checkearAnonimo()" style="font-size: 5vw; font-weight: 600; color: white">Registrarse como anónimo</ion-checkbox>
+  </div>
+  <form class="needs-validation" novalidate  [formGroup]="formUsuario" (ngSubmit)="darDeAlta()"
+  style="text-align: center; width: 90%; height: 90%; margin: 0 auto; left: 0; right: 0; margin-top:5%">
+  <br>
+  <!--+++++++++++++++++++++++ FOTO USER +++++++++++++++++++++++-->
+  <ion-button (click)="addNewToGallery()" fill="clear" style="width: 100px;height: 100px;"><img style="height: 70px;" src="../../assets/camara.png"></ion-button>
+
+  <img [src]="fotoUsr" style="position: absolute; margin: 0 auto; left: 0; right: 0; max-height: 120px; top: 18vh; border-radius: 10px;">  
+
+  <!--+++++++++++++++++++++++ INPUTS +++++++++++++++++++++++-->
+
+    <ion-item style="border-radius: 10px;" *ngIf="!esAnonimo">
+      <ion-input autocomplete="off" class="form-control" id="txtApellidos" label="Apellidos" labelPlacement="stacked" placeholder="Ingrese apellido/s" formControlName="apellidos" required name="apellidos"></ion-input>
+      <a style="text-align: center; color: rgb(219, 0, 0); font-weight: 700;" class="invalid"
+      *ngIf="formUsuario.controls.apellidos.errors?.required &&
+      formUsuario.controls.apellidos.touched">
+      El apellido es requerido
+    </a>
+    </ion-item>     
+    <br>
+    <ion-item style=" margin: 0 auto; border-radius: 10px;">
+      <ion-input autocomplete="off" class="form-control" id="txtNombres" label="Nombres" labelPlacement="stacked" placeholder="Ingrese nombre/s" formControlName="nombres" required name="nombres"></ion-input>
+      <a style="text-align: center; color: rgb(219, 0, 0); font-weight: 700;" class="invalid"
+      *ngIf="formUsuario.controls.nombres.errors?.required &&
+      formUsuario.controls.nombres.touched">
+      El nombre es requerido
+    </a>
+    </ion-item>
+    <br>
+    <div *ngIf="!esAnonimo">
+    <ion-item style=" margin: 0 auto; border-radius: 10px;">
+      <ion-input type="number" autocomplete="off" class="form-control" id="txtDNI"  label="DNI" labelPlacement="stacked" placeholder="Ingrese dni" formControlName="DNI" required name="DNI"></ion-input>
+      <a style="text-align: center; color: rgb(219, 0, 0); font-weight: 700;" class="invalid"
+      *ngIf="formUsuario.controls.DNI.errors?.required &&
+      formUsuario.controls.DNI.touched">
+      El DNI es requerido
+    </a>
+    <a style="text-align: center; color: rgb(219, 0, 0); font-weight: 700;" class="invalid"
+    *ngIf="formUsuario.controls.DNI.errors?.min &&
+    formUsuario.controls.DNI.touched">
+    Se requieren 8 caracteres
+  </a>
+  <a style="text-align: center; color: rgb(219, 0, 0); font-weight: 700;" class="invalid"
+  *ngIf="formUsuario.controls.DNI.errors?.max &&
+  formUsuario.controls.DNI.touched">
+  Se requieren 8 caracteres
+</a>
+    </ion-item>
+    <br>
+    <ion-item style=" margin: 0 auto; border-radius: 10px;">
+      <ion-input autocomplete="off" id="txtCorreo" label="correo" labelPlacement="stacked" placeholder="Ingrese correo" formControlName="correo" required name="correo"></ion-input>
+      <a style="text-align: center; color: rgb(219, 0, 0); font-weight: 700;" class="invalid"
+      *ngIf="formUsuario.controls.correo.errors?.required &&
+      formUsuario.controls.correo.touched">
+      El correo es requerido
+    </a>
+    </ion-item>
+
+    <br>
+    <ion-item style=" margin: 0 auto; border-radius: 10px;">
+      <ion-input type="password" autocomplete="off" class="form-control" id="txtClave"  label="Clave" labelPlacement="stacked" placeholder="Ingrese clave" formControlName="clave" required name="clave"></ion-input>
+      <a style="text-align: center; color: rgb(219, 0, 0); font-weight: 700;" class="invalid"
+      *ngIf="formUsuario.controls.clave.errors?.required &&
+      formUsuario.controls.clave.touched">
+      La clave es requerida
+    </a>
+    </ion-item>
+    <br>
+    
+
+    <ion-item style=" margin: 0 auto; border-radius: 10px;">
+      <ion-input type="password" autocomplete="off" class="form-control" id="txtRepetida" label="Repita la clave" labelPlacement="stacked" placeholder="Repita clave" formControlName="claveRepetida" required name="cRepetida"></ion-input>
+      <a style="text-align: center; color: rgb(219, 0, 0); font-weight: 700;" class="invalid"
+      *ngIf="formUsuario.controls.claveRepetida.errors?.diferentes &&
+      formUsuario.controls.claveRepetida.touched">
+      no son iguales
+    </a>
+        <a  style="text-align: center; color: rgb(219, 0, 0); font-weight: 700;" class="invalid"
+    *ngIf="formUsuario.controls.clave.errors?.required &&
+    formUsuario.controls.clave.touched">
+    Se requiere repetir clave
+  </a>
+    </ion-item>
+  </div>
+    
+    <br>
+    <ion-button [disabled]="formUsuario.invalid" type="submit" style="--background: rgb(255, 109, 92);; color: black; margin-top: 5%;">Añadir</ion-button>
+    <!--<ion-button (click)="agregar()" style="">Añadir</ion-button>-->
+    
+  </form>
+
+  <!--+++++++++++++++++++++++ ION FAB +++++++++++++++++++++++-->
+
+  <ion-fab vertical="top" horizontal="end" slot="fixed">
+    <ion-fab-button style="--background:rgb(255, 109, 92);" (click)="escanear()">
+      <ion-icon name="scan-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+    
+</ion-content>

@@ -1,7 +1,11 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> b261b067152d6c661d09dda5cc2014731573cafa
     repositories {
         google()
         mavenCentral()
