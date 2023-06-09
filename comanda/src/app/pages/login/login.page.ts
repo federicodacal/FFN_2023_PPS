@@ -43,7 +43,7 @@ export class LoginPage implements OnInit {
           else if(usr.data()?.perfil == 'supervisor' || usr.data()?.perfil == 'duenio')
           {
             this.presentToast('bottom', 'Ingreso exitoso!', 'success');
-            this.router.navigate(['/supervisar']);
+            this.router.navigate(['/home']); 
           }
         }
         else if(usr.data()?.estadoUsuario == 0)

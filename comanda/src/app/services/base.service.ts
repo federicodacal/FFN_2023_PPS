@@ -10,6 +10,12 @@ export class BaseService {
 
   constructor(private bd: Firestore){ }
 
+  getUsuariosGeneral(): Observable<any[]>{
+    const usuarioRef = collection(this.bd, "usuarios");
+
+    return collectionData(usuarioRef, {idField: 'uid'}) as Observable<any[]>;
+  }
+
   getUsuarios(perfil: string): Observable<any[]>{
     const usuarioRef = collection(this.bd, "usuarios");
     const q = query(usuarioRef, where('perfil', '==', perfil));

@@ -11,6 +11,7 @@ import { firstValueFrom } from 'rxjs';
 export class HomePage implements OnInit {
 
   usuario: any = {};
+  usuarios: any[] = [];
 
   constructor(private bd: BaseService, private auth: AuthService) {}
 
@@ -21,6 +22,12 @@ export class HomePage implements OnInit {
     .catch(error => console.log(error));
     console.log(this.auth.getUid()!);
     
+    Promise.all([
+      firstValueFrom( this.bd.getUsuariosGeneral())
+    ]).then(([usrs]) => {
+      this.usuarios = usrs;
+    });
+   
   }
 
   

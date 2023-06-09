@@ -1,18 +1,68 @@
 
 <ion-content [fullscreen]="true" style="--background: rgb(255, 196, 189)">
-  <div style="width: 90vw; margin: auto">
-    <p style="font-size: 13vw; color: rgb(255, 109, 92); font-weight: 700;">Bienvenido,</p>
-    <p style="font-size: 8vw; color: white; margin-top: -8%; font-weight: 600;">{{usuario.nombre}}</p>
-    <div style="text-align: center;" *ngIf="usuario.perfil == 'cliente'">
-      <ion-button style="--background: rgb(255, 109, 92); margin: 0 auto; margin-top: 30%; ">Comenzar</ion-button>
+  <!--+++++++++++++++++++++++++++++++++ CLIENTE +++++++++++++++++++++++++++++++++-->
+    <div *ngIf="usuario.perfil == 'cliente' || usuario.perfil == 'anonimo'" style="width: 90vw; margin: auto">
+      <p style="font-size: 13vw; color: rgb(255, 109, 92); font-weight: 700;">Bienvenido,</p>
+      <p style="font-size: 8vw; color: white; margin-top: -8%; font-weight: 600;">{{usuario.nombre}}</p>
+
+
+      <br>
+      <p style="font-size: 5vw; color: white; margin-top: -8%; font-weight: 600;">Escanee el QR para pedir una mesa.</p>
+
+      <ion-button style="--background: rgb(255, 109, 92); margin: 0 auto; margin-top: 10%; height: 50vh;"><img src="../../../assets/escaner-de-codigo-de-barras.png"></ion-button>
     </div>
-    <div style="text-align: center;" *ngIf="usuario.perfil == 'empleado'">
-      <ion-button style="--background: rgb(255, 109, 92); margin: 0 auto; margin-top: 30%; ">Comenzar</ion-button>
+
+    <div *ngIf="usuario.perfil == 'supervisor' || usuario.perfil == 'duenio'" style="">
+      <p style="font-size: 13vw; color: rgb(255, 109, 92); font-weight: 700; margin-left: 5%;">a,</p>
+      <p style="font-size: 8vw; color: white; margin-top: -8%; font-weight: 600; margin-left: 5%;">{{usuario.nombre}}</p>
+
+      <!--<div *ngFor="let u of usuarios" style="height: 10vh; width: 90%;border: 2px salmon solid; background-color: rgba(255, 255, 255, 0.486);">
+
+        <div *ngIf="u.estadoUsuario == 0">
+
+          <img style="max-height: 15vh;" [src]="u.foto">
+          <p style="font-size: 5vw; color: white; margin-top: -8%; font-weight: 600;"><b>Nombre:</b> {{u.nombre}} {{u.apellido}}</p><br>
+          <div *ngIf="u.perfil == 'cliente'"></div>
+          <p style="font-size: 5vw; color: white; margin-top: -8%; font-weight: 600;"><b>DNI:</b> {{u.dni}}</p>
+
+
+        </div>
+      </div>-->
+      <div style="width: 90%; margin: auto; text-align: center;">
+      <div  *ngFor="let u of usuarios; let i = index" style="margin-bottom: 5%;">
+        <div *ngIf="u.estadoUsuario == 0"  style="background-color: rgba(255, 255, 255, 0.575); color: salmon; border-radius: 10px; border: 2px salmon solid; width: 100%;">
+          
+          <img id="" style="position: relative; height: 70px;" [src]="u.foto">
+          <p style="font-size: 5vw; color: white;font-weight: 600;">{{u.nombre}}{{u.apellido}}</p>
+          <div *ngIf="u.perfil == 'cliente'">
+            <p style="font-size: 5vw; color: white; font-weight: 600;"><b>DNI:</b> {{u.dni}}</p>
+          </div>
+          <div style="display: flex; justify-content: right;">
+            <ion-button color="danger">Rechazar</ion-button>
+            <ion-button color="success" >Aceptar</ion-button>
+
+          </div>
+          <br>
+        <!-- <p style="color: black; border:solid 1px black;">{{imagesBd[i].perfil}}</p> -->
+          
+          
+        </div>
+      </div>
     </div>
-    <div style="text-align: center;" *ngIf="usuario.perfil == 'dueño' || usuario.perfil == 'supervisor'">
-      <ion-button style="--background: rgb(255, 109, 92); margin: 0 auto; margin-top: 30%; ">Comenzar</ion-button>
     </div>
-  </div>
+
+
+      <!--<div style="text-align: center;" *ngIf="usuario.perfil == 'cliente'">
+        <ion-button style="--background: rgb(255, 109, 92); margin: 0 auto; margin-top: 30%; ">Comenzar</ion-button>
+        <ion-button style="--background: rgb(255, 109, 92); margin: 0 auto; margin-top: 30%; ">Comenzar</ion-button>
+      </div>
+      <div style="text-align: center;" *ngIf="usuario.perfil == 'empleado'">
+        <ion-button style="--background: rgb(255, 109, 92); margin: 0 auto; margin-top: 30%; ">Comenzar</ion-button>
+      </div>
+      <div style="text-align: center;" *ngIf="usuario.perfil == 'dueño' || usuario.perfil == 'supervisor'">
+        <ion-button style="--background: rgb(255, 109, 92); margin: 0 auto; margin-top: 30%; ">Comenzar</ion-button>
+      </div>
+    </div>-->
 
   <ion-button routerLink="/alta-usuario">Test alta</ion-button>
 </ion-content>
