@@ -1,5 +1,18 @@
-
-
-<ion-content [fullscreen]="true">
-  <ion-button (click)="loginHarcodeado()">Log test</ion-button>
+<ion-content style="--background: rgb(255, 196, 189)">
+  <ion-card class="card-login">
+    <br>
+    <div class="inputs">
+      <ion-input style="--background: #ffff;" placeholder="Correo" name="txtMail" [(ngModel)]="email"></ion-input>
+    </div>
+    <br>
+    <div class="inputs">
+      <ion-input style="--background: #ffff" placeholder="Contraseña" name="txtPass" [(ngModel)]="pass"></ion-input>
+    </div> 
+    <br>
+    <ion-button class="boton-login" style="display: block" (click)="loguin()">Ingresar</ion-button>
+  </ion-card>
 </ion-content>
+
+<!-- <ion-content [fullscreen]="true">
+  <ion-button (click)="loginHarcodeado()">Log test</ion-button>
+</ion-content> -->

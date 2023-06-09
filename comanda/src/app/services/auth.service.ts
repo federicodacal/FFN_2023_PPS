@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from '@angular/fire/auth';
 import { callbackify } from 'util';
 
 @Injectable({
@@ -19,5 +19,10 @@ export class AuthService {
 
   register(email: string, clave: string){
     return createUserWithEmailAndPassword(this.auth, email, clave); 
+  }
+
+  logOut()
+  {
+    return signOut(this.auth);
   }
 }
