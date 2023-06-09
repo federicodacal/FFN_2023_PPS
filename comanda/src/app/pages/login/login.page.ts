@@ -71,4 +71,9 @@ export class LoginPage implements OnInit {
     await toast.present();
   }
 
+  cargarSupervisor() {
+    this.email = 'supervisor1@gmail.com';
+    this.pass = '123456';
+  }
+
 }
