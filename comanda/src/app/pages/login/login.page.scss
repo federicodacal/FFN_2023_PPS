@@ -1,0 +1,27 @@
+.card-login{
+    margin: auto; 
+    margin-top: 60%;
+    max-width: 90%;
+    padding-top:5%;
+    padding-bottom: 5%;
+    border-radius: 12px;
+    border: 5px solid rgb(250, 142, 130);
+    --background: rgba(252, 162, 152, 0.7);
+}
+
+.boton-login{
+    --ion-color-primary: rgb(255, 109, 92);
+    color: black;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.inputs{
+    margin-left: 5%;
+    margin-right: 5%;
+    border-radius: 12px;
+    border: 5px solid rgb(250, 142, 130);
+    background-color: #ffff;
+    padding-left: 5px;
+    padding-right: 5px;
+}
