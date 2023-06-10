@@ -1,19 +1,46 @@
 <ion-content style="--background: rgb(255, 196, 189)">
-  <ion-card class="card-login">
-    <br>
-    <div class="inputs">
-      <ion-input style="--background: #ffff;" placeholder="Correo" name="txtMail" [(ngModel)]="email"></ion-input>
-    </div>
-    <br>
-    <div class="inputs">
-      <ion-input style="--background: #ffff" placeholder="Contraseña" name="txtPass" [(ngModel)]="pass"></ion-input>
-    </div> 
-    <br>
-    <ion-button class="boton-login" style="display: block" (click)="loguin()">Ingresar</ion-button>
-  </ion-card>
-  <ion-button class="boton-login" color="tertiary" style="display: block" (click)="cargarSupervisor()">Cargar Supervisor</ion-button>
-</ion-content>
+  <!---------------------------LOGIN USUARIOS COMUNES------------------------------->
+  <div *ngIf="loginAnonimo == false">
+    <ion-card class="card-login">
+      <br>
+      <div class="inputs">
+        <ion-input style="--background: #ffff;" placeholder="Correo" name="txtMail" [(ngModel)]="email"></ion-input>
+      </div>
+      <br>
+      <div class="inputs">
+        <ion-input type="password" style="--background: #ffff" placeholder="Contraseña" name="txtPass" [(ngModel)]="pass"></ion-input>
+      </div> 
+      <br>
+      <ion-button class="boton-login" style="display: block" (click)="login()">Ingresar</ion-button>
+      <div class="anonimo" (click)="loginAnonimo = true">Ingresar como anonimo.</div>
+    </ion-card>
 
-<!-- <ion-content [fullscreen]="true">
-  <ion-button (click)="loginHarcodeado()">Log test</ion-button>
-</ion-content> -->
+    <div class="accesoRapido">
+      <ion-button class="boton-rapido" (click)="accesoRapido('cliente')">Cliente</ion-button>
+      <ion-button class="boton-rapido" (click)="accesoRapido('empleado')">Empleado</ion-button>
+      <ion-button class="boton-rapido" (click)="accesoRapido('supervisor')">Supervisor</ion-button>
+    </div>
+  </div>
+
+    <!---------------------------LOGIN ANONIMOS------------------------------->
+  <div *ngIf="loginAnonimo == true">
+    <ion-card class="card-login-anon">
+      <br>
+      <div class="inputs">
+        <ion-input style="--background: #ffff;" placeholder="Nombre" name="txtNombre" [(ngModel)]="nombreAnonimo"></ion-input>
+      </div>
+      <br>
+      <ion-button class="boton-login" style="display: block" (click)="loginAnon()">Ingresar</ion-button>
+      <div class="anonimo" (click)="loginAnonimo = false">Volver al ingreso normal.</div>
+    </ion-card>
+
+    <div class="accesoRapido">
+      <ion-button class="boton-rapido" (click)="accesoRapido('anonimo')">Anonimo</ion-button>
+    </div>
+  </div>
+
+<!---------------------------SPINNER------------------------------->
+  <div class="spinner">
+    <ion-spinner style="transform: scale(2); color: white" *ngIf="show" name="crescent"></ion-spinner>
+  </div>
+</ion-content>
