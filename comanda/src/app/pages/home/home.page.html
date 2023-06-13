@@ -1,5 +1,6 @@
 
 <ion-content [fullscreen]="true" style="--background: rgb(255, 196, 189)">
+
   <!--+++++++++++++++++++++++++++++++++ CLIENTE +++++++++++++++++++++++++++++++++-->
     <div *ngIf="usuario.perfil == 'cliente' || usuario.perfil == 'anonimo'" style="width: 90vw; margin: auto">
       <p style="font-size: 13vw; color: rgb(255, 109, 92); font-weight: 700;">Bienvenido,</p>
@@ -9,9 +10,10 @@
       <br>
       <p style="font-size: 5vw; color: white; margin-top: -8%; font-weight: 600;">Escanee el QR para pedir una mesa.</p>
 
-      <ion-button style="--background: rgb(255, 109, 92); margin: 0 auto; margin-top: 10%; height: 50vh;"><img src="../../../assets/escaner-de-codigo-de-barras.png"></ion-button>
+      <ion-button style="--background: rgb(255, 109, 92); margin: 0 auto; margin-top: 10%; height: 50vh;"><img src="../../../assets/escaner-de-codigo-de-barras.png" (click)="scanQRMesa()"></ion-button>
     </div>
 
+    <!--+++++++++++++++++++++++++++++++++ SUPERVISOR +++++++++++++++++++++++++++++++++-->
     <div *ngIf="usuario.perfil == 'supervisor' || usuario.perfil == 'duenio'">
       <p style="font-size: 13vw; color: rgb(255, 109, 92); font-weight: 700; margin-left: 5%;">a,</p>
       <p style="font-size: 8vw; color: white; margin-top: -8%; font-weight: 600; margin-left: 5%;">{{usuario.nombre}}</p>
@@ -47,7 +49,8 @@
           
         </div>
       </div>
-    </div>
+      
+      </div>
     </div>
 
 
@@ -62,6 +65,45 @@
         <ion-button style="--background: rgb(255, 109, 92); margin: 0 auto; margin-top: 30%; ">Comenzar</ion-button>
       </div>
     </div>-->
+
+    <!--+++++++++++++++++++++++++++++++++ METRE +++++++++++++++++++++++++++++++++-->
+
+    <div *ngIf="usuario.perfil == 'metre'">
+      <p style="font-size: 13vw; color: rgb(255, 109, 92); font-weight: 700; margin-left: 5%;">a,</p>
+      <p style="font-size: 8vw; color: white; margin-top: -8%; font-weight: 600; margin-left: 5%;">{{usuario.nombre}}</p>
+
+      <div style="width: 90%; margin: auto; text-align: center;">
+      <div  *ngFor="let u of usuarios; let i = index" style="margin-bottom: 5%;">
+        <div *ngIf="u.estadoUsuario == 1 && u.mesa == 0"  style="background-color: rgba(255, 255, 255, 0.575); color: salmon; border-radius: 10px; border: 2px salmon solid; width: 100%;">
+          
+          <img id="" style="position: relative; height: 70px;" [src]="u.foto">
+          <p style="font-size: 5vw; color: white;font-weight: 600;">{{u.nombre}}{{u.apellido}}</p>
+          <div *ngIf="u.perfil == 'cliente'">
+            <p style="font-size: 5vw; color: white; font-weight: 600;"><b>DNI:</b> {{u.dni}}</p>
+          </div>
+          <div style="display: flex; justify-content: right;">
+            <ion-button color="danger" (click)="rechazarPedidoMesa(u)">Rechazar</ion-button>
+          </div>
+
+          <ion-list style="color: salmon; border-radius: 10px; border: 2px salmon solid; width: 100%;">
+            <ion-item>
+              <ion-select (ionChange)="manejadorElegirMesa($event, u)" aria-label="mesa" interface="action-sheet" placeholder="Elegir mesa">
+                <!--ion-select-option *ngFor="let mesa of mesas" [value]="mesa.numero">{{mesa.numero}}</ion-select-option-->
+                <div *ngFor="let mesa of mesas">
+                  <ion-select-option *ngIf="mesa.libre===true" [value]="mesa">{{mesa.numero}}</ion-select-option>
+                </div>
+
+              </ion-select>
+            </ion-item>
+          </ion-list>
+
+          <br>          
+          
+        </div>
+      </div>
+      </div>
+
+    </div>
 
   <ion-button routerLink="/alta-usuario">Test alta</ion-button>
   <ion-button (click)="perfil()">PRUEBA</ion-button>
