@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, collectionData, where, query, doc, getDoc, addDoc, setDoc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, where, query, doc, getDoc, addDoc, setDoc, updateDoc, docData } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Cliente } from '../clases/cliente';
 
@@ -22,7 +22,7 @@ export class BaseService {
     return collectionData(q, {idField: 'uid'}) as Observable<any[]>;
   }
  
-  getUsuario(uid: string){ 
+  getUsuario(uid: string) { 
     const docRef = doc(this.bd, "usuarios", uid);
     return getDoc(docRef);
   }
@@ -34,11 +34,26 @@ export class BaseService {
 
   updateEstadoUsario(usr:any) {
     const usrRef = doc(this.bd, `usuarios/${usr.uid}`);
-    return updateDoc(usrRef, {estadoUsuario:usr.estadoUsuario})
+    return updateDoc(usrRef, {estadoUsuario:usr.estadoUsuario});
+  }
+
+  updateMesaUsuario(usr:any) {
+    const usrRef = doc(this.bd, `usuarios/${usr.uid}`);
+    return updateDoc(usrRef, {mesa:usr.mesa});
   }
 
   addAnonimo(usr: any){
     const usrRef = collection(this.bd, 'usuarios');
     return addDoc(usrRef, usr);   
+  }
+
+  getMesas(): Observable<any[]> {
+    const usuarioRef = collection(this.bd, "mesas");
+    return collectionData(usuarioRef, {idField: 'uid'}) as Observable<any[]>;
+  }
+
+  updateEstadoMesa(mesa:any) {
+    const usrRef = doc(this.bd, `mesas/${mesa.uid}`);
+    return updateDoc(usrRef, {libre:mesa.libre});
   }
 }

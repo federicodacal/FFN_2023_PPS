@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { BaseService } from '../../services/base.service';
 import { AuthService } from '../../services/auth.service';
-import { firstValueFrom } from 'rxjs';
+import { Subscription, firstValueFrom } from 'rxjs';
 import { MailService } from 'src/app/services/mail.service';
 import { Auth } from '@angular/fire/auth';
 import { UserActivoService } from 'src/app/services/user-activo.service';
+import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -15,8 +17,9 @@ export class HomePage implements OnInit {
 
   usuario: any = {};
   usuarios: any[] = [];
+  mesas: any[] = [];
 
-  constructor(private userActivo : UserActivoService, private bd: BaseService, private auth: AuthService, private mail:MailService, private authFire : Auth) {}
+  constructor(private userActivo : UserActivoService, private bd: BaseService, private auth: AuthService, private mail:MailService, private authFire : Auth, private barcodeScanner: BarcodeScanner, private toastController:ToastController) {}
 
   ngOnInit(){
     
@@ -34,10 +37,28 @@ export class HomePage implements OnInit {
     {
       console.log(this.auth.getUid()!);
       this.bd.getUsuario(this.auth.getUid()!)
-      .then(response => this.usuario =  response.data())
-      .catch(error => console.log(error));
+        .then((response) => {
+          this.usuario = response.data();
+          this.usuario.uid = this.auth.getUid();
+
+          // Si es metre cargo mesas
+          if(this.usuario.perfil == 'metre') {
+            this.bd.getMesas().subscribe((res) => {
+              this.mesas = res;
+            });
+          }
+        })
+        .catch(error => console.log(error));
       console.log(this.auth.getUid()!);
       console.log(this.authFire.currentUser);
+
+      // Para Debug QR Mesa
+      /*
+      setTimeout(() => {
+        this.presentToast("middle", `Usuario - ${this.usuario.correo} - UID: ${this.usuario.uid} - Espera mesa: ${this.usuario.esperaMesa}`, 'warning', 2000);
+        console.log('usuario', this.usuario);
+      }, 1000);
+      */
     }
     else
     {
@@ -70,5 +91,63 @@ export class HomePage implements OnInit {
   {
     console.log(this.usuario);
     console.log(this.authFire.currentUser);
+  }
+
+  /************************ QR MESA *************************/
+  async scanQRMesa() {
+    let data = "";
+      this.barcodeScanner.scan().then(barcodeData => {
+        data = barcodeData.text;
+
+        console.log('usuario bd', this.usuario);
+      
+        if(data == 'listadoDeEsperaMesa') {
+          this.usuario.mesa = 0;
+          this.bd.updateMesaUsuario(this.usuario);
+          this.presentToast("middle", 'Pronto se te asignará una mesa. Gracias!', 'success', 2000);
+
+          /*
+          setTimeout(() => {
+            this.presentToast("middle", `Usuario - ${this.usuario.correo} - Espera mesa: ${this.usuario.esperaMesa}`, 'warning', 2000)
+          }, 3000);
+          */
+        }
+      });
+  }
+
+  /************************* METRE ASIGNA MESA *********************/
+  rechazarPedidoMesa(cliente:any) {
+    console.log(cliente);
+    if(cliente != null) {
+      cliente.mesa = -1;
+      this.bd.updateMesaUsuario(cliente);
+    } 
+  }
+
+  manejadorElegirMesa($event:any, cliente:any) {
+    let mesa = $event.target.value;
+    console.log('cliente', cliente);
+    console.log('mesa', mesa);
+
+    if($event != null && cliente != null) {
+      cliente.mesa = mesa.numero;
+      this.bd.updateMesaUsuario(cliente);
+
+      mesa.libre = false;
+      this.bd.updateEstadoMesa(mesa);
+
+      this.presentToast('middle', `Mesa ${mesa.numero} asignada a cliente: ${cliente.correo}`, 'success');
+    }
+  }
+
+  async presentToast(position: 'top' | 'middle' | 'bottom', msj:string, color: string, duration:number=1000) {
+    const toast = await this.toastController.create({
+      message: msj,
+      duration: duration,
+      position: position,
+      color: color
+    });
+
+    await toast.present();
   }
 }

@@ -58,6 +58,10 @@ export class LoginPage implements OnInit {
               this.presentToast('bottom', 'Ingreso exitoso!', 'success');
               this.router.navigate(['/home']); 
             }
+            else if(usr.data()?.perfil == 'metre') { 
+              this.presentToast('bottom', 'Ingreso exitoso!', 'success');
+              this.router.navigate(['/home']); 
+            }
           }
           else if(usr.data()?.estadoUsuario == 0)
           {
@@ -116,7 +120,7 @@ export class LoginPage implements OnInit {
         this.email = 'f@gmail.com'
         this.pass = '123456'
       break;
-      case 'empleado':
+      case 'metre':
         this.email = 'testfoto@gmail.com'
         this.pass = '123456'
       break;
@@ -124,6 +128,9 @@ export class LoginPage implements OnInit {
         this.email = 'supervisor1@gmail.com'
         this.pass = '123456'
       break;
+      case 'mozo':
+        //
+        break;
       case 'anonimo':
         this.nombreAnonimo = 'testAnonimo'
       break;
