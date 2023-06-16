@@ -1,21 +1,63 @@
 
-<ion-content [fullscreen]="true" style="--background: rgb(255, 196, 189)">
+<ion-content [fullscreen]="true" style="--background: rgb(255, 196, 189);">
 
   <!--+++++++++++++++++++++++++++++++++ CLIENTE +++++++++++++++++++++++++++++++++-->
+  <div *ngIf="pantalla == 'inicio'">
     <div *ngIf="usuario.perfil == 'cliente' || usuario.perfil == 'anonimo'" style="width: 90vw; margin: auto">
       <p style="font-size: 13vw; color: rgb(255, 109, 92); font-weight: 700;">Bienvenido,</p>
       <p style="font-size: 8vw; color: white; margin-top: -8%; font-weight: 600;">{{usuario.nombre}}</p>
 
 
       <br>
-      <p style="font-size: 5vw; color: white; margin-top: -8%; font-weight: 600;">Escanee el QR para pedir una mesa.</p>
+      <p *ngIf="usuario.mesa == -1" style="font-size: 5vw; color: white; margin-top: -8%; font-weight: 600;">Escanee el QR para pedir una mesa.</p>
+      <p *ngIf="usuario.mesa != -1" style="font-size: 5vw; color: white; margin-top: -8%; font-weight: 600;">Tiene una mesa asignada. Escanee el QR para ver el menú.</p>
+      <div style="text-align: center;">
+        <ion-button style="--background: rgb(255, 109, 92); margin: auto; margin-top: 10%; height: 40vh; width: 80vw;"><img src="../../../assets/escaner-de-codigo-de-barras.png" (click)="scanQRMesa()"></ion-button>
+        <ion-button (click)="pantalla = 'consulta'" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Consultar al mozo</ion-button>
 
-      <ion-button style="--background: rgb(255, 109, 92); margin: 0 auto; margin-top: 10%; height: 50vh;"><img src="../../../assets/escaner-de-codigo-de-barras.png" (click)="scanQRMesa()"></ion-button>
+      </div>
+      
+    </div>
+  </div>
+  <div *ngIf="usuario.perfil == 'mozo'">
+    <ion-button (click)="pantalla = 'verConsultas';" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Ver consultas</ion-button>
+
+  </div>
+  <div *ngIf="pantalla == 'consulta'">
+    <div style="height: 5vh; width: 100%;">
+      <ion-button *ngIf="usuario.perfil != 'mozo'" (click)="pantalla = 'inicio'" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Volver</ion-button>
+    </div>
+    <div *ngIf="usuario.perfil == 'cliente' || usuario.perfil == 'anonimo'">
+      <div style="margin-top: 4%;">
+        <app-consulta [usuarioRecibido]="undefined"></app-consulta>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="usuario.perfil == 'mozo'">
+
+    <div *ngIf="pantalla == 'verConsultas'" style="">
+
+    <div (click)="consultaSeleccionada = c; pantalla = 'consulta'" *ngFor="let c of consultas | async" style="margin-top: 4%; border-radius: 10px; border: 2px solid salmon; background-color: white;
+      margin: auto;width: 80%; padding: 3%; ">
+      {{c.nombre}}<br>
+      "{{c.ultimoMsj}}"<br><br>
+      <div style="text-align: right;">
+        <label>{{c.fecha | date: 'dd/MM/yy, hh:mm'}}</label>
+      </div>
     </div>
 
+  </div>
+  <div *ngIf="pantalla == 'consulta'">
+    <app-consulta [usuarioRecibido]="consultaSeleccionada"></app-consulta>
+
+  </div>
+
+  </div>
+
+    <!--<button routerLink="/cliente-consultar">Test consulta</button>-->
     <!--+++++++++++++++++++++++++++++++++ SUPERVISOR +++++++++++++++++++++++++++++++++-->
     <div *ngIf="usuario.perfil == 'supervisor' || usuario.perfil == 'duenio'">
-      <p style="font-size: 13vw; color: rgb(255, 109, 92); font-weight: 700; margin-left: 5%;">a,</p>
+      <p style="font-size: 13vw; color: rgb(255, 109, 92); font-weight: 700; margin-left: 5%;">Bienvenido</p>
       <p style="font-size: 8vw; color: white; margin-top: -8%; font-weight: 600; margin-left: 5%;">{{usuario.nombre}}</p>
 
       <!--<div *ngFor="let u of usuarios" style="height: 10vh; width: 90%;border: 2px salmon solid; background-color: rgba(255, 255, 255, 0.486);">
@@ -105,6 +147,6 @@
 
     </div>
 
-  <ion-button routerLink="/alta-usuario">Test alta</ion-button>
-  <ion-button (click)="perfil()">PRUEBA</ion-button>
+  <!--<ion-button routerLink="/alta-usuario">Test alta</ion-button>
+  <ion-button (click)="perfil()">PRUEBA</ion-button>-->
 </ion-content>

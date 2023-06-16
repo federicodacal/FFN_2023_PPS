@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BaseService } from '../../services/base.service';
 import { AuthService } from '../../services/auth.service';
-import { Subscription, firstValueFrom } from 'rxjs';
+import { Subscription, firstValueFrom, subscribeOn } from 'rxjs';
 import { MailService } from 'src/app/services/mail.service';
 import { Auth } from '@angular/fire/auth';
 import { UserActivoService } from 'src/app/services/user-activo.service';
@@ -15,9 +15,15 @@ import { ToastController } from '@ionic/angular';
 })
 export class HomePage implements OnInit {
 
+  pantalla = 'inicio';
+
   usuario: any = {};
   usuarios: any[] = [];
   mesas: any[] = [];
+
+  consultaSeleccionada: any = {};
+
+  consultas: any;
 
   constructor(private userActivo : UserActivoService, private bd: BaseService, private auth: AuthService, private mail:MailService, private authFire : Auth, private barcodeScanner: BarcodeScanner, private toastController:ToastController) {}
 
@@ -31,7 +37,44 @@ export class HomePage implements OnInit {
     // });
 
     //Con esta anduvo att:Nico
-    this.bd.getUsuariosGeneral().subscribe(data => this.usuarios = data);
+    this.consultas = this.bd.getDatosConsulta()/*.subscribe((data) =>{*/
+      /*console.log(data);
+      this.consultas = data; */
+     
+     /* console.log(data);
+      data.forEach(d => {
+        this.bd.getConsulta(d.id).subscribe((res)=>{
+          if(res.length != 0){
+            res[0].nombre = d.nombre;
+
+            console.log(res[0])
+            this.consultas.push(res[0]);
+          }
+          
+        })
+      });
+     
+    })*/
+
+
+    this.bd.getUsuariosGeneral().subscribe((data) => {
+      this.usuarios = data  
+     
+      
+     
+     
+     
+     /* data.forEach(usr => {
+        this.bd.getConsulta(usr.uid).subscribe((res)=>{
+          if(res.length != 0){
+            this.consultas.push(res[0]);
+
+          }
+          
+        })
+        
+      });*/
+    });
 
     if(this.userActivo.uActivo == "")
     {
@@ -47,6 +90,7 @@ export class HomePage implements OnInit {
               this.mesas = res;
             });
           }
+         
         })
         .catch(error => console.log(error));
       console.log(this.auth.getUid()!);
@@ -150,4 +194,15 @@ export class HomePage implements OnInit {
 
     await toast.present();
   }
+
+  verListado(){
+
+  }
+
+
+  consultar(){
+    this.pantalla = 'consulta';
+    
+  }
+  
 }

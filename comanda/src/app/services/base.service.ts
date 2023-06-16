@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, collectionData, where, query, doc, getDoc, addDoc, setDoc, updateDoc, docData } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, where, query, doc, getDoc, addDoc, setDoc, updateDoc, docData, orderBy } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Cliente } from '../clases/cliente';
 
@@ -55,5 +55,57 @@ export class BaseService {
   updateEstadoMesa(mesa:any) {
     const usrRef = doc(this.bd, `mesas/${mesa.uid}`);
     return updateDoc(usrRef, {libre:mesa.libre});
+  }
+
+
+
+  //PRODUCTOS
+  getProductos(){
+    const prodRef = collection(this.bd, 'productos');
+    return collectionData(prodRef, {idField: 'id'});
+  }
+
+
+
+  //CONSULTA
+    crearConsulta(uidUsuario:any, usuario: any) {
+    
+    const consRef = doc(this.bd, 'consultas', uidUsuario);
+
+    
+    return setDoc(consRef, usuario, {merge: true});
+  }
+
+  comprobarSiExisteConsulta(uidUsuario:any){
+    const consRef = doc(this.bd, 'consultas', uidUsuario);
+    const a = doc(this.bd, 'consultas', 'xd');
+    return getDoc(consRef )
+
+  }
+
+  addConsulta(consultaId: string, texto: string, sender: string = consultaId){
+    const ref = collection(this.bd, 'consultas', consultaId, 'pregunta');
+    const pregRef = doc(this.bd, 'consultas', consultaId);
+    setDoc(pregRef,{
+      ultimoMsj: texto,
+      fecha: Date.now()
+    }, {merge: true})
+    return addDoc(ref, {
+      horaEnvio: Date.now(),
+      senderId: sender,
+      texto: texto
+    })
+  }
+
+  getConsulta(chatId: string) {
+    const consRef = collection(this.bd, 'consultas', chatId, 'pregunta');
+    const q = query(consRef, orderBy('horaEnvio', 'asc'))
+    return collectionData(q) as Observable<any[]>;
+  }
+
+  getDatosConsulta(){
+    const consRef = collection(this.bd, 'consultas');
+    const q = query(consRef, orderBy('fecha', 'desc'));
+    return collectionData(q, {idField: 'id'}) as Observable<any[]>;
   }
 }

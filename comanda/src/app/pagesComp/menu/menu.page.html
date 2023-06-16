@@ -1,0 +1,18 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>menu</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" style="--background: rgba(0, 0, 0, 0.400);">
+  <div *ngFor="let p of productos" style="background-color: rgb(255, 218, 213); text-align: center;
+  width: 95vw; margin: auto; margin-top: 5%; border: salmon 2px solid; border-radius: 10px;">
+    <img style="max-width: 29vw; max-height: 30vh; margin-left: 2%;" [src]="p.foto" >
+    <img style="max-width: 29vw; max-height: 30vh;  margin-left: 2%;;" [src]="p.foto2" >
+    <img style="max-width: 29vw; max-height: 30vh;  margin-left: 2%;" [src]="p.foto3" ><br>
+    <label style="font-size: 7vw; font-weight: 600; color: salmon">{{p.descripcion}}</label><br>
+    <label style="font-size: 7vw; font-weight: 600; color: salmon">${{p.precio}}</label><br>
+    <ion-button style="--background: rgb(255, 109, 92); margin-top: 3%;" >Agregar al pedido</ion-button>
+    
+  </div>
+</ion-content>

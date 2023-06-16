@@ -142,6 +142,7 @@ export class AltaUsuarioPage implements OnInit {
               foto: this.fotoUsr
             }
           }
+          usuario.mesa = -1;
           usuario.estadoUsuario = 0;
           
         break;

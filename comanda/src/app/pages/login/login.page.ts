@@ -48,20 +48,9 @@ export class LoginPage implements OnInit {
         .then((usr)=>{
           if(usr.data()?.estadoUsuario == 1)
           {
-            if(usr.data()?.perfil == 'cliente' || usr.data()?.perfil == 'anonimo')
-            {
+
               this.presentToast('bottom', 'Ingreso exitoso!', 'success');
               this.router.navigate(['/home']);
-            }
-            else if(usr.data()?.perfil == 'supervisor' || usr.data()?.perfil == 'duenio')
-            {
-              this.presentToast('bottom', 'Ingreso exitoso!', 'success');
-              this.router.navigate(['/home']); 
-            }
-            else if(usr.data()?.perfil == 'metre') { 
-              this.presentToast('bottom', 'Ingreso exitoso!', 'success');
-              this.router.navigate(['/home']); 
-            }
           }
           else if(usr.data()?.estadoUsuario == 0)
           {
