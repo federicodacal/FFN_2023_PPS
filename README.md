@@ -44,6 +44,8 @@
 * Modificaciones en page Login 
 * Implementación del nuevo Login con 'Cliente anónimo'. Los clientes pueden accede con un perfil anónimo.
 
+***
+
 ### :mag_right: Detalles de trabajo semana 2:
 
 :calendar: 13/06/23:
