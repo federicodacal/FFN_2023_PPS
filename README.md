@@ -49,4 +49,4 @@
 ### :iphone: Códigos QR:
 
 * QR Entrada:
-![QR entrada](assets/qrEntrada.JPG "QR entrada")
+![QR entrada](/FFN_2023_PPS/comanda/src/assets/qrEntrada.JPG "QR entrada")
