@@ -4,6 +4,8 @@
 
 ### :computer: Integrantes: Franco Sultana, Nicolas Caretti, Federico Dacal
 
+***
+
 ### :pushpin: Planificación:
 
 ### Franco Sultana:
@@ -17,6 +19,8 @@
 ### Federico Dacal:
 * Supervisor acepta/rechaza cliente
 * Automatización de emails de confirmación
+
+***
 
 ### :mag_right: Detalles de trabajo semana 1:
 
@@ -45,6 +49,8 @@
 :calendar: 13/06/23:
 * Generamos QR de entrada del restaurante. El cliente lo escanea para acceder a lista de espera hasta que se le asigne una mesa o el pedido sea rechazado.
 * Funcionalidades del perfil Metre, quién debe asignar una mesa a los clientes en espera.
+
+***
 
 ### :iphone: Códigos QR:
 
