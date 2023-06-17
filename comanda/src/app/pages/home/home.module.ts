@@ -6,6 +6,8 @@ import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
 import { ConsultaComponent } from 'src/app/components/consulta/consulta.component';
+import { MenuComponent } from 'src/app/components/menu/menu.component';
+import { VerPedidosComponent } from 'src/app/components/ver-pedidos/ver-pedidos.component';
 
 
 
@@ -16,6 +18,6 @@ import { ConsultaComponent } from 'src/app/components/consulta/consulta.componen
     IonicModule,
     HomePageRoutingModule,
   ],
-  declarations: [HomePage, ConsultaComponent]
+  declarations: [HomePage, ConsultaComponent, MenuComponent, VerPedidosComponent]
 })
 export class HomePageModule {}

@@ -108,4 +108,19 @@ export class BaseService {
     const q = query(consRef, orderBy('fecha', 'desc'));
     return collectionData(q, {idField: 'id'}) as Observable<any[]>;
   }
+
+
+
+  //PEDIDOS
+  addPedido(pedido: any){
+    const ref = collection(this.bd, 'pedidos');
+    return addDoc(ref, pedido);
+  }
+
+
+  getPedidos() {
+    const consRef = collection(this.bd, 'pedidos');
+    const q = query(consRef, orderBy('hora', 'desc'))
+    return collectionData(q) as Observable<any[]>;
+  }
 }
