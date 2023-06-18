@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Firestore, doc, setDoc } from '@angular/fire/firestore';
 import { ToastController } from '@ionic/angular';
 import { settings } from 'cluster';
 import { ColdObservable } from 'rxjs/internal/testing/ColdObservable';
@@ -22,7 +23,7 @@ export class MenuComponent  implements OnInit {
 
 
   uid: string = '';
-  constructor(private bd: BaseService, private toastController: ToastController, private auth: AuthService) { 
+  constructor(private bdFire : Firestore ,private bd: BaseService, private toastController: ToastController, private auth: AuthService) { 
     this.pedido.productos = [];
   }
 
@@ -74,6 +75,13 @@ export class MenuComponent  implements OnInit {
     this.pedido.uid =  this.uid;
     console.log(this.pedido);
     this.bd.addPedido(this.pedido);
+
+    //cambio el estado de la mesa
+    const usrRef = doc(this.bdFire, 'usuarios', this.uid)
+    setDoc(usrRef, {
+      estadoQrMesa: 'pedidoCargado'
+    }, {merge: true});
+
     this.presentToast('middle', '¡Se cargó el pedido!', 'success');
     setTimeout(()=>{
       this.pantalla = 'menu';

@@ -117,10 +117,31 @@ export class BaseService {
     return addDoc(ref, pedido);
   }
 
+  addPedidoChef(pedidos: any){
+    const ref = collection(this.bd, 'pedidosChef');
+    console.log(pedidos);
+    return addDoc(ref, pedidos);
+  }
+
+  addPedidoBartender(pedidos: any){
+    const ref = collection(this.bd, 'pedidosBartender');
+    console.log(pedidos);
+    return addDoc(ref, pedidos);
+  }
 
   getPedidos() {
     const consRef = collection(this.bd, 'pedidos');
     const q = query(consRef, orderBy('hora', 'desc'))
-    return collectionData(q) as Observable<any[]>;
+    return collectionData(q, {idField: 'id'}) as Observable<any[]>;
+  }
+
+  getPedidosChef(){
+    const consRef = collection(this.bd, 'pedidosChef');
+    return collectionData(consRef, {idField: 'id'});
+  }
+
+  getPedidosBartender(){
+    const consRef = collection(this.bd, 'pedidosBartender');
+    return collectionData(consRef, {idField: 'id'});
   }
 }

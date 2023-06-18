@@ -118,13 +118,24 @@ export class LoginPage implements OnInit {
         this.pass = '123456'
       break;
       case 'mozo':
-        //
-        break;
+        this.email = 'mozotest@gmail.com'
+        this.pass = '123456'
+      break;
       case 'anonimo':
         this.nombreAnonimo = 'testAnonimo'
       break;
+      case 'chef':
+        this.email = 'testchef@gmail.com'
+        this.pass = '123456'
+      break;
+      case 'bartender':
+        this.email = 'testbar@gmail.com'
+        this.pass = '123456'
+      break;
     }
   }
+
+  //hacer el 'No tiene cuenta? Registrarte'
 
   async presentToast(position: 'top' | 'middle' | 'bottom', msj:string, color: string) {
     const toast = await this.toastController.create({

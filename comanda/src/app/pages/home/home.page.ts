@@ -20,6 +20,7 @@ export class HomePage implements OnInit {
   usuario: any = {};
   usuarios: any[] = [];
   mesas: any[] = [];
+  pedidos: any;
 
   consultaSeleccionada: any = {};
 
@@ -28,7 +29,6 @@ export class HomePage implements OnInit {
   constructor(private userActivo : UserActivoService, private bd: BaseService, private auth: AuthService, private mail:MailService, private authFire : Auth, private barcodeScanner: BarcodeScanner, private toastController:ToastController) {}
 
   ngOnInit(){
-    
     //No me funciona, tira undefined 
     // Promise.all([
     //   firstValueFrom( this.bd.getUsuariosGeneral())
@@ -90,6 +90,22 @@ export class HomePage implements OnInit {
               this.mesas = res;
             });
           }
+
+          //Si es chef cargo pedidos
+          if(this.usuario.perfil == 'chef') {
+            this.bd.getPedidosChef().subscribe((ped)=>{
+              console.log(ped);
+              this.pedidos = ped;
+            })
+          }
+
+          if(this.usuario.perfil == 'bartender')
+          {
+            this.bd.getPedidosBartender().subscribe((ped)=>{
+              console.log(ped);
+              this.pedidos = ped;
+            })
+          }
          
         })
         .catch(error => console.log(error));
@@ -149,12 +165,24 @@ export class HomePage implements OnInit {
           this.usuario.mesa = 0;
           this.bd.updateMesaUsuario(this.usuario);
           this.presentToast("middle", 'Pronto se te asignará una mesa. Gracias!', 'success', 2000);
+        }
+          //asignar estadoQrMesa a ninguno
 
           /*
           setTimeout(() => {
             this.presentToast("middle", `Usuario - ${this.usuario.correo} - Espera mesa: ${this.usuario.esperaMesa}`, 'warning', 2000)
           }, 3000);
           */
+
+        //mesa asignada y qr de mesa
+        if(this.usuario.mesa > 0 && data == 'listadoProductos' && this.usuario.estadoQrMesa == 'ninguno')
+        {
+          this.pantalla = 'hacerPedido';
+        }
+
+        if(data == 'listadoProductos' && this.usuario.estadoQrMesa == 'pedidoCargado')
+        {
+          //falta general el qr con un text 'listadoProductos' y el nuevo componente con lo de encuestas y estado pedido
         }
       });
   }

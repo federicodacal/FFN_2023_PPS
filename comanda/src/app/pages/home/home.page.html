@@ -153,18 +153,45 @@
                 <div *ngFor="let mesa of mesas">
                   <ion-select-option *ngIf="mesa.libre===true" [value]="mesa">{{mesa.numero}}</ion-select-option>
                 </div>
-
               </ion-select>
             </ion-item>
           </ion-list>
-
           <br>          
-          
         </div>
       </div>
       </div>
-
     </div>
+
+    <!--+++++++++++++++++++++++++++++++++ COCINERO Y BARTENDER +++++++++++++++++++++++++++++++++-->
+
+    <div *ngIf="this.usuario.perfil == 'chef' || this.usuario.perfil =='bartender'" style="margin-top: 5%;">
+      <div *ngFor="let p of pedidos" style="color: rgb(80, 80, 80); 
+      background-color: rgba(255, 255, 255, 0.808); width: 90%; border: 2px solid salmon; border-radius: 15px;
+      margin: auto;  padding: 3%">
+        <div>
+          <label style="font-size: 6vw;">{{p.cliente}}</label><br>
+          <label style="font-size: 7vw; font-weight: 600;">Pedido:</label>
+          <div *ngFor="let prod of p.pedido">
+            <div style="text-align: center;">
+              <label style="font-size: 6vw; text-align: center;"><u>{{prod.descripcion}}</u></label><br>
+    
+            </div>
+          <label style="font-size: 5vw;">{{prod.marca}}</label><br>
+    
+          <label style="font-size: 5vw;"><b>Cantidad:</b> {{prod.cantidad}}</label><br>
+          <div style="width: 85%; height: 2px; background-color: salmon; border-radius: 5px; margin:auto"></div>
+          </div>
+          <br>
+          <ion-button class="botonConfirmar">Pedido terminado</ion-button>
+          <div style="text-align: right;">
+            <label style="font-size: 4vw;">{{p.hora | date: 'dd/MM/yy, hh:mm'}}</label><br>
+          </div>
+        </div>
+        </div>
+    </div>
+
+
+    <!--+++++++++++++++++++++++++++++++++ BARTENDER +++++++++++++++++++++++++++++++++-->
 
   <!--<ion-button routerLink="/alta-usuario">Test alta</ion-button>
   <ion-button (click)="perfil()">PRUEBA</ion-button>-->

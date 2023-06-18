@@ -16,11 +16,16 @@
     </ion-card>
 
     <div class="accesoRapido">
+      <ion-button class="boton-rapido" (click)="accesoRapido('supervisor')">Supervisor</ion-button>
+      <ion-button class="boton-rapido" (click)="accesoRapido('chef')">Chef</ion-button>
+      <ion-button class="boton-rapido" (click)="accesoRapido('bartender')">Bartender</ion-button>
+
+    </div>
+    <div class="accesoRapido">
+      <ion-button class="boton-rapido" (click)="accesoRapido('mozo')">Mozo</ion-button>
       <ion-button class="boton-rapido" (click)="accesoRapido('cliente')">Cliente</ion-button>
       <ion-button class="boton-rapido" (click)="accesoRapido('metre')">Metre</ion-button>
-      <ion-button class="boton-rapido" (click)="accesoRapido('supervisor')">Supervisor</ion-button>
     </div>
-    <ion-button class="boton-rapido" (click)="accesoRapido('mozo')">Mozo</ion-button>
   </div>
 
     <!---------------------------LOGIN ANONIMOS------------------------------->
