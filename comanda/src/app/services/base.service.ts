@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, collectionData, where, query, doc, getDoc, addDoc, setDoc, updateDoc, docData, orderBy } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, where, query, doc, getDoc, addDoc, setDoc, updateDoc, docData, orderBy, deleteDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Cliente } from '../clases/cliente';
 
@@ -144,4 +144,22 @@ export class BaseService {
     const consRef = collection(this.bd, 'pedidosBartender');
     return collectionData(consRef, {idField: 'id'});
   }
+
+  getPedidoByClienteUid(uid:string) {
+    const colRef = collection(this.bd, "pedidos");
+    const q = query(colRef, where('uid', '==', uid));
+    return collectionData(q, {idField:'id'}) as Observable<any[]>;
+  }
+
+
+  deletePedidoFromChef(uidProd:string) {
+    const colRef = doc(this.bd, `pedidosChef/${uidProd}`);
+    return deleteDoc(colRef);
+  }
+
+  deletePedidoFromBartender(uidProd:string) {
+    const colRef = doc(this.bd, `pedidosBartender/${uidProd}`);
+    return deleteDoc(colRef);
+  }
+
 }

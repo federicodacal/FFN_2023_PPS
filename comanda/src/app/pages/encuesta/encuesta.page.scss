@@ -1,0 +1,51 @@
+ion-content {
+    --background: rgb(187, 175, 174);
+    .upperBox {
+        background-color:  rgb(255, 109, 92);
+        box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95x 2.6px;
+        height: auto;
+        margin-bottom: 10px;
+        padding: 20px;
+        h3 {
+            font-size: 20px;
+            color: white;
+        }
+    }
+}
+
+
+
+/*
+.inputs{
+    margin-left: 5%;
+    margin-right: 5%;
+    border-radius: 12px;
+    border: 5px solid rgb(250, 142, 130);
+    background-color: #ffff;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+*/
+
+ion-input{
+    --placeholder-color: #000;
+    --color: black;
+}
+
+.anonimo{
+    margin-left: 3%;
+    margin-top: 5%;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: black;
+}
+
+
+
+
+
+.boton-rapido{
+    --ion-color-primary: rgb(255, 109, 92);
+    color: black;
+    font-weight: 700;
+}

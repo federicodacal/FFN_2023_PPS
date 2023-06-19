@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { BaseService } from '../../services/base.service';
 import { AuthService } from '../../services/auth.service';
-import { Subscription, firstValueFrom, subscribeOn } from 'rxjs';
+import { Subscription, firstValueFrom, map, subscribeOn } from 'rxjs';
 import { MailService } from 'src/app/services/mail.service';
 import { Auth } from '@angular/fire/auth';
 import { UserActivoService } from 'src/app/services/user-activo.service';
 import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
 import { ToastController } from '@ionic/angular';
+import { JsonPipe } from '@angular/common';
+import { Router } from '@angular/router';
+import { Firestore, doc, setDoc, updateDoc } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-home',
@@ -22,11 +25,15 @@ export class HomePage implements OnInit {
   mesas: any[] = [];
   pedidos: any;
 
+  pedidoClienteLogeado:any = {};
+
   consultaSeleccionada: any = {};
 
   consultas: any;
 
-  constructor(private userActivo : UserActivoService, private bd: BaseService, private auth: AuthService, private mail:MailService, private authFire : Auth, private barcodeScanner: BarcodeScanner, private toastController:ToastController) {}
+  pedidosGeneral:any [] = [];
+
+  constructor(private userActivo : UserActivoService, private bd: BaseService, private auth: AuthService, private mail:MailService, private authFire : Auth, private barcodeScanner: BarcodeScanner, private toastController:ToastController, private router:Router, private fs:Firestore) {}
 
   ngOnInit(){
     //No me funciona, tira undefined 
@@ -79,6 +86,7 @@ export class HomePage implements OnInit {
     if(this.userActivo.uActivo == "")
     {
       console.log(this.auth.getUid()!);
+      
       this.bd.getUsuario(this.auth.getUid()!)
         .then((response) => {
           this.usuario = response.data();
@@ -88,6 +96,14 @@ export class HomePage implements OnInit {
           if(this.usuario.perfil == 'metre') {
             this.bd.getMesas().subscribe((res) => {
               this.mesas = res;
+            });
+          }
+
+          //cargo pedidos general 
+          if(this.usuario.perfil == 'chef' || this.usuario.perfil == 'bartender') {
+            this.bd.getPedidos().subscribe((res:any) => {
+              this.pedidosGeneral = res;
+              console.log('pedidos general', this.pedidosGeneral);
             });
           }
 
@@ -106,6 +122,19 @@ export class HomePage implements OnInit {
               this.pedidos = ped;
             })
           }
+
+          // Si es cliente y qrMesa es pedidoCargado me fijo el pedido
+          if((this.usuario.perfil == 'cliente' || this.usuario.perfil == 'anonimo') && this.usuario.estadoQrMesa == 'pedidoCargado') {
+
+            setTimeout(() => {
+              this.bd.getPedidoByClienteUid(this.usuario.uid).subscribe((res:any) => {
+                console.log('usuario', this.usuario);
+                console.log('res', res);
+                this.pedidoClienteLogeado = res[0];
+                console.log('cliente tiene pedido', this.pedidoClienteLogeado);
+              });
+            }, 1000);
+          } 
          
         })
         .catch(error => console.log(error));
@@ -119,6 +148,7 @@ export class HomePage implements OnInit {
         console.log('usuario', this.usuario);
       }, 1000);
       */
+ 
     }
     else
     {
@@ -166,13 +196,8 @@ export class HomePage implements OnInit {
           this.bd.updateMesaUsuario(this.usuario);
           this.presentToast("middle", 'Pronto se te asignará una mesa. Gracias!', 'success', 2000);
         }
-          //asignar estadoQrMesa a ninguno
+        //asignar estadoQrMesa a ninguno
 
-          /*
-          setTimeout(() => {
-            this.presentToast("middle", `Usuario - ${this.usuario.correo} - Espera mesa: ${this.usuario.esperaMesa}`, 'warning', 2000)
-          }, 3000);
-          */
 
         //mesa asignada y qr de mesa
         if(this.usuario.mesa > 0 && data == 'listadoProductos' && this.usuario.estadoQrMesa == 'ninguno')
@@ -180,9 +205,23 @@ export class HomePage implements OnInit {
           this.pantalla = 'hacerPedido';
         }
 
+        /*
+        this.bd.getPedidoByClienteUid(this.usuario.uid).then((res:any) => {
+          this.pedidoClienteLogeado = res;
+          console.log('cliente tiene pedido', this.pedidoClienteLogeado);
+        });
+        */
+
         if(data == 'listadoProductos' && this.usuario.estadoQrMesa == 'pedidoCargado')
         {
-          //falta general el qr con un text 'listadoProductos' y el nuevo componente con lo de encuestas y estado pedido
+          
+          // Para debug desde celu, despues sacar
+          setTimeout(() => {
+            this.presentToast("middle", `Usuario - ${this.usuario.correo} - Cliente: ${this.pedidoClienteLogeado.cliente} - Precio: $${this.pedidoClienteLogeado.total}`, 'warning', 5000)
+          }, 200);
+
+          this.pantalla = 'encuesta-y-estado';
+          
         }
       });
   }
@@ -208,8 +247,61 @@ export class HomePage implements OnInit {
       mesa.libre = false;
       this.bd.updateEstadoMesa(mesa);
 
-      this.presentToast('middle', `Mesa ${mesa.numero} asignada a cliente: ${cliente.correo}`, 'success');
+      this.presentToast('middle', `Mesa ${mesa.numero} asignada a cliente: ${cliente.correo}`, 'success', 2000);
     }
+  }
+
+  /***************************** CHEF/BARTENDER ****************************************************/
+  confirmarPedidoTerminado(idPedEmp:any, uidCliente:any) {
+
+    let pedido:any= {};
+
+    console.log('id cliente : ' + uidCliente + ' idPed ' + idPedEmp);
+    let idPedido:string='';
+
+    this.bd.getPedidoByClienteUid(uidCliente).subscribe((res:any) => {
+      //console.log(res);
+      console.log(res[0]);
+      pedido = res[0];
+      idPedido = res[0].id;
+    });
+
+    setTimeout(async () => {
+      console.log('idPedido', idPedido); 
+
+    
+    // confirma chef
+    if(this.usuario.perfil == 'chef') {
+      
+      console.log('hola 2');
+      const ref = doc(this.fs, 'pedidos', idPedido);
+      await updateDoc(ref, {terminoChef: true});
+      
+      console.log('hola 3');
+      this.bd.deletePedidoFromChef(idPedEmp);
+    }
+    
+    // confirma bartender
+    if(this.usuario.perfil == 'bartender') {
+
+      const ref = doc(this.fs, 'pedidos', idPedido);
+      await updateDoc(ref, {
+        terminoBartender: true
+      });
+
+      this.bd.deletePedidoFromBartender(idPedEmp);
+    }
+
+
+    if(pedido.terminoBartender && pedido.terminoChef) {
+      const ref = doc(this.fs, 'pedidos', idPedido);
+        await updateDoc(ref, {
+          estado: 'terminado'
+      });
+    }
+      
+    }, 1000);
+    
   }
 
   async presentToast(position: 'top' | 'middle' | 'bottom', msj:string, color: string, duration:number=1000) {
@@ -231,6 +323,10 @@ export class HomePage implements OnInit {
   consultar(){
     this.pantalla = 'consulta';
     
+  }
+
+  redirigirAEncuesta() {
+    this.router.navigateByUrl('/encuesta');
   }
   
 }

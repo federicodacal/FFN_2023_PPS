@@ -70,7 +70,7 @@ export class MenuComponent  implements OnInit {
   hacerPedido(){
     this.pedido.cliente = this.usuarioActual.nombre
     this.pedido.hora = Date.now();
-    this.pedido.realizado = false;
+    this.pedido.estado = 'a confirmar';
     this.pedido.total = this.precioTotal;
     this.pedido.uid =  this.uid;
     console.log(this.pedido);

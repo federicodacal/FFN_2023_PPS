@@ -10,7 +10,11 @@
 
       <br>
       <p *ngIf="usuario.mesa == -1" style="font-size: 5vw; color: white; margin-top: -8%; font-weight: 600;">Escanee el QR para pedir una mesa.</p>
-      <p *ngIf="usuario.mesa != -1" style="font-size: 5vw; color: white; margin-top: -8%; font-weight: 600;">Tiene una mesa asignada. Escanee el QR para ver el menú.</p>
+
+      <p *ngIf="usuario.mesa != -1 && usuario.estadoQrMesa=='ninguno'" style="font-size: 5vw; color: white; margin-top: -8%; font-weight: 600;">Tiene una mesa asignada. Escanee el QR para ver el menú.</p>
+
+      <p *ngIf="usuario.mesa != -1 && usuario.estadoQrMesa == 'pedidoCargado'" style="font-size: 5vw; color: white; margin-top: -8%; font-weight: 600;">Pedido confirmado. Escanee el QR para acceder al estado del pedido o responder nuestra encuesta.</p>
+
       <div style="text-align: center;">
         <ion-button style="--background: rgb(255, 109, 92); margin: auto; margin-top: 10%; height: 40vh; width: 80vw;"><img src="../../../assets/escaner-de-codigo-de-barras.png" (click)="scanQRMesa()"></ion-button>
         <ion-button (click)="pantalla = 'consulta'" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Consultar al mozo</ion-button><br>
@@ -32,6 +36,7 @@
   <div *ngIf="usuario.perfil == 'mozo'">
     <ion-button (click)="pantalla = 'verConsultas';" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Ver consultas</ion-button>
     <ion-button (click)="pantalla = 'pedidos';" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Ver pedidos</ion-button>
+    <ion-button (click)="pantalla = 'pedidos-en-proceso';" style="--background: rgb(255, 109, 92); margin-top: 3%;" >En preparación</ion-button>
 
   </div>
   <div *ngIf="pantalla == 'consulta'">
@@ -64,7 +69,11 @@
   </div>
 
   <div *ngIf="pantalla == 'pedidos'">
-    <app-ver-pedidos></app-ver-pedidos>
+    <app-ver-pedidos [queMuestro]="'a confirmar'"></app-ver-pedidos>
+  </div>
+
+  <div *ngIf="pantalla == 'pedidos-en-proceso'">
+    <app-ver-pedidos [queMuestro]="'en proceso'"></app-ver-pedidos>
   </div>
 
 
@@ -169,20 +178,22 @@
       background-color: rgba(255, 255, 255, 0.808); width: 90%; border: 2px solid salmon; border-radius: 15px;
       margin: auto;  padding: 3%">
         <div>
-          <label style="font-size: 6vw;">{{p.cliente}}</label><br>
+          <label style="font-size: 6vw;">{{p.cliente}} </label><br>
           <label style="font-size: 7vw; font-weight: 600;">Pedido:</label>
           <div *ngFor="let prod of p.pedido">
             <div style="text-align: center;">
               <label style="font-size: 6vw; text-align: center;"><u>{{prod.descripcion}}</u></label><br>
-    
+              
             </div>
-          <label style="font-size: 5vw;">{{prod.marca}}</label><br>
-    
-          <label style="font-size: 5vw;"><b>Cantidad:</b> {{prod.cantidad}}</label><br>
-          <div style="width: 85%; height: 2px; background-color: salmon; border-radius: 5px; margin:auto"></div>
+            <label style="font-size: 5vw;">{{prod.marca}}</label><br>
+            
+            <label style="font-size: 5vw;"><b>Cantidad:</b> {{prod.cantidad}}</label><br>
+            <div style="width: 85%; height: 2px; background-color: salmon; border-radius: 5px; margin:auto"></div>
+            <br>
+            
           </div>
+          <ion-button class="botonConfirmar" (click)="confirmarPedidoTerminado(p.id, p.uid_cliente)">Pedido terminado</ion-button>
           <br>
-          <ion-button class="botonConfirmar">Pedido terminado</ion-button>
           <div style="text-align: right;">
             <label style="font-size: 4vw;">{{p.hora | date: 'dd/MM/yy, hh:mm'}}</label><br>
           </div>
@@ -192,6 +203,45 @@
 
 
     <!--+++++++++++++++++++++++++++++++++ BARTENDER +++++++++++++++++++++++++++++++++-->
+
+
+
+    <!---------------------------ENCUESTA Y ESTADO---------------------------------------------->
+    <div *ngIf="pantalla == 'encuesta-y-estado'">
+      <div *ngIf="usuario.perfil == 'cliente' || usuario.perfil == 'anonimo'" style="width: 90vw; margin: auto">
+        <p style="font-size: 13vw; color: rgb(255, 109, 92); font-weight: 700;">Bienvenido,</p>
+        <p style="font-size: 8vw; color: white; margin-top: -8%; font-weight: 600;">{{usuario.nombre}}</p>
+
+        <label style="font-size: 5vw;"><b>Estado:</b> {{this.pedidoClienteLogeado.estado}}</label><br>
+        
+        <div *ngFor="let prod of this.pedidoClienteLogeado.productos">
+          <div style="text-align: center;">
+            <label style="font-size: 6vw; text-align: center;"><u>{{prod.descripcion}}</u></label><br>
+
+            <label style="font-size: 5vw;">{{prod.marca}}</label><br>
+      
+            <label style="font-size: 5vw;"><b>Cantidad:</b> {{prod.cantidad}}</label><br>
+
+          </div>
+        </div>
+        <label style="font-size: 5vw;"><b>Total:</b> ${{this.pedidoClienteLogeado.total}}</label><br>
+  
+        <br>
+  
+        <div style="text-align: center;">
+          <ion-button (click)="redirigirAEncuesta()" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Encuesta</ion-button><br>
+          <!-- 
+            <ion-button (click)="pantalla='estado-pedido'" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Estado pedido</ion-button><br>
+          -->
+            <ion-button (click)="pantalla ='consulta'" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Consultar al mozo</ion-button><br>
+  
+        </div>
+      </div>
+    </div>
+
+  
+
+
 
   <!--<ion-button routerLink="/alta-usuario">Test alta</ion-button>
   <ion-button (click)="perfil()">PRUEBA</ion-button>-->

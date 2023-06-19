@@ -22,7 +22,11 @@ const routes: Routes = [
   {
     path: 'menu',
     loadChildren: () => import('./pagesComp/menu/menu.module').then( m => m.MenuPageModule)
+  },  {
+    path: 'encuesta',
+    loadChildren: () => import('./pages/encuesta/encuesta.module').then( m => m.EncuestaPageModule)
   },
+
 
 
 
