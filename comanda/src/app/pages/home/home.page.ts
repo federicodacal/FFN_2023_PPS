@@ -328,5 +328,21 @@ export class HomePage implements OnInit {
   redirigirAEncuesta() {
     this.router.navigateByUrl('/encuesta');
   }
+
+
+
+  confirmarPedido(){
+    let pedido: any;
+    this.bd.getPedidoByClienteUidOrden(this.usuario.uid).subscribe((pedidos) =>{
+      pedido = pedidos[0]
+      console.log('TEST SUSCRIBE')
+
+    })
+    setTimeout(()=>{
+      console.log('TEST TIMEOUT')
+      this.bd.updateEstadoPedido('terminado', pedido.id)
+      .then(res => this.presentToast('middle', 'Se confirmó la recepción del pedido', 'success'));
+    },2000)
+  }
   
 }

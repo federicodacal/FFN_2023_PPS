@@ -195,15 +195,23 @@ export class AltaUsuarioPage implements OnInit {
       let data = "";
       this.barcodeScanner.scan({formats:"PDF_417"}).then(barcodeData => {
         data = barcodeData.text;
+
         let array: string[] = [];
       //let result = await BarcodeScanner.startScan();
   
       array = data.split('@');
-  
-      //this.presentToast('middle', result.content!, 'success')
-      this.formUsuario.controls['apellidos'].setValue(array[1]);
-      this.formUsuario.controls['nombres'].setValue(array[2]);
-      this.formUsuario.controls['DNI'].setValue(array[4]);
+        if(array[1] == 'A' && array[2] == '1'){
+          this.formUsuario.controls['apellidos'].setValue(array[3]);
+          this.formUsuario.controls['nombres'].setValue(array[4]);
+          this.formUsuario.controls['DNI'].setValue(array[0]);
+        }
+        else{
+          //this.presentToast('middle', result.content!, 'success')
+          this.formUsuario.controls['apellidos'].setValue(array[1]);
+          this.formUsuario.controls['nombres'].setValue(array[2]);
+          this.formUsuario.controls['DNI'].setValue(array[4]);
+        }
+      
 
       
       });

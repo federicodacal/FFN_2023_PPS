@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, collectionData, where, query, doc, getDoc, addDoc, setDoc, updateDoc, docData, orderBy, deleteDoc } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, where, query, doc, getDoc, addDoc, setDoc, updateDoc, docData, orderBy, deleteDoc, and } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Cliente } from '../clases/cliente';
 
@@ -123,6 +123,12 @@ export class BaseService {
     return addDoc(ref, pedidos);
   }
 
+  updateEstadoPedido(estado: string, id: string){
+    //console.log(pedido.id)
+    const ref = doc(this.bd, 'pedidos', id);
+    return setDoc(ref, {estado: estado}, {merge: true});
+  }
+
   addPedidoBartender(pedidos: any){
     const ref = collection(this.bd, 'pedidosBartender');
     console.log(pedidos);
@@ -148,6 +154,12 @@ export class BaseService {
   getPedidoByClienteUid(uid:string) {
     const colRef = collection(this.bd, "pedidos");
     const q = query(colRef, where('uid', '==', uid));
+    return collectionData(q, {idField:'id'}) as Observable<any[]>;
+  }
+
+  getPedidoByClienteUidOrden(uid:string) {
+    const colRef = collection(this.bd, "pedidos");
+    const q = query(colRef, where('uid', '==', uid), orderBy('hora', 'desc'));
     return collectionData(q, {idField:'id'}) as Observable<any[]>;
   }
 

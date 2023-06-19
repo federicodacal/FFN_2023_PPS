@@ -25,7 +25,7 @@ export class ConsultaComponent  implements OnInit {
   ngOnInit(){
     this.uidUsr = this.auth.getUid()!
     setTimeout(()=>{
-      this.bd.getUsuario(this.uidUsr)
+      this.bd.getUsuario(this.uidUsr) 
       .then((usr)=>{
         if(this.usuarioRecibido == undefined){
           this.bd.crearConsulta(this.uidUsr, usr.data()!);
