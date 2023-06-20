@@ -8,6 +8,7 @@ import { HomePageRoutingModule } from './home-routing.module';
 import { ConsultaComponent } from 'src/app/components/consulta/consulta.component';
 import { MenuComponent } from 'src/app/components/menu/menu.component';
 import { VerPedidosComponent } from 'src/app/components/ver-pedidos/ver-pedidos.component';
+import { PedidosPagosComponent } from 'src/app/components/pedidos-pagos/pedidos-pagos.component';
 
 
 
@@ -18,6 +19,6 @@ import { VerPedidosComponent } from 'src/app/components/ver-pedidos/ver-pedidos.
     IonicModule,
     HomePageRoutingModule,
   ],
-  declarations: [HomePage, ConsultaComponent, MenuComponent, VerPedidosComponent]
+  declarations: [HomePage, ConsultaComponent, MenuComponent, VerPedidosComponent, PedidosPagosComponent]
 })
 export class HomePageModule {}

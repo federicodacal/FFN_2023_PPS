@@ -98,7 +98,8 @@ export class MenuOpcionesPage implements OnInit {
     const pedidoRef = doc(this.bdFire, 'pedidos', this.pedido.id);
     setDoc(pedidoRef, {
       propina: this.propinas,
-      total: nuevoTotal
+      total: nuevoTotal,
+      estadoPago: 'pagado'
     }, {merge: true})
 
     this.mostrarPropinas = false;

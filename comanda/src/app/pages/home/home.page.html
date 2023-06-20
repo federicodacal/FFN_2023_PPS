@@ -39,6 +39,7 @@
     <ion-button (click)="pantalla = 'verConsultas';" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Ver consultas</ion-button>
     <ion-button (click)="pantalla = 'pedidos';" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Ver pedidos</ion-button>
     <ion-button (click)="pantalla = 'pedidos-en-proceso';" style="--background: rgb(255, 109, 92); margin-top: 3%;" >En preparación</ion-button>
+    <ion-button (click)="pantalla = 'pagos';" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Pagos</ion-button>
 
   </div>
   <div *ngIf="pantalla == 'consulta'">
@@ -78,6 +79,10 @@
     <app-ver-pedidos [queMuestro]="'en proceso'"></app-ver-pedidos>
   </div>
 
+
+  <div *ngIf="pantalla == 'pagos'">
+    <app-pedidos-pagos></app-pedidos-pagos>
+  </div>
 
 
   </div>

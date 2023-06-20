@@ -27,6 +27,7 @@ export class BaseService {
     return getDoc(docRef);
   }
 
+  
   getUser(uid:string) {
     const noteDocRef = doc(this.bd, `usuarios/${uid}`);
     return docData(noteDocRef, {idField: 'uid'}) as Observable<any>;
@@ -58,6 +59,11 @@ export class BaseService {
   }
 
   updateEstadoMesa(mesa:any) {
+    const usrRef = doc(this.bd, `mesas/${mesa.uid}`);
+    return updateDoc(usrRef, {libre:mesa.libre});
+  }
+
+  updateEstadoMesaNumero(mesa:any) {
     const usrRef = doc(this.bd, `mesas/${mesa.uid}`);
     return updateDoc(usrRef, {libre:mesa.libre});
   }
@@ -178,6 +184,23 @@ export class BaseService {
     const colRef = doc(this.bd, `pedidosBartender/${uidProd}`);
     return deleteDoc(colRef);
   }
+
+
+
+  getPedidosPagados(){
+    const colRef = collection(this.bd, "pedidos");
+    const q = query(colRef, where('estadoPago', '==', 'pagado'));
+    return collectionData(q, {idField:'id'}) as Observable<any[]>;
+  }
+
+
+  updateEstadoPagado(estado: string, id: string){
+    //console.log(pedido.id)
+    const ref = doc(this.bd, 'pedidos', id);
+    return setDoc(ref, {estadoPago: estado}, {merge: true});
+  }
+
+
 
   // Encuesta
   addEncuesta(encuesta:any) {

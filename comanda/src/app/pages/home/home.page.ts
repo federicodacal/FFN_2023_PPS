@@ -192,9 +192,17 @@ export class HomePage implements OnInit {
         console.log('usuario bd', this.usuario);
       
         if(data == 'listadoDeEsperaMesa') {
-          this.usuario.mesa = 0;
-          this.bd.updateMesaUsuario(this.usuario);
-          this.presentToast("middle", 'Pronto se te asignará una mesa. Gracias!', 'success', 2000);
+          if(this.usuario.estadoQrEspera == 'escaneado'){
+            this.router.navigateByUrl('/encuesta');
+          }
+          if(this.usuario.estadoQrEspera == undefined){
+            this.usuario.mesa = 0;
+            this.usuario.estadoQrEspera = 'escaneado'
+            this.bd.updateMesaUsuario(this.usuario);
+            this.presentToast("middle", 'Pronto se te asignará una mesa. Gracias!', 'success', 2000);
+          }
+          
+
         }
         //asignar estadoQrMesa a ninguno
 

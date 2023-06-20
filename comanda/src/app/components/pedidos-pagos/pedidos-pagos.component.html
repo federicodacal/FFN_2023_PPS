@@ -1,0 +1,14 @@
+<div>
+  <p style="font-size: 7vw; ">Pagos:</p>
+  <div *ngFor="let p of pagos | async" style="background-color: white; padding: 2%; font-size: 7vw; border: 2px solid salmon; 
+  border-radius: 10px; width: 90%; margin: auto;">
+    <p><b>{{p.cliente}}</b></p>
+    <p>Total: ${{p.total}}</p>
+    <p>Propina: ${{p.propina}}</p>
+    <div style="text-align: center;">
+      <ion-button (click)="confirmaraPago(p)" style="--background: rgb(255, 109, 92); margin: auto; margin-top: 3%; " >Confirmar pago</ion-button>
+
+    </div>
+
+  </div>
+</div>
