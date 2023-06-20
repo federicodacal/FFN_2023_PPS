@@ -1,7 +1,7 @@
 <!----- ENCUESTA ------>
 
-<div *ngIf="this.usuarioActual"> 
-  <ion-content style="--background: rgb(255, 196, 189)">
+<ion-content style="--background: rgb(255, 196, 189)">
+  <div *ngIf="this.usuarioActual.completoEncuesta == false"> 
  
     <p style="font-size: 8.5vw; color: rgb(255, 109, 92); font-weight: 700; margin-left: 1em;">Encuesta de satisfacción: FFN</p>
     <div class="upperBox">
@@ -119,14 +119,48 @@
     <div>
       <ion-button expand="block" color="danger" (click)="enviarEncuesta()">Enviar</ion-button>
     </div>
-  
-  
-  <!---------------------------SPINNER------------------------------->
-  </ion-content>
 
-</div>
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button (click)="takePicture()">
+        <ion-icon name="camera-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  
+  </div>
+  
+
+
 
 <!----- GRAFICOS ------>
-<div ngIf=""> 
+<div *ngIf="this.usuarioActual.completoEncuesta == true"> 
+
+  <div class="row">
+  
+    <div class="col-lg-6">
+        <h2>Calificacion</h2>
+        <canvas id="piechart"></canvas>
+    </div>
+
+    <div class="col-lg-6">
+        <h2>QR</h2>
+        <canvas id="barchart"></canvas>
+    </div>
+
+    <div class="col-lg-6">
+        <h2>Doughnut Chart</h2>
+        <canvas id="dochart"></canvas>
+    </div>
+    
+</div>
+
+
 
 </div>
+
+
+
+
+</ion-content>
+
+

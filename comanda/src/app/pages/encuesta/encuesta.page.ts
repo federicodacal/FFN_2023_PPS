@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
-import { ToastController } from '@ionic/angular';
+import { getDownloadURL, ref, uploadString } from '@angular/fire/storage';
+import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
+import { LoadingController, ToastController } from '@ionic/angular';
+import { Chart, ChartType, registerables } from 'chart.js';
 import { AuthService } from 'src/app/services/auth.service';
 import { BaseService } from 'src/app/services/base.service';
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-encuesta',
@@ -11,7 +15,21 @@ import { BaseService } from 'src/app/services/base.service';
 })
 export class EncuestaPage implements OnInit {
 
+  fotosSubidas:number=0;
+  imgSource:any;
+
+  chartdata: any;
+
+  labeldataCalificacion: any[] = [];
+  realdataCalificacion: any[] = [];
+
+  labeldataQR: any[] = [];
+  realdataQR: any[] = [];
+
+
   usuarioActual: any = {};
+
+  encuestas:any[] = [];
 
   resRadioBtn!:string;
 
@@ -24,7 +42,7 @@ export class EncuestaPage implements OnInit {
   resSelect!:string;
   comentario!:string;
 
-  constructor(private toast:ToastController, private bd:BaseService, private auth:AuthService, private fs:Firestore) { }
+  constructor(private toast:ToastController, private bd:BaseService, private auth:AuthService, private fs:Firestore, private loadingCtrl:LoadingController, private toastCtrl:ToastController) { }
 
   ngOnInit() {
 
@@ -34,6 +52,49 @@ export class EncuestaPage implements OnInit {
       this.bd.getUser(uid).subscribe((res:any) => {
         this.usuarioActual = res;
         console.log(this.usuarioActual);
+
+        //this.presentToast('top', `${this.usuarioActual.nombre}`, 'warning', 3000)
+
+        console.log(this.usuarioActual.completoEncuesta);
+
+        if(this.usuarioActual.completoEncuesta) {
+
+          this.bd.getEncuestas().subscribe((res:any) => {
+            this.encuestas = res;
+            console.log(this.encuestas);
+          });
+          
+          
+          setTimeout(() => {
+
+            if(this.encuestas) {
+              console.log(this.encuestas.length);
+
+              this.labeldataCalificacion = [1,2,3,4,5,6,7,8,9,10];
+              this.labeldataQR = ['si', 'mejorar', 'no'];
+
+              for(let i=0; i<this.encuestas.length; i++) { 
+
+                //console.log(this.encuestas[i].calificacion);
+                this.realdataCalificacion.push(this.encuestas[i].calificacion);
+
+                this.realdataQR.push(this.encuestas[i].interaccionQrs);
+              }
+
+              //console.log(this.labeldataCalificacion);
+              //console.log(this.realdataCalificacion);
+
+              this.renderChart(this.labeldataCalificacion,this.realdataCalificacion,'pie','piechart');
+              this.renderChart(this.labeldataQR,this.realdataQR,'bar','barchart');
+
+              //this.renderChart(this.labeldata,this.realdata,this.colordata,'doughnut','dochart');
+
+            }
+            
+          }, 2000);
+
+            
+        }
       });
     },1000)
   }
@@ -101,12 +162,79 @@ export class EncuestaPage implements OnInit {
     await updateDoc(ref, {completoEncuesta: true});
   }
 
-  async mostrarGraficos() {
-    setTimeout(() => {
 
-    }, 1000);
+  renderChart(labeldata:any, maindata:any, type:any, id:any) {
+    const myChart = new Chart(id, {
+      type: type,
+      data: {
+        labels: labeldata,
+        datasets: [{
+          label: '',
+          data: maindata,
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 205, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(201, 203, 207, 0.2)'
+          ],
+          borderColor: [
+            'rgb(255, 99, 132)',
+            'rgb(255, 159, 64)',
+            'rgb(255, 205, 86)',
+            'rgb(75, 192, 192)',
+            'rgb(54, 162, 235)',
+            'rgb(153, 102, 255)',
+            'rgb(201, 203, 207)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
   }
 
-  
+  takePicture = async () => {
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: false, 
+      resultType: CameraResultType.Base64,
+      source: CameraSource.Prompt,
+      saveToGallery: false
+    })
+      this.imgSource = 'data:image/jpeg;base64,' + image.base64String;
+      
+      console.info('img', this.imgSource);
 
+      if(image) {
+        const loading = await this.loadingCtrl.create();
+        await loading.present();
+
+        const result = await this.uploadImage(image, 'fotoCliente');
+        
+        if(result) {
+          const toast = await this.toastCtrl.create({
+            message: 'La imagen fue subida correctamente',
+            position: 'bottom',
+            duration: 2000
+          });
+
+          toast.present();
+        }
+        loading.dismiss();
+      }
+    }   
+
+    async uploadImage(cameraFile:Photo, foto:string) { 
+      return null;
+    }
 }
