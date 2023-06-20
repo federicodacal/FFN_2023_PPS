@@ -1,107 +1,132 @@
-<ion-content style="--background: rgb(255, 196, 189)">
-  <!---------------------------LOGIN USUARIOS COMUNES------------------------------->
-  <div class="upperBox">
-    <h3>Pregunta 1</h3>
+<!----- ENCUESTA ------>
 
-    <ion-list>
-      <ion-radio-group>
+<div *ngIf="this.usuarioActual"> 
+  <ion-content style="--background: rgb(255, 196, 189)">
+ 
+    <p style="font-size: 8.5vw; color: rgb(255, 109, 92); font-weight: 700; margin-left: 1em;">Encuesta de satisfacción: FFN</p>
+    <div class="upperBox">
+      <h3>De los siguientes items ¿Cuál te pareció mas importante en tu experiencia? <b>*</b></h3>
+  
+      <ion-list>
+        <ion-radio-group [(ngModel)]="resRadioBtn">
+          <ion-item>
+            <ion-label>Nuestra comida</ion-label>
+            <ion-radio value="comida"></ion-radio>
+          </ion-item>
+  
+          <ion-item>
+            <ion-label>Metodología de pedido</ion-label>
+            <ion-radio value="pedido"></ion-radio>
+          </ion-item>
+  
+          <ion-item>
+            <ion-label>Comunicación con el staff</ion-label>
+            <ion-radio value="comunicacion"></ion-radio>
+          </ion-item>
+  
+          <ion-item>
+            <ion-label>Nuestro local</ion-label>
+            <ion-radio value="local"></ion-radio>
+          </ion-item>
+  
+          <ion-item lines="">
+            <ion-label>Otra</ion-label>
+            <ion-radio value="otra"></ion-radio>
+          </ion-item>
+        </ion-radio-group>
+  
+      </ion-list>
+    </div>
+  
+    <!---------------------------------------------------------------------------->
+  
+    <div class="upperBox">
+      <h3>Indicar cuál/es de los siguientes items utilizaste en tu estadía en FFN. <b>*</b></h3>
+      <ion-list>
+        <ion-row>
+          <ion-col size="12">
+            <ion-item>
+              <ion-label>Chat con mozo</ion-label>
+              <ion-checkbox mode="md" item-left value="mozo" [(ngModel)]="cbChat"></ion-checkbox>
+            </ion-item>
+          </ion-col>
+  
+          <ion-col size="12">
+            <ion-item>
+              <ion-label>Verificacion del estado de tu pedido</ion-label>
+              <ion-checkbox mode="md" item-left value="estado_pedido" [(ngModel)]="cbEstadoPedido"></ion-checkbox>
+            </ion-item>
+          </ion-col>
+  
+          <ion-col size="12">
+            <ion-item>
+              <ion-label>Juegos</ion-label>
+              <ion-checkbox mode="md" item-left value="juegos" [(ngModel)]="cbJuegos"></ion-checkbox>
+            </ion-item>
+          </ion-col>
+  
+          <ion-col size="12">
+            <ion-item>
+              <ion-label>Registro mediante scan del DNI</ion-label>
+              <ion-checkbox mode="md" item-left value="dni" [(ngModel)]="cbDni"></ion-checkbox>
+            </ion-item>
+          </ion-col>
+  
+        </ion-row>
+      </ion-list>
+    </div>
+  
+    <!------------------------------------------------------------------------------->
+  
+    <div class="upperBox">
+      <h3>¿Cómo calificarías tu experiencia en FFN? (1 al 10) <b>*</b></h3>
+      <ion-list lines="none">
         <ion-item>
-          <ion-label>Opcion 1</ion-label>
-          <ion-radio value="1"></ion-radio>
+          <ion-range min="1" max="10" mode="ios" color="danger" [pin]="true" [(ngModel)]="calificacion"></ion-range>
+          <ion-label slot="end">{{this.calificacion}} puntos</ion-label>
         </ion-item>
-
+      </ion-list>
+    </div>
+  
+    <!---------------------------------------------------------------------------------------------->
+  
+    <div class="upperBox">
+      <h3>¿Te resulto favorable la interacción con nuestros QR? <b>*</b></h3>
+      <ion-list style="color: salmon; border-radius: 10px; border: 2px salmon solid; width: 100%;">
         <ion-item>
-          <ion-label>Opcion 2</ion-label>
-          <ion-radio value="2"></ion-radio>
+          <ion-select aria-label="mesa" interface="action-sheet" placeholder="Seleccionar opcion" [(ngModel)]="resSelect">
+            <!--ion-select-option *ngFor="let mesa of mesas" [value]="mesa.numero">{{mesa.numero}}</ion-select-option-->
+            <ion-select-option value="si">Si</ion-select-option>
+            <ion-select-option value="mejorar">Puede mejorar</ion-select-option>
+            <ion-select-option value="no">No</ion-select-option>
+          </ion-select>
         </ion-item>
-
+      </ion-list>
+  
+    </div>
+  
+    <!--------------------------------------------------------------------------------------->
+    <div class="upperBox">
+      <h3>Dejanos un comentario</h3>
+      <ion-list>
         <ion-item>
-          <ion-label>Opcion 3</ion-label>
-          <ion-radio value="3"></ion-radio>
+          <ion-textarea label="Tu opinión nos interesa" labelPlacement="floating"></ion-textarea>
+  
         </ion-item>
+      </ion-list>  
+    </div>
+  
+    <div>
+      <ion-button expand="block" color="danger" (click)="enviarEncuesta()">Enviar</ion-button>
+    </div>
+  
+  
+  <!---------------------------SPINNER------------------------------->
+  </ion-content>
 
-        <ion-item lines="">
-          <ion-label>Otra</ion-label>
-          <ion-radio value="4"></ion-radio>
-        </ion-item>
-      </ion-radio-group>
-    </ion-list>
-  </div>
+</div>
 
+<!----- GRAFICOS ------>
+<div ngIf=""> 
 
-  <div class="upperBox">
-    <h3>Pregunta 2</h3>
-    <ion-list>
-      <ion-row>
-        <ion-col size="6">
-          <ion-item>
-            <ion-label>Opt 1</ion-label>
-            <ion-checkbox mode="md" item-left value="opt1"></ion-checkbox>
-          </ion-item>
-        </ion-col>
-
-        <ion-col size="6">
-          <ion-item>
-            <ion-label>Opt 2</ion-label>
-            <ion-checkbox mode="md" item-left value="opt2"></ion-checkbox>
-          </ion-item>
-        </ion-col>
-
-        <ion-col size="6">
-          <ion-item>
-            <ion-label>Opt 3</ion-label>
-            <ion-checkbox mode="md" item-left value="opt3"></ion-checkbox>
-          </ion-item>
-        </ion-col>
-
-        <ion-col size="6">
-          <ion-item>
-            <ion-label>Opt 4</ion-label>
-            <ion-checkbox mode="md" item-left value="opt4"></ion-checkbox>
-          </ion-item>
-        </ion-col>
-
-      </ion-row>
-    </ion-list>
-  </div>
-
-  <div class="upperBox">
-    <h3>Calificacion</h3>
-    <ion-list lines="none">
-      <ion-item>
-        <ion-range min="1" max="10" mode="ios" color="danger" [pin]="true"></ion-range>
-        <ion-label slot="end">puntos</ion-label>
-      </ion-item>
-    </ion-list>
-  </div>
-
-  <div class="upperBox">
-    <ion-list style="color: salmon; border-radius: 10px; border: 2px salmon solid; width: 100%;">
-      <ion-item>
-        <ion-select aria-label="mesa" interface="action-sheet" placeholder="Seleccionar opcion">
-          <!--ion-select-option *ngFor="let mesa of mesas" [value]="mesa.numero">{{mesa.numero}}</ion-select-option-->
-          <ion-select-option value="opcion 1">opcion 1</ion-select-option>
-          <ion-select-option value="opcion 2">opcion 2</ion-select-option>
-          <ion-select-option value="opcion 3">opcion 3</ion-select-option>
-        </ion-select>
-      </ion-item>
-    </ion-list>
-
-  </div>
-
-  <div class="upperBox">
-    <ion-list>
-      <ion-item>
-        <ion-textarea label="Tu opinión nos interesa" labelPlacement="floating" fill="outline" placeholder="Comentarios"></ion-textarea>
-
-      </ion-item>
-    </ion-list>  
-  </div>
-
-  <div>
-    <ion-button expand="block" color="danger">Enviar</ion-button>
-  </div>
-
-
-<!---------------------------SPINNER------------------------------->
-</ion-content>
+</div>

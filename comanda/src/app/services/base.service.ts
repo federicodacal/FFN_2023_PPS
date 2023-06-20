@@ -27,6 +27,11 @@ export class BaseService {
     return getDoc(docRef);
   }
 
+  getUser(uid:string) {
+    const noteDocRef = doc(this.bd, `usuarios/${uid}`);
+    return docData(noteDocRef, {idField: 'uid'}) as Observable<any>;
+  }
+
   addUsuario(usr: any, uid: string = ''){
     const usrRef = doc(this.bd, 'usuarios', uid);
     return setDoc(usrRef, usr);   
@@ -172,6 +177,17 @@ export class BaseService {
   deletePedidoFromBartender(uidProd:string) {
     const colRef = doc(this.bd, `pedidosBartender/${uidProd}`);
     return deleteDoc(colRef);
+  }
+
+  // Encuesta
+  addEncuesta(encuesta:any) {
+    const colRef = collection(this.bd, 'encuestas');
+    return addDoc(colRef, encuesta);
+  }
+
+  getEncuestas() {
+    const colRef = collection(this.bd, 'encuestas');
+    return collectionData(colRef, {idField: 'id'}) as Observable<any[]>;
   }
 
 }

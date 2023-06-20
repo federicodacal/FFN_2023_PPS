@@ -7,7 +7,6 @@ import { Auth } from '@angular/fire/auth';
 import { UserActivoService } from 'src/app/services/user-activo.service';
 import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
 import { ToastController } from '@ionic/angular';
-import { JsonPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { Firestore, doc, setDoc, updateDoc } from '@angular/fire/firestore';
 
