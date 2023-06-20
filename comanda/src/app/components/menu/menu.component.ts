@@ -76,7 +76,7 @@ export class MenuComponent  implements OnInit {
     console.log(this.pedido);
     this.bd.addPedido(this.pedido);
 
-    //cambio el estado de la mesa
+    //cambio el estado de la mesa. NO ES ASYNC, hay que salir y volver a entrar
     const usrRef = doc(this.bdFire, 'usuarios', this.uid)
     setDoc(usrRef, {
       estadoQrMesa: 'pedidoCargado'

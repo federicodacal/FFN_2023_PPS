@@ -36,6 +36,7 @@ export class HomePage implements OnInit {
   constructor(private userActivo : UserActivoService, private bd: BaseService, private auth: AuthService, private mail:MailService, private authFire : Auth, private barcodeScanner: BarcodeScanner, private toastController:ToastController, private router:Router, private fs:Firestore) {}
 
   ngOnInit(){
+    this.pantalla = 'inicio';
     //No me funciona, tira undefined 
     // Promise.all([
     //   firstValueFrom( this.bd.getUsuariosGeneral())

@@ -29,7 +29,7 @@
   </div>
 
   <div *ngIf="pantalla == 'hacerPedido'">
-  <ion-button (click)="pantalla = 'inicio'" style="--background: rgb(255, 109, 92);
+  <ion-button (click)="ngOnInit()" style="--background: rgb(255, 109, 92);
   position: fixed; z-index: 100;" ><img style="height: 80%;" src="../../../assets/volver.png"></ion-button>
     <app-menu></app-menu>
   </div>
@@ -202,10 +202,6 @@
         </div>
         </div>
     </div>
-
-
-    <!--+++++++++++++++++++++++++++++++++ BARTENDER +++++++++++++++++++++++++++++++++-->
-
 
 
     <!---------------------------ENCUESTA Y ESTADO---------------------------------------------->
