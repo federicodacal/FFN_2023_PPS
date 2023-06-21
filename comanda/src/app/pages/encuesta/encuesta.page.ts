@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
-import { getDownloadURL, ref, uploadString } from '@angular/fire/storage';
+//import { getDownloadURL, ref, uploadString } from '@angular/fire/storage';
 import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { Chart, ChartType, registerables } from 'chart.js';
@@ -68,36 +68,131 @@ export class EncuestaPage implements OnInit {
           setTimeout(() => {
 
             if(this.encuestas) {
-              console.log(this.encuestas.length);
 
-              this.labeldataCalificacion = [1,2,3,4,5,6,7,8,9,10];
-              this.labeldataQR = ['si', 'mejorar', 'no'];
-
-              for(let i=0; i<this.encuestas.length; i++) { 
-
-                //console.log(this.encuestas[i].calificacion);
-                this.realdataCalificacion.push(this.encuestas[i].calificacion);
-
-                this.realdataQR.push(this.encuestas[i].interaccionQrs);
-              }
-
-              //console.log(this.labeldataCalificacion);
-              //console.log(this.realdataCalificacion);
-
-              this.renderChart(this.labeldataCalificacion,this.realdataCalificacion,'pie','piechart');
-              this.renderChart(this.labeldataQR,this.realdataQR,'bar','barchart');
-
-              //this.renderChart(this.labeldata,this.realdata,this.colordata,'doughnut','dochart');
+              this.cargarDatosPregunta1();
+              this.cargarDatosPregunta2();
+              this.cargarDatosPregunta3();
+              this.cargarDatosPregunta4();
 
             }
-            
-          }, 2000);
+          
+          }, 1000);
 
             
         }
       });
     },1000)
   }
+
+  valorRespuesta1: any = [0,0,0,0,0,0,0,0,0,0]; //[1,2,3,4,5,6,7,8,9,10]
+  cargarDatosPregunta1(){
+    for (let i = 0; i < this.encuestas.length; i++) {
+        switch (this.encuestas[i].calificacion) {
+          case 1:
+            this.valorRespuesta1[0]++;
+          break;
+          case 2:
+            this.valorRespuesta1[1]++;
+          break; 
+          case 3:
+            this.valorRespuesta1[2]++;
+          break;
+          case 4:
+            this.valorRespuesta1[3]++;
+          break;
+          case 5:
+            this.valorRespuesta1[4]++;
+          break;
+          case 6:
+            this.valorRespuesta1[5]++;
+          break;
+          case 7:
+            this.valorRespuesta1[6]++;
+          break;
+          case 8:
+            this.valorRespuesta1[7]++;
+          break;
+          case 9:
+            this.valorRespuesta1[8]++;
+          break;
+          case 10:
+            this.valorRespuesta1[9]++;
+          break;   
+        }
+    }
+    
+    this.renderChart([1,2,3,4,5,6,7,8,9,10],this.valorRespuesta1,'pie','piechart');
+  }
+
+  valorRespuesta2: any = [0,0,0]; //[si, mejorar, no]
+  cargarDatosPregunta2() {
+    for (let i = 0; i < this.encuestas.length; i++) {
+      switch (this.encuestas[i].interaccionQrs) {
+        case 'si':
+          this.valorRespuesta2[0]++;
+          break;
+        case 'mejorar':
+          this.valorRespuesta2[1]++;
+          break; 
+        case 'no':
+          this.valorRespuesta2[2]++;
+          break;
+      }
+  }
+
+    this.renderChart(['Si', 'Puede mejorar', 'No'],this.valorRespuesta2,'bar','barchart');
+  }
+
+  valorRespuesta3: any = [0,0,0,0]; //[comida, comunicacion, local, pedido]
+  cargarDatosPregunta3() {
+    for (let i = 0; i < this.encuestas.length; i++) {
+
+      console.log(this.encuestas[i].itemMasImportante);
+
+      switch (this.encuestas[i].itemMasImportante) {
+        case 'comida':
+          this.valorRespuesta3[0]++;
+          break;
+        case 'comunicacion':
+          this.valorRespuesta3[1]++;
+          break; 
+        case 'local':
+          this.valorRespuesta3[2]++;
+          break;
+        case 'pedido':
+          this.valorRespuesta3[3]++;
+          break;
+      }
+  }
+
+    this.renderChart(['Comida', 'Comunicación', 'Local', 'Metodologia de Pedido'],this.valorRespuesta3,'doughnut','dochart');
+  }
+
+  valorRespuesta4: any = [0,0,0,0]; //[chat, dni, estado pedido, juegos]
+  cargarDatosPregunta4() {
+
+    for (let i = 0; i < this.encuestas.length; i++) {
+
+      console.log(this.encuestas[i].itemsUtilizados);
+
+        if(this.encuestas[i].itemsUtilizados.chat) {
+          this.valorRespuesta4[0]++;
+        }
+        if(this.encuestas[i].itemsUtilizados.dni) {
+          this.valorRespuesta4[1]++;
+        }
+        if(this.encuestas[i].itemsUtilizados.estadoPedido) {
+          this.valorRespuesta4[2]++;
+        }
+        if(this.encuestas[i].itemsUtilizados.juegos) {
+          this.valorRespuesta4[3]++;
+        }
+  }
+
+    this.renderChart(['Chat', 'Scan DNI', 'Estado Pedido', 'Juegos'],this.valorRespuesta4,'polarArea','polarchart');
+  }
+
+
 
   enviarEncuesta() {
     /*
@@ -115,7 +210,7 @@ export class EncuestaPage implements OnInit {
 
       const encuesta:any = {
         calificacion: this.calificacion,
-        itemMasImporante: this.resRadioBtn,
+        itemMasImportante: this.resRadioBtn,
         itemsUtilizados: {
           chat: this.cbChat != undefined ? true : false,
           estadoPedido: this.cbEstadoPedido != undefined ? true : false,
@@ -169,16 +264,16 @@ export class EncuestaPage implements OnInit {
       data: {
         labels: labeldata,
         datasets: [{
-          label: '',
+          label: 'Votos',
           data: maindata,
           backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(255, 159, 64, 0.2)',
-            'rgba(255, 205, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(201, 203, 207, 0.2)'
+            'rgba(255, 99, 132)',
+            'rgba(255, 159, 64)',
+            'rgba(255, 205, 86)',
+            'rgba(75, 192, 192)',
+            'rgba(54, 162, 235)',
+            'rgba(153, 102, 255)',
+            'rgba(201, 203, 207)'
           ],
           borderColor: [
             'rgb(255, 99, 132)',
