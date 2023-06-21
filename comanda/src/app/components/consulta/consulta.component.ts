@@ -27,6 +27,8 @@ export class ConsultaComponent  implements OnInit {
     setTimeout(()=>{
       this.bd.getUsuario(this.uidUsr) 
       .then((usr)=>{
+      console.log(usr);
+
         if(this.usuarioRecibido == undefined){
           this.bd.crearConsulta(this.uidUsr, usr.data()!);
           //console.log(this.bd.comprobarSiExisteConsulta(this.uidUsr));

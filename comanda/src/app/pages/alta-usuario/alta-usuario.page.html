@@ -33,19 +33,19 @@
     <br>
     <div *ngIf="!esAnonimo">
     <ion-item style=" margin: 0 auto; border-radius: 10px;">
-      <ion-input type="number" autocomplete="off" class="form-control" id="txtDNI"  label="DNI" labelPlacement="stacked" placeholder="Ingrese dni" formControlName="DNI" required name="DNI"></ion-input>
+      <ion-input autocomplete="off" class="form-control" id="txtDNI"  label="DNI" labelPlacement="stacked" placeholder="Ingrese dni" formControlName="DNI" required name="DNI"></ion-input>
       <a style="text-align: center; color: rgb(219, 0, 0); font-weight: 700;" class="invalid"
       *ngIf="formUsuario.controls.DNI.errors?.required &&
       formUsuario.controls.DNI.touched">
       El DNI es requerido
     </a>
     <a style="text-align: center; color: rgb(219, 0, 0); font-weight: 700;" class="invalid"
-    *ngIf="formUsuario.controls.DNI.errors?.min &&
+    *ngIf="formUsuario.controls.DNI.errors?.minlength &&
     formUsuario.controls.DNI.touched">
     Se requieren 8 caracteres
   </a>
   <a style="text-align: center; color: rgb(219, 0, 0); font-weight: 700;" class="invalid"
-  *ngIf="formUsuario.controls.DNI.errors?.max &&
+  *ngIf="formUsuario.controls.DNI.errors?.maxlength &&
   formUsuario.controls.DNI.touched">
   Se requieren 8 caracteres
 </a>

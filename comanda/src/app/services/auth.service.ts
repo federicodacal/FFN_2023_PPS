@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, signInAnonymously, signInWithEmailAndPassword, signOut } from '@angular/fire/auth';
 import { callbackify } from 'util';
 
 @Injectable({
@@ -24,5 +24,9 @@ export class AuthService {
   logOut()
   {
     return signOut(this.auth);
+  }
+
+  registrarAnonimo(){
+    return signInAnonymously(this.auth)
   }
 }

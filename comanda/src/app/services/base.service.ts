@@ -49,8 +49,8 @@ export class BaseService {
   }
 
   addAnonimo(usr: any){
-    const usrRef = collection(this.bd, 'usuarios');
-    return addDoc(usrRef, usr);   
+    const usrRef = doc(this.bd, 'usuarios', usr.uid);
+    return setDoc(usrRef, usr);   
   }
 
   getMesas(): Observable<any[]> {

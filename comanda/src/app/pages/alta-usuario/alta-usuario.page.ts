@@ -7,6 +7,7 @@ import { ref, uploadBytes, Storage, getDownloadURL } from '@angular/fire/storage
 import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
 import { firstValueFrom } from 'rxjs';
 import { ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 
 export interface UserPhoto {
@@ -29,11 +30,11 @@ export class AltaUsuarioPage implements OnInit {
   esAnonimo: boolean = false;
 
   constructor(private formBuilder: FormBuilder, private auth: AuthService, private bd: BaseService,
-    private storage: Storage, private barcodeScanner: BarcodeScanner, private toastController: ToastController) { 
+    private storage: Storage, private barcodeScanner: BarcodeScanner, private toastController: ToastController, private router: Router) { 
     this.formUsuario = this.formBuilder.group({ 
       apellidos: ['', [Validators.required]],
       nombres: ['', [Validators.required,]],
-      DNI: ['', [Validators.required, Validators.min(10000000), Validators.max(50000000)]],
+      DNI: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]],
       correo: ['', [Validators.required]],
       clave: ['', Validators.required],
       claveRepetida: ['', [Validators.required]],
@@ -102,7 +103,11 @@ export class AltaUsuarioPage implements OnInit {
           })
           if(ok){
             if(this.esAnonimo){
-              this.bd.addAnonimo(usuario)
+              this.auth.registrarAnonimo().then((usr: any) =>{
+                usuario.uid = usr.user.uid;
+                this.bd.addAnonimo(usuario)
+                this.router.navigateByUrl('home');
+              })
             }else{
               this.auth.register(usuario.correo, usuario.clave)
               .then(response => this.bd.addUsuario(usuario, response.user.uid))
@@ -127,7 +132,8 @@ export class AltaUsuarioPage implements OnInit {
             usuario = {
             nombre: this.formUsuario.controls['nombres'].value,
             perfil: 'anonimo',
-            foto: this.fotoUsr
+            foto: this.fotoUsr,
+            dni:0
             }
           }
           else{
@@ -200,10 +206,10 @@ export class AltaUsuarioPage implements OnInit {
       //let result = await BarcodeScanner.startScan();
   
       array = data.split('@');
-        if(array[1] == 'A' && array[2] == '1'){
-          this.formUsuario.controls['apellidos'].setValue(array[3]);
-          this.formUsuario.controls['nombres'].setValue(array[4]);
-          this.formUsuario.controls['DNI'].setValue(array[0]);
+        if(array[2] == 'A' && array[3] == '1'){
+          this.formUsuario.controls['apellidos'].setValue(array[4]);
+          this.formUsuario.controls['nombres'].setValue(array[5]);
+          this.formUsuario.controls['DNI'].setValue(array[1]);
         }
         else{
           //this.presentToast('middle', result.content!, 'success')
