@@ -105,6 +105,7 @@ export class AltaUsuarioPage implements OnInit {
             if(this.esAnonimo){
               this.auth.registrarAnonimo().then((usr: any) =>{
                 usuario.uid = usr.user.uid;
+                usuario.estadoUsuario = 1;
                 this.bd.addAnonimo(usuario)
                 this.router.navigateByUrl('home');
               })

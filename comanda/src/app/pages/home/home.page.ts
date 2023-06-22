@@ -192,10 +192,10 @@ export class HomePage implements OnInit {
         console.log('usuario bd', this.usuario);
       
         if(data == 'listadoDeEsperaMesa') {
-          if(this.usuario.estadoQrEspera == 'escaneado'){
+          if(this.usuario.estadoQrEspera == 'escaneado') {
             this.router.navigateByUrl('/encuesta');
           }
-          if(this.usuario.estadoQrEspera == undefined){
+          if(this.usuario.estadoQrEspera == undefined) {
             this.usuario.mesa = 0;
             this.usuario.estadoQrEspera = 'escaneado'
             this.bd.updateMesaUsuario(this.usuario);
