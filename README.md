@@ -57,6 +57,7 @@
 ### :iphone: Códigos QR:
 
 * QR Entrada:
+<img src="comanda/src/assets/qrEntrada.JPG" width=500>
 ![Alt text](comanda/src/assets/qrEntrada.JPG)
 
 * QR Mesa:
