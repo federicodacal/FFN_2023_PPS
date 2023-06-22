@@ -8,18 +8,6 @@
 
 ### :pushpin: Planificación:
 
-### Franco Sultana:
-* Diseño Home
-* Alta Cliente
-
-### Nicolas Caretti:
-* Diseño Login
-* Ingreso Cliente anónimo
-
-### Federico Dacal:
-* Supervisor acepta/rechaza cliente
-* Automatización de emails de confirmación
-
 ***
 
 ### :mag_right: Detalles de trabajo semana 1:
@@ -54,14 +42,43 @@
 
 ***
 
+### :mag_right: Detalles de trabajo semana 3:
+
+:calendar: 16/06/23:
+* Consultas y comunicacion via chat con mozo.
+* Relizacion de pedido por el cliente y verificacion en pantalla del mozo.
+* Implementacion para que el cliente puede cargar su pedido.
+
+:calendar: 17/06/23:
+* Generamos QR de mesa del restaurante. El cliente lo escanea para que el cliente acceda al listado de los productos.
+* El cliente realiza el pedido.
+* Submenú home.
+
+:calendar: 18/06/23:
+* QR Mesa, confirmación mozo y actualización del estado del pedido para la verificación en pantalla del cliente.
+* Chef y Bartender confirman que terminaron sus tareas y el pedido esta listo para entregar.
+* Diseño page encuesta.
+
+:calendar: 19/06/23:
+* El cliente solicita la cuenta.
+* QR propina. Mediante un codigo QR el cliente puede realizar un pago de propina.
+* Detalle de la propina y confirmación.
+
+:calendar: 20/06/23:
+* Encuesta cliente.
+* Confirmación del pago por parte del mozo.
+
+:calendar: 21/06/23:
+* Modificación del ingreso de cliente anónimo.
+* Graficos de las encuentas de clientes.
+
 ### :iphone: Códigos QR:
 
 * QR Entrada:
-<img src="comanda/src/assets/qrEntrada.JPG" width=500>
-![Alt text](comanda/src/assets/qrEntrada.JPG)
+<img src="comanda/src/assets/qrEntrada.JPG" width=230>
 
 * QR Mesa:
-![Alt text](comanda/src/assets/qrMesa.jpeg)
+<img src="comanda/src/assets/qrMesa.jpeg" width=230>
 
 * QR Propina:
-![Alt text](comanda/src/assets/qrPropina.png)
+<img src="comanda/src/assets/qrPropina.png" width=230>
