@@ -2,8 +2,8 @@
 <div *ngIf="this.mostrarCuenta == false && this.preguntarPorPropina == false && this.mostrarPropinas == false" style="text-align: center;">
     <p style="font-size: 6vw; font-weight: 600; color: salmon">Estado del pedido: {{pedido.estado}}</p>
 
-    <ion-button  style="--background: rgb(255, 109, 92);" >Encuesta</ion-button><br>
-    <div *ngIf="this.pedido.estado == 'terminado'">
+    <ion-button (click)="encuesta = true" style="--background: rgb(255, 109, 92);" >Encuesta</ion-button><br>
+    <div *ngIf="this.pedido.estado == 'confirmado'">
         <ion-button (click)="productos()" style="--background: rgb(255, 109, 92);" >Pedir cuenta</ion-button><br>
     </div>
 </div>
@@ -60,6 +60,44 @@ margin: top; margin-right: auto; margin-left: auto;  padding: 3%; margin-top: 10
     <label style="font-size: 4vw;">{{pedido.hora | date: 'dd/MM/yy, hh:mm'}}</label><br>
     </div>
 </div>
+
+
+
+
+<!--++++++++++++++++++++++++++++++++ encuesta y estado ++++++++++++++++++++++++++++++++-->
+<div *ngIf="encuesta">
+    <div *ngIf="usuarioActual.perfil == 'cliente' || usuarioActual.perfil == 'anonimo'" style="width: 90vw; margin: auto">
+      <p style="font-size: 13vw; color: rgb(255, 109, 92); font-weight: 700;">Bienvenido,</p>
+      <p style="font-size: 8vw; color: white; margin-top: -8%; font-weight: 600;">{{usuarioActual.nombre}}</p>
+
+      <label style="font-size: 5vw;"><b>Estado:</b> {{this.pedido.estado}}</label><br>
+      
+      <div *ngFor="let prod of this.pedido.productos">
+        <div style="text-align: center;">
+          <label style="font-size: 6vw; text-align: center;"><u>{{prod.descripcion}}</u></label><br>
+
+          <label style="font-size: 5vw;">{{prod.marca}}</label><br>
+    
+          <label style="font-size: 5vw;"><b>Cantidad:</b> {{prod.cantidad}}</label><br>
+
+        </div>
+      </div>
+      <label style="font-size: 5vw;"><b>Total:</b> ${{this.pedido.total}}</label><br>
+
+      <br>
+
+      <div style="text-align: center;">
+        <ion-button routerLink="/encuesta" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Encuesta</ion-button><br>
+        <!-- 
+          <ion-button (click)="pantalla='estado-pedido'" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Estado pedido</ion-button><br>
+        -->
+          <ion-button routerLink="/consulta" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Consultar al mozo</ion-button><br>
+
+      </div>
+    </div>
+  </div>
+
+
 </div>
 
 

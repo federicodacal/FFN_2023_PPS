@@ -149,6 +149,8 @@ export class AltaUsuarioPage implements OnInit {
               foto: this.fotoUsr
             }
           }
+          usuario.estadoQrMesa = 'ninguno';
+          usuario.completoEncuesta = false;
           usuario.mesa = -1;
           usuario.estadoUsuario = 0;
           

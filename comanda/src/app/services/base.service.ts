@@ -45,7 +45,7 @@ export class BaseService {
 
   updateMesaUsuario(usr:any) {
     const usrRef = doc(this.bd, `usuarios/${usr.uid}`);
-    return updateDoc(usrRef, {mesa:usr.mesa});
+    return updateDoc(usrRef, {mesa:usr.mesa, estadoQrEspera:usr.estadoQrEspera});
   }
 
   addAnonimo(usr: any){
@@ -186,6 +186,10 @@ export class BaseService {
   }
 
 
+  deletePedido(uidPedido:string) {
+    const colRef = doc(this.bd, `pedidos/${uidPedido}`);
+    return deleteDoc(colRef);
+  }
 
   getPedidosPagados(){
     const colRef = collection(this.bd, "pedidos");

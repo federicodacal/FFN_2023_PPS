@@ -193,7 +193,12 @@ export class HomePage implements OnInit {
       
         if(data == 'listadoDeEsperaMesa') {
           if(this.usuario.estadoQrEspera == 'escaneado') {
-            this.router.navigateByUrl('/encuesta');
+            if(this.usuario.completoEncuesta == false){
+              this.presentToast('bottom', 'Todavía no completó la encuesta', 'warning')
+            }
+            else{
+              this.router.navigateByUrl('/encuesta');
+            }
           }
           if(this.usuario.estadoQrEspera == undefined) {
             this.usuario.mesa = 0;
@@ -211,6 +216,7 @@ export class HomePage implements OnInit {
         if(this.usuario.mesa > 0 && data == 'listadoProductos' && this.usuario.estadoQrMesa == 'ninguno')
         {
           this.pantalla = 'hacerPedido';
+          //this.router.navigateByUrl('/menu')
         }
 
         /*
@@ -224,11 +230,11 @@ export class HomePage implements OnInit {
         {
           
           // Para debug desde celu, despues sacar
-          setTimeout(() => {
+          /*setTimeout(() => {
             this.presentToast("middle", `Usuario - ${this.usuario.correo} - Cliente: ${this.pedidoClienteLogeado.cliente} - Precio: $${this.pedidoClienteLogeado.total}`, 'warning', 5000)
-          }, 200);
-
-          this.pantalla = 'encuesta-y-estado';
+          }, 200);*/
+          this.router.navigateByUrl('menu-opciones')
+          //this.pantalla = 'encuesta-y-estado';
           
         }
       });
@@ -348,7 +354,7 @@ export class HomePage implements OnInit {
     })
     setTimeout(()=>{
       console.log('TEST TIMEOUT')
-      this.bd.updateEstadoPedido('terminado', pedido.id)
+      this.bd.updateEstadoPedido('confirmado', pedido.id)
       .then(res => this.presentToast('middle', 'Se confirmó la recepción del pedido', 'success'));
     },2000)
   }

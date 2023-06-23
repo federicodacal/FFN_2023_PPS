@@ -18,6 +18,7 @@ export class MenuOpcionesPage implements OnInit {
   propinas : number = 0;
   preguntarPorPropina : boolean = false;
   mostrarPropinas: boolean = false;
+  encuesta = false;
 
   constructor(private bdFire : Firestore ,private bd: BaseService, private auth: AuthService, private barcodeScanner: BarcodeScanner) { 
     this.pedido.estado = '...';

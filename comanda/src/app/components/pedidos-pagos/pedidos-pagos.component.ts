@@ -41,6 +41,9 @@ export class PedidosPagosComponent  implements OnInit {
           console.log('q paso4');
           console.log(p.uid);
           this.bd.updateEstadoPagado('confirmado', p.id)
+          .then(a =>{
+            this.bd.deletePedido(p.id);
+          })
           this.presentToast('middle', 'Se confirmó el pago.', 'success');
         }
       });

@@ -2,13 +2,12 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { BaseService } from 'src/app/services/base.service';
 
-
 @Component({
   selector: 'app-consulta',
-  templateUrl: './consulta.component.html',
-  styleUrls: ['./consulta.component.scss'],
+  templateUrl: './consulta.page.html',
+  styleUrls: ['./consulta.page.scss'],
 })
-export class ConsultaComponent  implements OnInit {
+export class ConsultaPage implements OnInit {
 
   @ViewChild('endOfChat') endOfChat: ElementRef | undefined;
  

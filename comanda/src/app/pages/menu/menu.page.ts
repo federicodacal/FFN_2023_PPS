@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { Firestore, doc, setDoc } from '@angular/fire/firestore';
 import { ToastController } from '@ionic/angular';
@@ -5,13 +6,13 @@ import { settings } from 'cluster';
 import { ColdObservable } from 'rxjs/internal/testing/ColdObservable';
 import { AuthService } from 'src/app/services/auth.service';
 import { BaseService } from 'src/app/services/base.service';
-
 @Component({
   selector: 'app-menu',
-  templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.scss'],
+  templateUrl: './menu.page.html',
+  styleUrls: ['./menu.page.scss'],
 })
-export class MenuComponent  implements OnInit {
+export class MenuPage implements OnInit {
+
   pantalla = 'menu';
   pedido: any = {};
   precioTotal = 0;
@@ -99,4 +100,5 @@ export class MenuComponent  implements OnInit {
     this.tiempoAprox = Math.max(...tiempos);
     this.pantalla = 'pedido';
   }
+
 }

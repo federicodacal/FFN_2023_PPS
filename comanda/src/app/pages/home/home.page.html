@@ -17,10 +17,10 @@
 
       <div style="text-align: center;">
         <ion-button style="--background: rgb(255, 109, 92); margin: auto; margin-top: 10%; height: 40vh; width: 80vw;"><img src="../../../assets/escaner-de-codigo-de-barras.png" (click)="scanQRMesa()"></ion-button>
-        <ion-button (click)="pantalla = 'consulta'" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Consultar al mozo</ion-button><br>
+        <ion-button *ngIf="usuario.mesa > 0" (click)="pantalla = 'consulta'" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Consultar al mozo</ion-button><br>
         <ion-button (click)="pantalla = 'hacerPedido'" style="margin-top: 3%;" >HacerPedido (test)</ion-button><br>
         <ion-button routerLink="/menu-opciones" style="margin-top: 3%;" >Opciones (test)</ion-button><br>
-        <ion-button (click)="confirmarPedido()" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Confirmar recepción de pedido</ion-button><br>
+        <ion-button *ngIf="pedidoClienteLogeado != null" (click)="confirmarPedido()" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Confirmar recepción de pedido</ion-button><br>
   
       </div>
 
