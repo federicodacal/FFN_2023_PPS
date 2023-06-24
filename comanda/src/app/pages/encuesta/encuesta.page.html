@@ -1,3 +1,5 @@
+<!----- ENCUESTA ------>
+
 <ion-content style="--background: rgb(255, 196, 189)">
   <div *ngIf="this.usuarioActual.completoEncuesta == false">
     
@@ -95,3 +97,76 @@
           </ion-select>
         </ion-item>
       </ion-list>
+  
+    </div>
+  
+    <!--------------------------------------------------------------------------------------->
+    <div class="upperBox">
+      <h3>Dejanos un comentario</h3>
+      <ion-list>
+        <ion-item>
+          <ion-textarea label="Tu opinión nos interesa" labelPlacement="floating"></ion-textarea>
+  
+        </ion-item>
+      </ion-list>  
+    </div>
+  
+    <div>
+      <ion-button expand="block" color="danger" (click)="enviarEncuesta()">Enviar</ion-button>
+    </div>
+
+    <!-- 
+      <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button (click)="addNewToGallery()">
+          <ion-icon name="camera-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+    -->
+    
+  </div>
+  
+
+
+<!----- GRAFICOS ------>
+<div *ngIf="this.usuarioActual.completoEncuesta == true"> 
+
+  <div class="row">
+  
+    <div class="col-lg-6">
+        <h2>Calificacion</h2>
+        <canvas id="piechart"></canvas>
+    </div>
+
+    <div class="col-lg-6">
+        <h2>¿Fue favorable la interacción con nuestros QRs?</h2>
+        <canvas id="barchart"></canvas>
+    </div>
+
+    <div class="col-lg-6">
+        <h2>Nos destacamos por nuestra:</h2>
+        <canvas id="dochart"></canvas>
+    </div>
+
+    <div class="col-lg-6">
+      <h2>Los clientes ha usado:</h2>
+      <canvas id="polarchart"></canvas>
+  </div>
+    
+</div>
+
+
+
+</div>
+
+
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="this.usuarioActual.completoEncuesta == false">
+    <ion-fab-button (click)="addNewToGallery()">
+      <ion-icon name="camera-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>
+
+
+
