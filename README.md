@@ -6,6 +6,37 @@
 
 ***
 
+## Franco Sultana:
+* Diseño Home.
+* Alta Cliente. Validar datos.
+* Registro mediante lectura QR DNI.
+* Listado de productos.
+* Consulta al mozo. Respuesta mozo.
+* Cliente realiza pedido. Importe y tiempo estimado.
+* Mozo entrega pedido y confirmación de cliente. Confirmación de pago.
+* Push notification.
+
+## Nicolas Caretti
+* Diseño Login.
+* Diseño registro cliente anónimo.
+* Ingreso cliente anónimo. Login cliente anónimo.
+* QR Mesa. Cliente accede al listado de productos para hacer el pedido.
+* Confirmación mozo del pedido. Acepta o rechaza pedido.
+* Interacción cliente y mozo.
+* QR Propina, detalle de la propina y confirmación de pago.
+* Push notification.
+
+## Federico Dacal
+* Supervisor acepta o rechaza registro.
+* Autorización de correos electrónicos del restaurante.
+* QR de entrada al local.
+* Asignación de mesas por parte del Metre.
+* Confirmación del chef y bartender.
+* Listado pedido mozo. Verificación estado pedidos.
+* Encuesta de satisfacción cliente.
+* Gráficos de la encuesta de clientes.
+* Push notification.
+
 ### :pushpin: Planificación:
 
 ***
@@ -71,6 +102,13 @@
 :calendar: 21/06/23:
 * Modificación del ingreso de cliente anónimo.
 * Graficos de las encuentas de clientes.
+
+:calendar: 23/06/23:
+* Push notifications.
+* Correcciones de diseño.
+* Correciones generales.
+* Diseño del logo.
+* Splash estático y splash dinámico
 
 ### :iphone: Códigos QR:
 
