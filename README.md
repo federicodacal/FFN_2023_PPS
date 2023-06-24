@@ -1,4 +1,6 @@
-# :fork_and_knife: FFN Restaurante 
+# :fork_and_knife: FFN Restaurante
+
+<img src="comanda/src/assets/logo_ffn.png" width=230>
 
 ## :clipboard: Trabajo Práctico Grupal PPS (UTN-Fra) 
 
