@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
-//import { getDownloadURL, ref, uploadString } from '@angular/fire/storage';
 import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { Chart, ChartType, registerables } from 'chart.js';
 import { AuthService } from 'src/app/services/auth.service';
 import { BaseService } from 'src/app/services/base.service';
+import { UserPhoto } from '../alta-usuario/alta-usuario.page';
+import { getDownloadURL, ref, uploadBytes, Storage } from '@angular/fire/storage';
 Chart.register(...registerables);
 
 @Component({
@@ -15,17 +16,10 @@ Chart.register(...registerables);
 })
 export class EncuestaPage implements OnInit {
 
-  fotosSubidas:number=0;
-  imgSource:any;
+  public photos: UserPhoto[] = [];
+  fotoUsr: string = "";
 
-  chartdata: any;
-
-  labeldataCalificacion: any[] = [];
-  realdataCalificacion: any[] = [];
-
-  labeldataQR: any[] = [];
-  realdataQR: any[] = [];
-
+  fotosSubidas=0;
 
   usuarioActual: any = {};
 
@@ -42,7 +36,7 @@ export class EncuestaPage implements OnInit {
   resSelect!:string;
   comentario!:string;
 
-  constructor(private toast:ToastController, private bd:BaseService, private auth:AuthService, private fs:Firestore, private loadingCtrl:LoadingController, private toastCtrl:ToastController) { }
+  constructor(private toast:ToastController, private bd:BaseService, private auth:AuthService, private fs:Firestore, private loadingCtrl:LoadingController, private toastCtrl:ToastController, private storage:Storage) { }
 
   ngOnInit() {
 
@@ -298,38 +292,53 @@ export class EncuestaPage implements OnInit {
 
   }
 
-  takePicture = async () => {
-    const image = await Camera.getPhoto({
-      quality: 90,
-      allowEditing: false, 
-      resultType: CameraResultType.Base64,
-      source: CameraSource.Prompt,
-      saveToGallery: false
-    })
-      this.imgSource = 'data:image/jpeg;base64,' + image.base64String;
+  private async savePicture(photo: Photo) {
+    const fileName = new Date().getTime() + '.jpeg';
+    
+    const response = await fetch(photo.webPath!);
+    const blob = await response.blob();
+    const filepath = 'fotosEncuesta' + '/' + fileName;
+    const imgRef= ref(this.storage, filepath);
+
+    await uploadBytes(imgRef, blob)
+    
+    .then(()=>{
+      getDownloadURL(ref(this.storage, 'fotosEncuesta/'+fileName))
+      .then((url:any)=>{
+        this.fotoUsr = url;
+        this.fotosSubidas++;
+        this.presentToast('middle', `Foto agregada: ${this.fotosSubidas} de 3 disponibles`, 'success');
+      });
       
-      console.info('img', this.imgSource);
+    })
 
-      if(image) {
-        const loading = await this.loadingCtrl.create();
-        await loading.present();
+    return {
+      filepath: fileName,
+      webviewPath: photo.webPath
+    };
+  }
 
-        const result = await this.uploadImage(image, 'fotoCliente');
+
+  public async addNewToGallery() {
+
+    if(this.fotosSubidas < 3) {
+      // Take a photo
+      const capturedPhoto = await Camera.getPhoto({
+        resultType: CameraResultType.Uri, // file-based data; provides best performance
+        source: CameraSource.Camera, // automatically take a new photo with the camera
+        quality: 100 // highest quality (0 to 100)
         
-        if(result) {
-          const toast = await this.toastCtrl.create({
-            message: 'La imagen fue subida correctamente',
-            position: 'bottom',
-            duration: 2000
-          });
-
-          toast.present();
-        }
-        loading.dismiss();
-      }
-    }   
-
-    async uploadImage(cameraFile:Photo, foto:string) { 
-      return null;
+      });
+      // Save the picture and add it to photo collection
+      //this.mostrarFoto = true
+      const savedImageFile = await this.savePicture(capturedPhoto);
+      
+      this.photos.unshift(savedImageFile);
     }
+    else {
+      this.presentToast('middle', 'Límite de fotos alcanzado', 'warning');
+    }
+  }
+
+
 }

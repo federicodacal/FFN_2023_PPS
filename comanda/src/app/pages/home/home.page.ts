@@ -166,7 +166,10 @@ export class HomePage implements OnInit {
 
 
 
-
+irA(path: string){
+  console.log(path);
+  this.pantalla = path;
+}
 
 
 //TEST PUSH NOTIF

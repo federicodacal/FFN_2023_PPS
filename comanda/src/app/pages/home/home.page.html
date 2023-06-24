@@ -50,9 +50,11 @@
 
       <div style="text-align: center;">
         <ion-button style="--background: rgb(255, 109, 92); margin: auto; margin-top: 10%; height: 40vh; width: 80vw;"><img src="../../../assets/escaner-de-codigo-de-barras.png" (click)="scanQRMesa()"></ion-button>
-        <ion-button *ngIf="usuario.mesa > 0" (click)="pantalla = 'consulta'" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Consultar al mozo</ion-button><br>
-       <ion-button (click)="pantalla = 'hacerPedido'" style="margin-top: 3%;" >HacerPedido (test)</ion-button><br>
-        <ion-button routerLink="/menu-opciones" style="margin-top: 3%;" >Opciones (test)</ion-button><br>
+        <ion-button *ngIf="usuario.mesa > 0" (click)="irA('consulta')" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Consultar al mozo</ion-button><br>
+       
+       
+        <!--<ion-button (click)="pantalla = 'hacerPedido'" style="margin-top: 3%;" >HacerPedido (test)</ion-button><br>
+        <ion-button routerLink="/menu-opciones" style="margin-top: 3%;" >Opciones (test)</ion-button><br>-->
         <ion-button *ngIf="pedidoClienteLogeado != null" (click)="confirmarPedido()" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Confirmar recepción de pedido</ion-button><br>
   
       </div>
@@ -68,11 +70,27 @@
   </div>
 
     <!--+++++++++++++++++++++++++++++++++ MOZO +++++++++++++++++++++++++++++++++-->
+    
+
+    <div *ngIf="pantalla == 'consulta'">
+      <div style="height: 5vh; width: 100%;">
+        <ion-button *ngIf="usuario.perfil != 'mozo'" (click)="pantalla = 'inicio'" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Volver</ion-button>
+      </div>
+      <div *ngIf="usuario.perfil == 'cliente' || usuario.perfil == 'anonimo'">
+        <div style="margin-top: 4%;">
+          <app-consulta [usuarioRecibido]="undefined" [audio]="audio"></app-consulta>
+        </div>
+      </div>
+    </div>
   <div *ngIf="usuario.perfil == 'mozo'">
     <ion-button (click)="pantalla = 'verConsultas';" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Ver consultas</ion-button>
     <ion-button (click)="pantalla = 'pedidos';" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Ver pedidos</ion-button>
     <ion-button (click)="pantalla = 'pedidos-en-proceso';" style="--background: rgb(255, 109, 92); margin-top: 3%;" >En preparación</ion-button>
     <ion-button (click)="pantalla = 'pagos';" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Pagos</ion-button>
+
+
+
+
     <ion-menu contentId="main-content">
       <ion-header>
         <ion-toolbar>
@@ -98,16 +116,17 @@
         </ion-toolbar>
       </ion-header>
       <ion-content style="--background: rgb(255, 180, 171);">
-        <div *ngIf="pantalla == 'consulta'">
+        <!--<div *ngIf="pantalla == 'consulta'">
+          
           <div style="height: 5vh; width: 100%;">
             <ion-button *ngIf="usuario.perfil != 'mozo'" (click)="pantalla = 'inicio'" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Volver</ion-button>
           </div>
           <div *ngIf="usuario.perfil == 'cliente' || usuario.perfil == 'anonimo'">
             <div style="margin-top: 4%;">
-              <app-consulta [usuarioRecibido]="undefined" [audio]="audio"></app-consulta>
+              <app-consulta [usuarioRecibido]="undefined"  [audio]="audio"></app-consulta>
             </div>
           </div>
-        </div>
+        </div>-->
         <div *ngIf="usuario.perfil == 'mozo'">
       
           <div *ngIf="pantalla == 'verConsultas'" style="">
@@ -151,7 +170,62 @@
     </ion-content>
     </div>
   </div>
- 
+
+
+
+
+<!--
+  <div *ngIf="usuario.perfil == 'mozo'">
+ <ion-button (click)="pantalla = 'verConsultas';" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Ver consultas</ion-button>
+    <ion-button (click)="pantalla = 'pedidos';" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Ver pedidos</ion-button>
+    <ion-button (click)="pantalla = 'pedidos-en-proceso';" style="--background: rgb(255, 109, 92); margin-top: 3%;" >En preparación</ion-button>
+   
+  </div>
+  <div *ngIf="pantalla == 'consulta'">
+    <div style="height: 5vh; width: 100%;">
+      <ion-button *ngIf="usuario.perfil != 'mozo'" (click)="pantalla = 'inicio'" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Volver</ion-button>
+    </div>
+    <div *ngIf="usuario.perfil == 'cliente' || usuario.perfil == 'anonimo'">
+      <div style="margin-top: 4%;">
+        <app-consulta [usuarioRecibido]="undefined" [audio]="audio"></app-consulta>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="usuario.perfil == 'mozo'">
+
+    <div *ngIf="pantalla == 'verConsultas'" style="">
+
+    <div (click)="consultaSeleccionada = c; pantalla = 'consulta'" *ngFor="let c of consultas | async" style="margin-top: 4%; border-radius: 10px; border: 2px solid salmon; background-color: white;
+      margin: auto;width: 80%; padding: 3%; ">
+      {{c.nombre}}<br> 
+      "{{c.ultimoMsj}}"<br><br>
+      <div style="text-align: right;">
+        <label>{{c.fecha | date: 'dd/MM/yy, hh:mm'}}</label>
+      </div>
+    </div>
+
+  </div>
+       
+</div>
+<div *ngIf="pantalla == 'consulta'">
+  <app-consulta [usuarioRecibido]="consultaSeleccionada" [audio]="audio"></app-consulta>
+
+</div>
+
+<div *ngIf="pantalla == 'pedidos'">
+  <app-ver-pedidos [queMuestro]="'a confirmar'" [audio]="audio"></app-ver-pedidos>
+</div>
+
+<div *ngIf="pantalla == 'pedidos-en-proceso'">
+  <app-ver-pedidos [queMuestro]="'en proceso'" [audio]="audio"></app-ver-pedidos>
+</div>
+
+
+<div *ngIf="pantalla == 'pagos'">
+  <app-pedidos-pagos [audio]="audio"></app-pedidos-pagos>
+</div>
+-->
+
 
 
  

@@ -27,6 +27,7 @@ export class ConsultaComponent  implements OnInit {
   constructor(private bd: BaseService, private auth: AuthService, private pn: PushNotificationService) { }
 
   ngOnInit(){
+    console.log('TEST CHAT')
     this.uidUsr = this.auth.getUid()!
     setTimeout(()=>{
       this.bd.getUsuario(this.uidUsr) 
@@ -77,7 +78,6 @@ export class ConsultaComponent  implements OnInit {
     },200)
       
     }
-
 
 
   sendPush() {
