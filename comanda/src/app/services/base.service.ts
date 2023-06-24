@@ -48,6 +48,11 @@ export class BaseService {
     return updateDoc(usrRef, {mesa:usr.mesa, estadoQrEspera:usr.estadoQrEspera});
   }
 
+  updateSoloMesaUsuario(usr:any) {
+    const usrRef = doc(this.bd, `usuarios/${usr.uid}`);
+    return updateDoc(usrRef, {mesa:usr.mesa});
+  }
+
   addAnonimo(usr: any){
     const usrRef = doc(this.bd, 'usuarios', usr.uid);
     return setDoc(usrRef, usr);   

@@ -4,6 +4,7 @@
     <div *ngIf="p.estado == queMuestro" style="color: rgb(80, 80, 80); 
     background-color: rgba(255, 255, 255, 0.808); width: 90%; border: 2px solid salmon; border-radius: 15px;
     margin: auto;  padding: 3%">
+
       <label style="font-size: 6vw;">{{p.cliente}}</label><br>
       <label style="font-size: 7vw; font-weight: 600;">Pedido:</label>
       <div *ngFor="let prod of p.productos">

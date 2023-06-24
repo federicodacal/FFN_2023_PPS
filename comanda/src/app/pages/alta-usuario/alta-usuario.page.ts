@@ -8,6 +8,7 @@ import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
 import { firstValueFrom } from 'rxjs';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { PushNotificationService } from 'src/app/services/push-notification.service';
 
 
 export interface UserPhoto {
@@ -30,7 +31,8 @@ export class AltaUsuarioPage implements OnInit {
   esAnonimo: boolean = false;
 
   constructor(private formBuilder: FormBuilder, private auth: AuthService, private bd: BaseService,
-    private storage: Storage, private barcodeScanner: BarcodeScanner, private toastController: ToastController, private router: Router) { 
+    private storage: Storage, private barcodeScanner: BarcodeScanner, private toastController: ToastController, 
+    private router: Router, private pn: PushNotificationService) { 
     this.formUsuario = this.formBuilder.group({ 
       apellidos: ['', [Validators.required]],
       nombres: ['', [Validators.required,]],
@@ -102,24 +104,52 @@ export class AltaUsuarioPage implements OnInit {
   
           })
           if(ok){
+
             if(this.esAnonimo){
               this.auth.registrarAnonimo().then((usr: any) =>{
                 usuario.uid = usr.user.uid;
                 usuario.estadoUsuario = 1;
                 this.bd.addAnonimo(usuario)
-                this.router.navigateByUrl('home');
+                .then(a =>{
+                  this.sendPush();
+                  this.router.navigateByUrl('home');
+                })
               })
             }else{
               this.auth.register(usuario.correo, usuario.clave)
-              .then(response => this.bd.addUsuario(usuario, response.user.uid))
+              .then(response => {
+                this.sendPush();
+                this.bd.addUsuario(usuario, response.user.uid)
+              })
               .catch(error => console.log(error));
             }     
+            
             this.formUsuario.reset();          
             this.presentToast("bottom", "Se dio de alta correctamente", 'success');
           }
             
       });
   
+    }
+
+
+
+    sendPush() {
+      this.pn
+        .sendPushNotification({
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          registration_ids: [
+            // eslint-disable-next-line max-len
+          'cBSDGcohSXiAPoeeq1MpnI:APA91bHHcJUEO3vc09FmBfa3EHmsDn-i1MYIUBiQYESbcd9pJzk5KV3ZQH21xY4vqT-Fz-oxEdlWb6c8hXCrY8iICHrGKp5OUIEnJeI-ZEan4u5ak_KREW4XyvtFVA1uNyq6MWyCunRh'
+          ],
+          notification: {
+            title: '¡Nuevo cliente!',
+            body: 'Un cliente se dio de alta',
+          },
+        })
+        .subscribe((data: any) => {
+          console.log(data);
+        });
     }
     
 

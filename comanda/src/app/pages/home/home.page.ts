@@ -9,6 +9,7 @@ import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Firestore, doc, setDoc, updateDoc } from '@angular/fire/firestore';
+import { PushNotificationService } from 'src/app/services/push-notification.service';
 
 @Component({
   selector: 'app-home',
@@ -32,9 +33,14 @@ export class HomePage implements OnInit {
 
   pedidosGeneral:any [] = [];
 
-  constructor(private userActivo : UserActivoService, private bd: BaseService, private auth: AuthService, private mail:MailService, private authFire : Auth, private barcodeScanner: BarcodeScanner, private toastController:ToastController, private router:Router, private fs:Firestore) {}
+  audio = true;
+
+  constructor(private userActivo : UserActivoService, private bd: BaseService, private auth: AuthService, private mail:MailService, 
+    private authFire : Auth, private barcodeScanner: BarcodeScanner, private toastController:ToastController, private router:Router, 
+    private fs:Firestore, private pn: PushNotificationService) {}
 
   ngOnInit(){
+    this.pn.getUser();
     this.pantalla = 'inicio';
     //No me funciona, tira undefined 
     // Promise.all([
@@ -158,6 +164,49 @@ export class HomePage implements OnInit {
   }
 
 
+
+
+
+
+
+//TEST PUSH NOTIF
+sendPush(msj: string, tlt: string) {
+  this.pn
+    .sendPushNotification({
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      registration_ids: [
+        // eslint-disable-next-line max-len
+        'cBSDGcohSXiAPoeeq1MpnI:APA91bHHcJUEO3vc09FmBfa3EHmsDn-i1MYIUBiQYESbcd9pJzk5KV3ZQH21xY4vqT-Fz-oxEdlWb6c8hXCrY8iICHrGKp5OUIEnJeI-ZEan4u5ak_KREW4XyvtFVA1uNyq6MWyCunRh'
+      ],
+      notification: {
+        title: tlt,
+        body: msj,
+      },
+    })
+    .subscribe((data: any) => {
+      console.log(data);
+    });
+}
+
+///////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /************************* SUPERVISOR RECHAZA/ACEPTA CLIENTE **********************************************/
   rechazarCliente(user:any) {
     console.log(user);
@@ -197,6 +246,7 @@ export class HomePage implements OnInit {
               this.presentToast('bottom', 'Todavía no completó la encuesta', 'warning')
             }
             else{
+              this.sendPush('¡Estoy esperando!', this.usuario.nombre);
               this.router.navigateByUrl('/encuesta');
             }
           }
@@ -217,6 +267,9 @@ export class HomePage implements OnInit {
         {
           this.pantalla = 'hacerPedido';
           //this.router.navigateByUrl('/menu')
+        }
+        if(this.usuario.mesa == -1 && data == 'listadoProductos'){
+          this.presentToast('bottom', 'La mesa se encuentra libre', 'warning');
         }
 
         /*
@@ -293,11 +346,13 @@ export class HomePage implements OnInit {
       
       console.log('hola 3');
       this.bd.deletePedidoFromChef(idPedEmp);
+
+      this.sendPush('Pedido confirmado', 'Chef')
     }
     
     // confirma bartender
     if(this.usuario.perfil == 'bartender') {
-
+      this.sendPush('Pedido confirmado', 'Bartender')
       const ref = doc(this.fs, 'pedidos', idPedido);
       await updateDoc(ref, {
         terminoBartender: true

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ToastButton, ToastController } from '@ionic/angular';
 import { BaseService } from 'src/app/services/base.service';
 
@@ -8,6 +8,9 @@ import { BaseService } from 'src/app/services/base.service';
   styleUrls: ['./pedidos-pagos.component.scss'],
 })
 export class PedidosPagosComponent  implements OnInit {
+
+
+  @Input() audio?:any | undefined;
 
   pagos: any;
   constructor(private bd: BaseService, private toastController: ToastController) { }
@@ -42,6 +45,12 @@ export class PedidosPagosComponent  implements OnInit {
           console.log(p.uid);
           this.bd.updateEstadoPagado('confirmado', p.id)
           .then(a =>{
+            if(this.audio){
+              this.reproducirAudio();
+
+            }
+            usuario.mesa = -1;
+            this.bd.updateSoloMesaUsuario(usuario);
             this.bd.deletePedido(p.id);
           })
           this.presentToast('middle', 'Se confirmó el pago.', 'success');
@@ -60,5 +69,13 @@ export class PedidosPagosComponent  implements OnInit {
     });
 
     await toast.present();
+  }
+
+
+  reproducirAudio(){
+    const audio = new Audio();
+    audio.src = '../../../assets/confirmarPago.mp3';
+    audio.load();
+    audio.play();
   }
 }

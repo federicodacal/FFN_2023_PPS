@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "34748268613",
+    "project_id": "pps-2do-parcial",
+    "storage_bucket": "pps-2do-parcial.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:34748268613:android:6a3160f352b2972b61e32c",
+        "android_client_info": {
+          "package_name": "io.ionic.starter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "34748268613-pkrvlua9vjftnuhcpnp2dkfoi4kknpen.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgJvnvO02ZvC2zE-9peUshvFMnYOHbJT4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "34748268613-pkrvlua9vjftnuhcpnp2dkfoi4kknpen.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

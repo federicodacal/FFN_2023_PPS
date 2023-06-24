@@ -26,6 +26,8 @@ export class LoginPage implements OnInit {
   constructor(private userActual : UserActivoService, private authFire : Auth, private auth: AuthService, private router: Router, private bd : BaseService, private toastController : ToastController) { }
 
   ngOnInit() {
+    this.email = "";
+    this.pass = "";
     //Si recargo o vuelvo hacia atras la sesion se mantiene.
     // this.authFire.signOut();
     this.bd.getUsuariosGeneral().subscribe(data => this.arrayUsuarios = data);

@@ -9,7 +9,9 @@ import { ConsultaComponent } from 'src/app/components/consulta/consulta.componen
 import { MenuComponent } from 'src/app/components/menu/menu.component';
 import { VerPedidosComponent } from 'src/app/components/ver-pedidos/ver-pedidos.component';
 import { PedidosPagosComponent } from 'src/app/components/pedidos-pagos/pedidos-pagos.component';
-
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 
 
 @NgModule({
@@ -18,6 +20,7 @@ import { PedidosPagosComponent } from 'src/app/components/pedidos-pagos/pedidos-
     FormsModule,
     IonicModule,
     HomePageRoutingModule,
+
   ],
   declarations: [HomePage, ConsultaComponent, MenuComponent, VerPedidosComponent, PedidosPagosComponent]
 })

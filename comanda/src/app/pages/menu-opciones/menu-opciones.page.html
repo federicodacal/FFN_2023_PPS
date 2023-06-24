@@ -1,10 +1,10 @@
 <div style="background-color: rgb(255, 196, 189); height: 100%; width: 100%;">
 <div *ngIf="this.mostrarCuenta == false && this.preguntarPorPropina == false && this.mostrarPropinas == false" style="text-align: center;">
-    <p style="font-size: 6vw; font-weight: 600; color: salmon">Estado del pedido: {{pedido.estado}}</p>
+    <p style="font-size: 15vw; font-weight: 600; color: salmon">Estado del pedido: <br><b style="color: white">{{pedido.estado}}</b></p>
 
-    <ion-button (click)="encuesta = true" style="--background: rgb(255, 109, 92);" >Encuesta</ion-button><br>
+    <ion-button routerLink="/encuesta" style="--background: rgb(255, 109, 92); height: 20vh; width: 80vw; font-size: 7vw; font-weight: 800;" >Encuesta</ion-button><br>
     <div *ngIf="this.pedido.estado == 'confirmado'">
-        <ion-button (click)="productos()" style="--background: rgb(255, 109, 92);" >Pedir cuenta</ion-button><br>
+        <ion-button (click)="productos()" style="--background: rgb(255, 109, 92); height: 20vh; width: 80vw; margin-top: 5%; font-size: 7vw; font-weight: 800;" >Pedir cuenta</ion-button><br>
     </div>
 </div>
 

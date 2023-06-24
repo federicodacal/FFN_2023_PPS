@@ -1,18 +1,21 @@
 <ion-content style="--background: rgb(255, 196, 189)">
   <!---------------------------LOGIN USUARIOS COMUNES------------------------------->
   <div *ngIf="loginAnonimo == false">
+    <div style="text-align: center; margin-top: 5%;">
+      <img src="../../../assets/restaurante.png" style="width: 60%;">
+    </div>
     <ion-card class="card-login">
       <br>
       <div class="inputs">
         <ion-input style="--background: #ffff;" placeholder="Correo" name="txtMail" [(ngModel)]="email"></ion-input>
       </div>
-      <br>
+      <br> 
       <div class="inputs">
         <ion-input type="password" style="--background: #ffff" placeholder="Contraseña" name="txtPass" [(ngModel)]="pass"></ion-input>
       </div> 
       <br>
       <ion-button class="boton-login" style="display: block" (click)="login()">Ingresar</ion-button>
-      <div class="anonimo" (click)="loginAnonimo = true">Ingresar como anonimo.</div>
+      
     </ion-card>
 
     <div class="accesoRapido">

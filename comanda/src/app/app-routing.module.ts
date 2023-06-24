@@ -8,7 +8,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'splash',
     pathMatch: 'full'
   },
   {
@@ -30,7 +30,8 @@ const routes: Routes = [
   {
     path: 'menu-opciones',
     loadChildren: () => import('./pages/menu-opciones/menu-opciones.module').then( m => m.MenuOpcionesPageModule)
-  },  {
+  },
+  {
     path: 'consulta',
     loadChildren: () => import('./pages/consulta/consulta.module').then( m => m.ConsultaPageModule)
   },
@@ -45,6 +46,10 @@ const routes: Routes = [
   {
     path: 'ver-pedidos',
     loadChildren: () => import('./pages/ver-pedidos/ver-pedidos.module').then( m => m.VerPedidosPageModule)
+  },
+  {
+    path: 'splash',
+    loadChildren: () => import('./pages/splash/splash.module').then( m => m.SplashPageModule)
   },
 
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Firestore, doc, setDoc } from '@angular/fire/firestore';
 import { ToastController } from '@ionic/angular';
 import { settings } from 'cluster';
@@ -20,6 +20,7 @@ export class MenuComponent  implements OnInit {
 
   productos: any[] = [];
 
+  @Input() audio?:any | undefined;
 
   tiempoAprox = 0;
 
@@ -76,7 +77,10 @@ export class MenuComponent  implements OnInit {
     this.pedido.uid =  this.uid;
     console.log(this.pedido);
     this.bd.addPedido(this.pedido);
+    if(this.audio){
+      this.reproducirAudio();
 
+    }
     //cambio el estado de la mesa. NO ES ASYNC, hay que salir y volver a entrar
     const usrRef = doc(this.bdFire, 'usuarios', this.uid)
     setDoc(usrRef, {
@@ -98,5 +102,13 @@ export class MenuComponent  implements OnInit {
     });
     this.tiempoAprox = Math.max(...tiempos);
     this.pantalla = 'pedido';
+  }
+
+
+  reproducirAudio(){
+    const audio = new Audio();
+    audio.src = '../../../assets/hacerPedido.mp3';
+    audio.load();
+    audio.play();
   }
 }

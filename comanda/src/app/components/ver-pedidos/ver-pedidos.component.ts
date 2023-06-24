@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Firestore, doc, setDoc } from '@angular/fire/firestore';
 import { BaseService } from 'src/app/services/base.service';
+import { PushNotificationService } from 'src/app/services/push-notification.service';
 
 @Component({
   selector: 'app-ver-pedidos',
@@ -8,6 +9,7 @@ import { BaseService } from 'src/app/services/base.service';
   styleUrls: ['./ver-pedidos.component.scss'],
 })
 export class VerPedidosComponent  implements OnInit {
+  @Input() audio?:any | undefined;
 
   pedidos: any;
   pedidosChef:any = {};
@@ -15,7 +17,7 @@ export class VerPedidosComponent  implements OnInit {
 
   @Input() queMuestro!:string;
 
-  constructor(private bd: BaseService, private bdFire : Firestore) { }
+  constructor(private bd: BaseService, private bdFire : Firestore, private pn: PushNotificationService) { }
 
   ngOnInit() {
     
@@ -28,6 +30,11 @@ export class VerPedidosComponent  implements OnInit {
 
   confirmarPedido(producto : any, uid : any, productoCompleto : any)
   {
+    if(this.audio){
+      this.reproducirAudio();
+
+    }
+    this.sendPush();
     console.log(productoCompleto);
     let pdChef :any []=[];
     let pdBartender : any[]=[];
@@ -85,5 +92,31 @@ export class VerPedidosComponent  implements OnInit {
       terminoChef
     }, {merge: true});
 
+  }
+
+
+  sendPush() {
+    this.pn
+      .sendPushNotification({
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        registration_ids: [
+          // eslint-disable-next-line max-len
+        'fm4xlg-sSq68XxRByM4_B5:APA91bG3Goa409xLoflRTRMQw9DZRfL8p_KfMSmsn00If23uaJAaDD6oq-4Gf17BpX8USwC11bT6bwidKtqKdaqbH_dpijGaWpG-RXOqDDeY1GrYMTR8oNcQvhLmwe_QR5hWuNdUiM4v'
+        ],
+        notification: {
+          title: '¡Pedido confirmado!',
+          body: 'El mozo confirmó un pedido',
+        },
+      })
+      .subscribe((data: any) => {
+        console.log(data);
+      });
+  }
+
+  reproducirAudio(){
+    const audio = new Audio();
+    audio.src = '../../../assets/hacerPedido.mp3';
+    audio.load();
+    audio.play();
   }
 }

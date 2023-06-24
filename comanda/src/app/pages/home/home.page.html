@@ -1,5 +1,38 @@
 
 <ion-content [fullscreen]="true" style="--background: rgb(255, 196, 189);">
+  
+
+  <ion-fab vertical="top" horizontal="end" slot="fixed" style="">
+    <ion-fab-button color="dark" style="height: 60px; width: 60px;--background: salmon">
+      <ion-icon name="menu-outline"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="bottom" >
+      <ion-fab-button routerLink="/login"  style="height: 50px; width: 50px;">
+        <ion-icon name="log-out-outline" ></ion-icon>
+      </ion-fab-button>
+
+      <ion-fab-button (click)="audio = !audio" style="height: 50px; width: 50px;">
+        <ion-icon *ngIf="audio" name="volume-high-outline"></ion-icon>
+        <ion-icon *ngIf="!audio" name="volume-mute-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+
+
+
+  <!--<ion-fab slot="fixed" vertical="top" horizontal="end" [edge]="true" style="margin-top: 10%; --background: salmon;">
+    
+
+    <ion-fab-list side="bottom">
+      
+      <ion-fab-button>
+        <ion-icon name="color-palette"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button>
+        <ion-icon name="globe"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>-->
 
   <!--+++++++++++++++++++++++++++++++++ CLIENTE +++++++++++++++++++++++++++++++++-->
   <div *ngIf="pantalla == 'inicio'">
@@ -18,7 +51,7 @@
       <div style="text-align: center;">
         <ion-button style="--background: rgb(255, 109, 92); margin: auto; margin-top: 10%; height: 40vh; width: 80vw;"><img src="../../../assets/escaner-de-codigo-de-barras.png" (click)="scanQRMesa()"></ion-button>
         <ion-button *ngIf="usuario.mesa > 0" (click)="pantalla = 'consulta'" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Consultar al mozo</ion-button><br>
-        <ion-button (click)="pantalla = 'hacerPedido'" style="margin-top: 3%;" >HacerPedido (test)</ion-button><br>
+       <ion-button (click)="pantalla = 'hacerPedido'" style="margin-top: 3%;" >HacerPedido (test)</ion-button><br>
         <ion-button routerLink="/menu-opciones" style="margin-top: 3%;" >Opciones (test)</ion-button><br>
         <ion-button *ngIf="pedidoClienteLogeado != null" (click)="confirmarPedido()" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Confirmar recepción de pedido</ion-button><br>
   
@@ -40,58 +73,94 @@
     <ion-button (click)="pantalla = 'pedidos';" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Ver pedidos</ion-button>
     <ion-button (click)="pantalla = 'pedidos-en-proceso';" style="--background: rgb(255, 109, 92); margin-top: 3%;" >En preparación</ion-button>
     <ion-button (click)="pantalla = 'pagos';" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Pagos</ion-button>
-
-  </div>
-  <div *ngIf="pantalla == 'consulta'">
-    <div style="height: 5vh; width: 100%;">
-      <ion-button *ngIf="usuario.perfil != 'mozo'" (click)="pantalla = 'inicio'" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Volver</ion-button>
-    </div>
-    <div *ngIf="usuario.perfil == 'cliente' || usuario.perfil == 'anonimo'">
-      <div style="margin-top: 4%;">
-        <app-consulta [usuarioRecibido]="undefined"></app-consulta>
+    <ion-menu contentId="main-content">
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Menú</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>     
+        <ion-button (click)="pantalla = 'verConsultas';" style="--background: rgb(255, 109, 92); margin-top: 3%; width: 100%;" >Ver consultas</ion-button><br>
+        
+    <ion-button (click)="pantalla = 'pedidos';" style="--background: rgb(255, 109, 92); margin-top: 3%; width: 100%;" >Ver pedidos</ion-button><br>
+    <ion-button (click)="pantalla = 'pedidos-en-proceso';" style="--background: rgb(255, 109, 92); margin-top: 3%; width: 100%;" >En preparación</ion-button><br>
+    <ion-button (click)="pantalla = 'pagos';" style="--background: rgb(255, 109, 92); margin-top: 3%; width: 100%;" >Pagos</ion-button><br>
+    
+      </ion-content>
+    </ion-menu>
+    <div class="ion-page" id="main-content">
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+          </ion-buttons>
+          <ion-title>Menu de opciones</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content style="--background: rgb(255, 180, 171);">
+        <div *ngIf="pantalla == 'consulta'">
+          <div style="height: 5vh; width: 100%;">
+            <ion-button *ngIf="usuario.perfil != 'mozo'" (click)="pantalla = 'inicio'" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Volver</ion-button>
+          </div>
+          <div *ngIf="usuario.perfil == 'cliente' || usuario.perfil == 'anonimo'">
+            <div style="margin-top: 4%;">
+              <app-consulta [usuarioRecibido]="undefined" [audio]="audio"></app-consulta>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="usuario.perfil == 'mozo'">
+      
+          <div *ngIf="pantalla == 'verConsultas'" style="">
+      
+          <div (click)="consultaSeleccionada = c; pantalla = 'consulta'" *ngFor="let c of consultas | async" style="margin-top: 4%; border-radius: 10px; border: 2px solid salmon; background-color: white;
+            margin: auto;width: 80%; padding: 3%; ">
+            <div style="display: flex; justify-content: space-between;">
+              <div>
+                {{c.nombre}}<br>
+                "{{c.ultimoMsj}}"<br><br>
+              </div>
+              <div>
+                <img [src]="c.foto" style="height: 10vh; border-radius: 5px;">
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <label>{{c.fecha | date: 'dd/MM/yy, hh:mm'}}</label>
+            </div>
+          </div>
+      
+        </div>
+        <div *ngIf="pantalla == 'consulta'">
+          <app-consulta [usuarioRecibido]="consultaSeleccionada" [audio]="audio"></app-consulta>
+      
+        </div>
+      
+        <div *ngIf="pantalla == 'pedidos'">
+          <app-ver-pedidos [queMuestro]="'a confirmar'" [audio]="audio"></app-ver-pedidos>
+        </div>
+      
+        <div *ngIf="pantalla == 'pedidos-en-proceso'">
+          <app-ver-pedidos [queMuestro]="'en proceso'" [audio]="audio"></app-ver-pedidos>
+        </div>
+      
+      
+        <div *ngIf="pantalla == 'pagos'">
+          <app-pedidos-pagos [audio]="audio"></app-pedidos-pagos>
+        </div>
+    
       </div>
+    </ion-content>
     </div>
   </div>
-  <div *ngIf="usuario.perfil == 'mozo'">
-
-    <div *ngIf="pantalla == 'verConsultas'" style="">
-
-    <div (click)="consultaSeleccionada = c; pantalla = 'consulta'" *ngFor="let c of consultas | async" style="margin-top: 4%; border-radius: 10px; border: 2px solid salmon; background-color: white;
-      margin: auto;width: 80%; padding: 3%; ">
-      {{c.nombre}}<br>
-      "{{c.ultimoMsj}}"<br><br>
-      <div style="text-align: right;">
-        <label>{{c.fecha | date: 'dd/MM/yy, hh:mm'}}</label>
-      </div>
-    </div>
-
-  </div>
-  <div *ngIf="pantalla == 'consulta'">
-    <app-consulta [usuarioRecibido]="consultaSeleccionada"></app-consulta>
-
-  </div>
-
-  <div *ngIf="pantalla == 'pedidos'">
-    <app-ver-pedidos [queMuestro]="'a confirmar'"></app-ver-pedidos>
-  </div>
-
-  <div *ngIf="pantalla == 'pedidos-en-proceso'">
-    <app-ver-pedidos [queMuestro]="'en proceso'"></app-ver-pedidos>
-  </div>
+ 
 
 
-  <div *ngIf="pantalla == 'pagos'">
-    <app-pedidos-pagos></app-pedidos-pagos>
-  </div>
-
-
-  </div>
+ 
 
 
 
     <!--<button routerLink="/cliente-consultar">Test consulta</button>-->
     <!--+++++++++++++++++++++++++++++++++ SUPERVISOR +++++++++++++++++++++++++++++++++-->
-    <div *ngIf="usuario.perfil == 'supervisor' || usuario.perfil == 'duenio'">
+    <div *ngIf="usuario.perfil == 'supervisor' || usuario.perfil == 'duenio'" style="color: rgb(99, 99, 99)">
       <p style="font-size: 13vw; color: rgb(255, 109, 92); font-weight: 700; margin-left: 5%;">Bienvenido</p>
       <p style="font-size: 8vw; color: white; margin-top: -8%; font-weight: 600; margin-left: 5%;">{{usuario.nombre}}</p>
 
@@ -112,11 +181,11 @@
         <div *ngIf="u.estadoUsuario == 0"  style="background-color: rgba(255, 255, 255, 0.575); color: salmon; border-radius: 10px; border: 2px salmon solid; width: 100%;">
           
           <img id="" style="position: relative; height: 70px;" [src]="u.foto">
-          <p style="font-size: 5vw; color: white;font-weight: 600;">{{u.nombre}}{{u.apellido}}</p>
+          <p style="font-size: 5vw;font-weight: 600;">{{u.nombre}}{{u.apellido}}</p>
           <div *ngIf="u.perfil == 'cliente'">
-            <p style="font-size: 5vw; color: white; font-weight: 600;"><b>DNI:</b> {{u.dni}}</p>
+            <p style="font-size: 5vw; font-weight: 600;"><b>DNI:</b> {{u.dni}}</p>
           </div>
-          <div style="display: flex; justify-content: right;">
+          <div style="display: flex; justify-content: center;">
             <ion-button color="danger" (click)="rechazarCliente(u)">Rechazar</ion-button>
             <ion-button color="success" (click)="aceptarCliente(u)">Aceptar</ion-button>
           </div>
@@ -146,8 +215,7 @@
     <!--+++++++++++++++++++++++++++++++++ METRE +++++++++++++++++++++++++++++++++-->
 
     <div *ngIf="usuario.perfil == 'metre'">
-      <p style="font-size: 13vw; color: rgb(255, 109, 92); font-weight: 700; margin-left: 5%;">a,</p>
-      <p style="font-size: 8vw; color: white; margin-top: -8%; font-weight: 600; margin-left: 5%;">{{usuario.nombre}}</p>
+      <p style="font-size: 8vw; color: white;  font-weight: 600; margin-left: 5%;">{{usuario.nombre}} {{usuario.apellido}}</p>
 
       <div style="width: 90%; margin: auto; text-align: center;">
       <div  *ngFor="let u of usuarios; let i = index" style="margin-bottom: 5%;">
@@ -199,7 +267,7 @@
             <br>
             
           </div>
-          <ion-button class="botonConfirmar" (click)="confirmarPedidoTerminado(p.id, p.uid_cliente)">Pedido terminado</ion-button>
+          <ion-button style="--background: salmon" class="botonConfirmar" (click)="confirmarPedidoTerminado(p.id, p.uid_cliente)">Pedido terminado</ion-button>
           <br>
           <div style="text-align: right;">
             <label style="font-size: 4vw;">{{p.hora | date: 'dd/MM/yy, hh:mm'}}</label><br>
@@ -241,9 +309,6 @@
         </div>
       </div>
     </div>
-
-  
-
 
 
   <!--<ion-button routerLink="/alta-usuario">Test alta</ion-button>

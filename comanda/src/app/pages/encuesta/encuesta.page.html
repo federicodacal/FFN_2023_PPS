@@ -1,6 +1,14 @@
 <!----- ENCUESTA ------>
 
 <ion-content style="--background: rgb(255, 196, 189)">
+
+
+  
+  <ion-fab slot="fixed" vertical="top" horizontal="end" [edge]="true" style="margin-top: 9%;">
+    <ion-fab-button routerLink="/login"  style="--background: salmon;" >
+      <ion-icon name="log-out-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
   <div *ngIf="this.usuarioActual.completoEncuesta == false"> 
  
     <p style="font-size: 8.5vw; color: rgb(255, 109, 92); font-weight: 700; margin-left: 1em;">Encuesta de satisfacción: FFN</p>

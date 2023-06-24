@@ -1,16 +1,17 @@
-import { Injectable } from '@angular/core';
+import { CSP_NONCE, Injectable } from '@angular/core';
 import {
   ActionPerformed,
   PushNotifications,
   PushNotificationSchema,
   Token,
 } from '@capacitor/push-notifications';
-import { Platform } from '@ionic/angular';
+import { Platform, ToastController } from '@ionic/angular';
 import { Firestore, doc, docData, updateDoc } from '@angular/fire/firestore';
 import { LocalNotifications } from '@capacitor/local-notifications';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
+import { AuthService } from './auth.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -20,29 +21,48 @@ export class PushNotificationService {
   constructor(
     private platform: Platform,
     private firestore: Firestore,
-    private http: HttpClient
+    private http: HttpClient,
+    private auth: AuthService,
+    private toast: ToastController
   ) {
     // const aux = doc(firestore, 'personas/4hjcn6LXY1qVfxBDYub3');
     // docData(aux).subscribe((user) => (this.user = user));
   }
 
   async inicializar(): Promise<void> {
+
     this.addListeners();
+
     // Verificamos que este en un dispositivo y no en una PC y tambien que el usuario no tegna seteado el token
-    if (this.platform.is('capacitor') && this.user.token === '') {
-      const result = await PushNotifications.requestPermissions();
-      if (result.receive === 'granted') {
-        await PushNotifications.register();
-      }
+    if (this.platform.is('capacitor')) {
+
+      if(this.user.token === '') {
+    
+          const result = await PushNotifications.requestPermissions();
+          if (result.receive === 'granted') {
+            await PushNotifications.register();
+          }
+          //else{
+        //this.presentToast('top', 'no permisos', 'danger')
+    
+          //}
+        }
+        
     }
+  
   }
 
   getUser(): void {
-    const aux = doc(this.firestore, 'personas/4hjcn6LXY1qVfxBDYub3');
+  setTimeout(() => {
+    const aux = doc(this.firestore, 'usuarios/'+ this.auth.getUid()!);
+    console.log('TEST UID NOTIF: ' +this.auth.getUid()!)
+    
     docData(aux, { idField: 'id' }).subscribe(async (user) => {
       this.user = user;
       this.inicializar();
     });
+  }, 2000);
+    
   }
 
   sendPushNotification(req: any): Observable<any> {
@@ -63,7 +83,7 @@ export class PushNotificationService {
       async (token: Token) => {
         //Acá deberiamos asociar el token a nuestro usario en nuestra bd
         console.log('Registration token: ', token.value);
-        const aux = doc(this.firestore, `personas/${this.user.id}`);
+        const aux = doc(this.firestore, `usuarios/${this.user.id}`);
         await updateDoc(aux, {
           token: token.value,
         });
@@ -120,4 +140,20 @@ export class PushNotificationService {
       }
     );
   }
+
+
+
+  async presentToast(position: 'top' | 'middle' | 'bottom', msj:string, color: string, duration:number=1000) {
+    const toast = await this.toast.create({
+      message: msj,
+      duration: duration,
+      position: position,
+      color: color
+    });
+
+    await toast.present();
+  }
 }
+
+
+
