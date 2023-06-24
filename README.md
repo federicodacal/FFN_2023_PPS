@@ -72,6 +72,13 @@
 * Modificación del ingreso de cliente anónimo.
 * Graficos de las encuentas de clientes.
 
+:calendar: 23/06/23:
+* Push notifications.
+* Correcciones de diseño.
+* Correciones generales.
+* Diseño del logo.
+* Splash estático y splash dinámico
+
 ### :iphone: Códigos QR:
 
 * QR Entrada:
