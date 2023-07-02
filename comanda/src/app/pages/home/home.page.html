@@ -53,9 +53,10 @@
         <ion-button *ngIf="usuario.mesa > 0" (click)="irA('consulta')" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Consultar al mozo</ion-button><br>
        
        
-        <!--<ion-button (click)="pantalla = 'hacerPedido'" style="margin-top: 3%;" >HacerPedido (test)</ion-button><br>
-        <ion-button routerLink="/menu-opciones" style="margin-top: 3%;" >Opciones (test)</ion-button><br>-->
-        <ion-button *ngIf="pedidoClienteLogeado != null" (click)="confirmarPedido()" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Confirmar recepción de pedido</ion-button><br>
+        <ion-button (click)=" testScanQRMesa('listadoDeEsperaMesa')" style="margin-top: 3%;" >Lsita espera (test)</ion-button><br>
+        <ion-button (click)=" testScanQRMesa('2')" style="margin-top: 3%;" >HacerPedido (test)</ion-button><br>
+        <ion-button routerLink="/menu-opciones" style="margin-top: 3%;" >Opciones (test)</ion-button><br>
+        <ion-button *ngIf="pedidoClienteLogeado != null && pedidoClienteLogeado.estado == 'entregado'" (click)="confirmarPedido()" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Confirmar recepción de pedido</ion-button><br>
   
       </div>
 
@@ -102,6 +103,7 @@
         
     <ion-button (click)="pantalla = 'pedidos';" style="--background: rgb(255, 109, 92); margin-top: 3%; width: 100%;" >Ver pedidos</ion-button><br>
     <ion-button (click)="pantalla = 'pedidos-en-proceso';" style="--background: rgb(255, 109, 92); margin-top: 3%; width: 100%;" >En preparación</ion-button><br>
+    <ion-button (click)="pantalla = 'entregar';" style="--background: rgb(255, 109, 92); margin-top: 3%; width: 100%;" >Listos para entregar</ion-button><br>
     <ion-button (click)="pantalla = 'pagos';" style="--background: rgb(255, 109, 92); margin-top: 3%; width: 100%;" >Pagos</ion-button><br>
     
       </ion-content>
@@ -164,6 +166,10 @@
       
         <div *ngIf="pantalla == 'pagos'">
           <app-pedidos-pagos [audio]="audio"></app-pedidos-pagos>
+        </div>
+
+        <div *ngIf="pantalla == 'entregar'">
+          <app-listos-entregar></app-listos-entregar>
         </div>
     
       </div>

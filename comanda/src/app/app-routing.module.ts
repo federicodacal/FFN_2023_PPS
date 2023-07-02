@@ -31,11 +31,6 @@ const routes: Routes = [
     path: 'menu-opciones',
     loadChildren: () => import('./pages/menu-opciones/menu-opciones.module').then( m => m.MenuOpcionesPageModule)
   },
-
-  {
-    path: 'menu',
-    loadChildren: () => import('./pages/menu/menu.module').then( m => m.MenuPageModule)
-  },
   {
     path: 'pedidos-cargados',
     loadChildren: () => import('./pages/pedidos-cargados/pedidos-cargados.module').then( m => m.PedidosCargadosPageModule)

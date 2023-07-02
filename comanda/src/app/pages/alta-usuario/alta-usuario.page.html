@@ -11,6 +11,12 @@
 
   <img [src]="fotoUsr" style="position: absolute; margin: 0 auto; left: 0; right: 0; max-height: 120px; top: 18vh; border-radius: 10px;">  
 
+
+
+  <div class="spinner">
+    <ion-spinner style="transform: scale(2); color: white" *ngIf="spinner" name="crescent"></ion-spinner>
+  </div>
+  <br>
   <!--+++++++++++++++++++++++ INPUTS +++++++++++++++++++++++-->
 
     <ion-item style="border-radius: 10px;" *ngIf="!esAnonimo">

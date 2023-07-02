@@ -30,6 +30,8 @@ export class AltaUsuarioPage implements OnInit {
   formUsuario: FormGroup;
   esAnonimo: boolean = false;
 
+  spinner = false;
+
   constructor(private formBuilder: FormBuilder, private auth: AuthService, private bd: BaseService,
     private storage: Storage, private barcodeScanner: BarcodeScanner, private toastController: ToastController, 
     private router: Router, private pn: PushNotificationService) { 
@@ -119,6 +121,7 @@ export class AltaUsuarioPage implements OnInit {
               this.auth.register(usuario.correo, usuario.clave)
               .then(response => {
                 this.sendPush();
+                usuario.uid = response.user.uid;
                 this.bd.addUsuario(usuario, response.user.uid)
               })
               .catch(error => console.log(error));
@@ -190,6 +193,7 @@ export class AltaUsuarioPage implements OnInit {
     }
 
     private async savePicture(photo: Photo) {
+      this.spinner = true;
       const fileName = new Date().getTime() + '.jpeg';
      
       const response = await fetch(photo.webPath!);
@@ -203,6 +207,7 @@ export class AltaUsuarioPage implements OnInit {
         getDownloadURL(ref(this.storage, 'fotosUsr/'+fileName))
         .then((url:any)=>{
           this.fotoUsr = url;
+          this.spinner = false;
         });
        
       })

@@ -1,0 +1,28 @@
+<div style="margin-top: 5%;">
+  <div *ngFor="let p of pedidos">
+
+    <div style="color: rgb(80, 80, 80); 
+    background-color: rgba(255, 255, 255, 0.808); width: 90%; border: 2px solid salmon; border-radius: 15px;
+    margin: auto;  padding: 3%">
+
+      <label style="font-size: 6vw;">{{p.cliente}}</label><br>
+      <label style="font-size: 7vw; font-weight: 600;">Pedido:</label>
+      <div *ngFor="let prod of p.productos">
+        <div style="text-align: center;">
+          <label style="font-size: 6vw; text-align: center;"><u>{{prod.descripcion}}</u></label><br>
+
+        </div>
+      <label style="font-size: 5vw;">{{prod.marca}}</label><br>
+
+      <label style="font-size: 5vw;"><b>Cantidad:</b> {{prod.cantidad}}</label><br>
+
+
+
+      <div style="text-align: right;">
+        <label style="font-size: 4vw;">{{p.hora | date: 'dd/MM/yy, hh:mm'}}</label><br>
+      </div> 
+    </div>
+    <ion-button (click)="entregarPedido(p)" class="botonConfirmar">Entregado</ion-button>
+
+  <div>
+<div>

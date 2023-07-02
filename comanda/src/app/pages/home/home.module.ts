@@ -12,6 +12,7 @@ import { PedidosPagosComponent } from 'src/app/components/pedidos-pagos/pedidos-
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
+import { ListosEntregarComponent } from 'src/app/components/listos-entregar/listos-entregar.component';
 
 
 @NgModule({
@@ -22,6 +23,6 @@ import { FIREBASE_OPTIONS } from '@angular/fire/compat';
     HomePageRoutingModule,
 
   ],
-  declarations: [HomePage, ConsultaComponent, MenuComponent, VerPedidosComponent, PedidosPagosComponent]
+  declarations: [HomePage, ConsultaComponent, MenuComponent, VerPedidosComponent, PedidosPagosComponent, ListosEntregarComponent]
 })
 export class HomePageModule {}

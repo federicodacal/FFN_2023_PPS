@@ -93,9 +93,8 @@ export class HomePage implements OnInit {
     {
       console.log(this.auth.getUid()!);
       
-      this.bd.getUsuario(this.auth.getUid()!)
-        .then((response) => {
-          this.usuario = response.data();
+      this.bd.getUsuarioCollection(this.auth.getUid()!).subscribe((response) => {
+          this.usuario = response[0];
           this.usuario.uid = this.auth.getUid();
 
           // Si es metre cargo mesas
@@ -143,7 +142,7 @@ export class HomePage implements OnInit {
           } 
          
         })
-        .catch(error => console.log(error));
+        //.catch(error => console.log(error));
       console.log(this.auth.getUid()!);
       console.log(this.authFire.currentUser);
 
@@ -242,7 +241,7 @@ sendPush(msj: string, tlt: string) {
         data = barcodeData.text;
 
         console.log('usuario bd', this.usuario);
-      
+        //data = 'listadoDeEsperaMesa'
         if(data == 'listadoDeEsperaMesa') {
           if(this.usuario.estadoQrEspera == 'escaneado') {
             if(this.usuario.completoEncuesta == false){
@@ -264,17 +263,22 @@ sendPush(msj: string, tlt: string) {
         }
         //asignar estadoQrMesa a ninguno
 
-
+        //data = 'listadoProductos';
         //mesa asignada y qr de mesa
-        if(this.usuario.mesa > 0 && data == 'listadoProductos' && this.usuario.estadoQrMesa == 'ninguno')
+        if(this.usuario.mesa > 0 && ''+this.usuario.mesa == data && /*data == 'listadoProductos' &&*/ this.usuario.estadoQrMesa == 'ninguno')
         {
           this.pantalla = 'hacerPedido';
           //this.router.navigateByUrl('/menu')
         }
-        if(this.usuario.mesa == -1 && data == 'listadoProductos'){
-          this.presentToast('bottom', 'La mesa se encuentra libre', 'warning');
+        if(this.usuario.mesa == -1 && ''+this.usuario.mesa == data){
+          this.presentToast('bottom', 'No tiene una mesa asignada', 'warning');
         }
 
+
+        if(this.usuario.mesa > 0 && ''+this.usuario.mesa != data){
+          this.presentToast('bottom', 'Este QR no pertence a tu mesa.', 'danger');
+
+        }
         /*
         this.bd.getPedidoByClienteUid(this.usuario.uid).then((res:any) => {
           this.pedidoClienteLogeado = res;
@@ -282,7 +286,7 @@ sendPush(msj: string, tlt: string) {
         });
         */
 
-        if(data == 'listadoProductos' && this.usuario.estadoQrMesa == 'pedidoCargado')
+        if(''+this.usuario.mesa == data && this.usuario.estadoQrMesa == 'pedidoCargado')
         {
           
           // Para debug desde celu, despues sacar
@@ -295,6 +299,73 @@ sendPush(msj: string, tlt: string) {
         }
       });
   }
+
+  testScanQRMesa(test: string){
+    let data = test;
+
+      console.log('usuario bd', this.usuario);
+      //data = 'listadoDeEsperaMesa'
+      if(data == 'listadoDeEsperaMesa') {
+        if(this.usuario.estadoQrEspera == 'escaneado') {
+          if(this.usuario.completoEncuesta == false){
+            this.presentToast('bottom', 'Todavía no completó la encuesta', 'warning')
+          }
+          else{
+            this.sendPush('¡Estoy esperando!', this.usuario.nombre);
+            this.router.navigateByUrl('/encuesta');
+          }
+        }
+        if(this.usuario.estadoQrEspera == undefined) {
+          this.usuario.mesa = 0;
+          this.usuario.estadoQrEspera = 'escaneado'
+          this.bd.updateMesaUsuario(this.usuario);
+          this.presentToast("middle", 'Pronto se te asignará una mesa. Gracias!', 'success', 2000);
+        }
+        
+
+      }
+      //asignar estadoQrMesa a ninguno
+
+      //data = 'listadoProductos';
+      //mesa asignada y qr de mesa
+      if(this.usuario.mesa > 0 && ''+this.usuario.mesa == data && this.usuario.estadoQrMesa == 'ninguno')
+      {
+        this.pantalla = 'hacerPedido';
+        //this.router.navigateByUrl('/menu')
+      }
+      if(this.usuario.mesa == -1 && ''+this.usuario.mesa == data){
+        this.presentToast('bottom', 'La mesa se encuentra libre', 'warning');
+      }
+
+      if(this.usuario.mesa > 0 && ''+this.usuario.mesa != data){
+        this.presentToast('middle', 'Este QR no pertence a tu mesa.', 'danger');
+
+      }
+
+      /*
+      this.bd.getPedidoByClienteUid(this.usuario.uid).then((res:any) => {
+        this.pedidoClienteLogeado = res;
+        console.log('cliente tiene pedido', this.pedidoClienteLogeado);
+      });
+      */
+
+      if(''+this.usuario.mesa == data && this.usuario.estadoQrMesa == 'pedidoCargado')
+      {
+        
+        // Para debug desde celu, despues sacar
+        /*setTimeout(() => {
+          this.presentToast("middle", `Usuario - ${this.usuario.correo} - Cliente: ${this.pedidoClienteLogeado.cliente} - Precio: $${this.pedidoClienteLogeado.total}`, 'warning', 5000)
+        }, 200);*/
+        this.router.navigateByUrl('menu-opciones')
+        //this.pantalla = 'encuesta-y-estado';
+        
+      }
+    
+  }
+
+
+
+
 
   /************************* METRE ASIGNA MESA *********************/
   rechazarPedidoMesa(cliente:any) {
@@ -317,7 +388,7 @@ sendPush(msj: string, tlt: string) {
       mesa.libre = false;
       this.bd.updateEstadoMesa(mesa);
 
-      this.presentToast('middle', `Mesa ${mesa.numero} asignada a cliente: ${cliente.correo}`, 'success', 2000);
+      this.presentToast('middle', `Mesa ${mesa.numero} asignada a cliente: ${cliente.nombre}`, 'success', 2000);
     }
   }
 

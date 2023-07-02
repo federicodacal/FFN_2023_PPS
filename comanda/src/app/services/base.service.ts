@@ -27,6 +27,13 @@ export class BaseService {
     return getDoc(docRef);
   }
 
+
+  getUsuarioCollection(uid: string) { 
+    const docRef = collection(this.bd, "usuarios");
+    const q = query(docRef, where('uid', '==', uid));
+    return collectionData(q);
+  }
+
   
   getUser(uid:string) {
     const noteDocRef = doc(this.bd, `usuarios/${uid}`);
@@ -154,6 +161,12 @@ export class BaseService {
   getPedidos() {
     const consRef = collection(this.bd, 'pedidos');
     const q = query(consRef, orderBy('hora', 'desc'))
+    return collectionData(q, {idField: 'id'}) as Observable<any[]>;
+  }
+
+  getPedidosTerminados() {
+    const consRef = collection(this.bd, 'pedidos');
+    const q = query(consRef, where('estado', '==', 'terminado'));
     return collectionData(q, {idField: 'id'}) as Observable<any[]>;
   }
 
