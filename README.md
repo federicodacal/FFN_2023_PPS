@@ -117,8 +117,12 @@
 * QR Entrada:
 <img src="comanda/src/assets/qrEntrada.JPG" width=230>
 
-* QR Mesa:
-<img src="comanda/src/assets/qrMesa.jpeg" width=230>
+* QR Mesas:
+<img src="comanda/src/assets/mesa1.png" width=230>
+<img src="comanda/src/assets/mesa2.png" width=230>
+<img src="comanda/src/assets/mesa3.png" width=230>
+<img src="comanda/src/assets/mesa4.png" width=230>
+<img src="comanda/src/assets/mesa5.png" width=230>
 
 * QR Propina:
 <img src="comanda/src/assets/qrPropina.png" width=230>
