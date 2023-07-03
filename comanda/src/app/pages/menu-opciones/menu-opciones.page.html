@@ -17,7 +17,7 @@
     </div>
 </div>
 
-<div *ngIf="this.mostrarPropinas == true" style="margin-top: 50%;">
+<!-- <div *ngIf="this.mostrarPropinas == true" style="margin-top: 50%;">
     <p style="text-align: center; font-size: 2rem; font-weight: 700; color: salmon">
         Elija la propina segun su nivel de satisfaccion.
     </p>
@@ -33,34 +33,45 @@
     <div style="display: flex; justify-content: center; --ion-color-primary: rgb(255, 109, 92)">
         <ion-button (click)="eleccionPropina('malo')">Malo - 0%</ion-button>
     </div>
+</div> -->
+
+<div *ngIf="this.mostrarCuenta == true">
+    <h1 style="text-align: center; font-weight: bold; margin-top: 17%;">Cuenta del cliente {{pedido.cliente}}</h1>
+    <div style="text-align: center;" style="color: rgb(80, 80, 80); 
+    background-color: rgba(255, 255, 255, 0.808); width: 90%; border: 2px solid salmon; border-radius: 15px;
+    margin: top; margin-right: auto; margin-left: auto;  padding: 3%; margin-top: 10%;">
+        <!-- <label style="font-size: 6vw;">{{pedido.cliente}}</label><br> -->
+        <label style="font-size: 7vw; font-weight: 600;">Pedido:</label>
+        <div *ngFor="let prod of pedido.productos">
+        <div style="text-align: center;">
+            <label style="font-size: 6vw; text-align: center;"><u>{{prod.descripcion}}</u></label><br>
+
+        </div>
+        <label style="font-size: 5vw;">{{prod.marca}}</label><br>
+
+        <label style="font-size: 5vw;"><b>Cantidad:</b> {{prod.cantidad}}</label><br>
+        <label style="font-size: 5vw;"><b>Precio unitario:</b> ${{prod.precio}}</label><br>
+        <label style="font-size: 5vw;"><b>Precio total:</b> ${{prod.precioSuma}}</label><br>
+        <div style="width: 85%; height: 2px; background-color: salmon; border-radius: 5px; margin:auto"></div>
+        </div>
+        <div *ngIf="mostrarPropinas == true">
+            <label style="font-size: 5vw; padding-top:5px; padding-bottom: 5px;"><b>Propina:</b> ${{pedido.propina}}</label><br>
+        </div>
+        <label style="font-size: 7vw; font-size: 600;"><b>Pecio final: ${{pedido.total}}</b></label>
+
+        <div style="text-align: right;">
+        <label style="font-size: 4vw;">{{pedido.hora | date: 'dd/MM/yy, hh:mm'}}</label><br>
+        </div>
+    </div>
+
+    <div *ngIf="pedido.estadoPago != 'pagado'">
+        <ion-button (click)="scanQRMesa()" class="boton-propina">Dar propina</ion-button>
+    </div>
+    <div *ngIf="pedido.estadoPago == 'pagado'">
+        <h1 style="text-align: center; font-weight: bold;">Gracias por la propina!</h1>
+    </div>
+
 </div>
-
-<div *ngIf="this.mostrarCuenta == true" style="text-align: center;" style="color: rgb(80, 80, 80); 
-background-color: rgba(255, 255, 255, 0.808); width: 90%; border: 2px solid salmon; border-radius: 15px;
-margin: top; margin-right: auto; margin-left: auto;  padding: 3%; margin-top: 10%;">
-    <label style="font-size: 6vw;">{{pedido.cliente}}</label><br>
-    <label style="font-size: 7vw; font-weight: 600;">Pedido:</label>
-    <div *ngFor="let prod of pedido.productos">
-    <div style="text-align: center;">
-        <label style="font-size: 6vw; text-align: center;"><u>{{prod.descripcion}}</u></label><br>
-
-    </div>
-    <label style="font-size: 5vw;">{{prod.marca}}</label><br>
-
-    <label style="font-size: 5vw;"><b>Cantidad:</b> {{prod.cantidad}}</label><br>
-    <label style="font-size: 5vw;"><b>Precio unitario:</b> ${{prod.precio}}</label><br>
-    <label style="font-size: 5vw;"><b>Precio total:</b> ${{prod.precioSuma}}</label><br>
-    <div style="width: 85%; height: 2px; background-color: salmon; border-radius: 5px; margin:auto"></div>
-    </div>
-    <label style="font-size: 5vw; padding-top:5px; padding-bottom: 5px;"><b>Propina:</b> ${{pedido.propina}}</label><br>
-
-    <label style="font-size: 7vw; font-size: 600;"><b>Pecio final: ${{pedido.total}}</b></label>
-
-    <div style="text-align: right;">
-    <label style="font-size: 4vw;">{{pedido.hora | date: 'dd/MM/yy, hh:mm'}}</label><br>
-    </div>
-</div>
-
 
 
 

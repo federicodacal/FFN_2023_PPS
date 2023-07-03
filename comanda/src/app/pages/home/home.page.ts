@@ -442,9 +442,11 @@ sendPush(msj: string, tlt: string) {
           estado: 'terminado'
       });
     }
-      
-    }, 1000);
-    
+    }, 1000); 
+  }
+
+  altaPlato(){
+    this.router.navigate(['/alta-plato']);
   }
 
   async presentToast(position: 'top' | 'middle' | 'bottom', msj:string, color: string, duration:number=1000) {

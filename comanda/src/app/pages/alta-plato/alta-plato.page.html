@@ -1,0 +1,52 @@
+<ion-content [fullscreen]="true" style="--background: rgb(255, 196, 189);">
+  <div class="spinner">
+    <ion-spinner style="transform: scale(2); color: white" *ngIf="spinner" name="crescent"></ion-spinner>
+  </div>
+  <div class="contenedor-general" style="margin-top: 17%;">
+    <h1 style="text-align: center; color: black; font-weight: bold;">Fotos del plato</h1>
+    <div class="contenedor-fotos">
+      <div class="foto">
+        <div *ngIf="photos[0] == null">
+          <ion-button (click)="addNewToGallery()" fill="clear" style="width: 70px;height: 60px;"><img style="height: 50px;" src="../../assets/camara.png"></ion-button>
+        </div>
+        <div *ngIf="photos[0] != null">
+          <img [src]="photos[0].webviewPath" style="width: 70px;height: 70px;">
+        </div>
+      </div>
+      <div class="foto">
+        <div *ngIf="photos[1] == null">
+          <ion-button (click)="addNewToGallery()" fill="clear" style="width: 70px;height: 60px;"><img style="height: 50px;" src="../../assets/camara.png"></ion-button>
+        </div>
+        <div *ngIf="photos[1] != null">
+          <img [src]="photos[1].webviewPath" style="width: 70px;height: 70px;">
+        </div>
+      </div>
+      <div class="foto">
+        <div *ngIf="photos[2] == null">
+          <ion-button (click)="addNewToGallery()" fill="clear" style="width: 70px;height: 60px;"><img style="height: 50px;" src="../../assets/camara.png"></ion-button>
+        </div>
+        <div *ngIf="photos[2] != null">
+          <img [src]="photos[2].webviewPath" style="width: 70px;height: 70px;">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="contenedor-general" style="margin-top: 5%;">
+    <h1 style="text-align: center; color: black; font-weight: bold;">Datos del plato</h1>
+    <div class="inputs">
+      <ion-item style=" margin: 0 auto; border-radius: 10px; margin-bottom: 3%;">
+        <ion-input [(ngModel)]="nombre" autocomplete="off" class="form-control" id="txtNombre" label="Nombre" labelPlacement="stacked" placeholder="Ingrese el nombre del plato"></ion-input>
+      </ion-item>
+      <ion-item style=" margin: 0 auto; border-radius: 10px; margin-bottom: 3%;">
+        <ion-input [(ngModel)]="precio" type="number" autocomplete="off" class="form-control" id="txtPrecio" label="Precio" labelPlacement="stacked" placeholder="Ingrese el precio del plato"></ion-input>
+      </ion-item>
+      <ion-item style=" margin: 0 auto; border-radius: 10px;">
+        <ion-input [(ngModel)]="tiempo" type="number" autocomplete="off" class="form-control" id="txtTiempo" label="Tiempo" labelPlacement="stacked" placeholder="Ingrese el tiempo que tarda el plato"></ion-input>
+      </ion-item>
+   </div>
+  </div>
+  <div style="margin-top: 5%;">
+    <ion-button (click)="subirPlato()" class="boton-subirPlato" style="display: block">Subir plato</ion-button>
+  </div>
+
+</ion-content>
