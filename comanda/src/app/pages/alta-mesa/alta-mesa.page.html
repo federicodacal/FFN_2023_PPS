@@ -1,0 +1,27 @@
+<ion-content [fullscreen]="true" style="--background: rgb(255, 196, 189);">
+  <!--<div class="spinner">
+    <ion-spinner style="transform: scale(2); color: white" name="crescent"></ion-spinner>
+  </div>-->
+  <div class="contenedor-general" style="margin-top: 5%;">
+    <h1 style="text-align: center; color: salmon; font-weight: bold;">Alta de mesa</h1><br><br>
+    <div style="text-align: center;">
+      <ion-button (click)="addNewToGallery()" fill="clear" style="width: 100px;height: 100px;"><img style="height: 70px;" src="../../assets/camara.png"></ion-button>
+
+      <img [src]="foto" style="position: absolute; margin: 0 auto; left: 0; right: 0; max-height: 120px; top: 8vh; border-radius: 10px;">  
+    </div>
+
+    <div class="inputs">
+      <ion-item style=" margin: 0 auto; border-radius: 10px; margin-bottom: 3%; width: 90%;">
+        <ion-input [(ngModel)]="nroMesa" autocomplete="off" class="form-control" id="txtNombre" label="Numero de mesa" labelPlacement="stacked" placeholder="Ingrese el numero de mesa"></ion-input>
+      </ion-item>
+   </div>
+  </div>
+  <div style="margin: auto;margin-top: 5%; width: 90%; ">
+    <ion-button (click)="altaMesa()" style="--background: salmon; " style="display: block">Dar de alta</ion-button>
+  </div>
+
+  <div *ngIf="nroMesa != undefined && nroMesa != ''" id="imagenQr" style="text-align: center; margin-top: 10%;">
+    <qrcode [qrdata]="nroMesa" [width]="300" [errorCorrectionLevel]="'M'"></qrcode>
+    Mesa: {{nroMesa}}
+  </div>
+</ion-content>

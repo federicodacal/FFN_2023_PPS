@@ -46,6 +46,10 @@ const routes: Routes = [
     path: 'alta-plato',
     loadChildren: () => import('./pages/alta-plato/alta-plato.module').then( m => m.AltaPlatoPageModule)
   },
+  {
+    path: 'alta-mesa',
+    loadChildren: () => import('./pages/alta-mesa/alta-mesa.module').then( m => m.AltaMesaPageModule)
+  },
 
 
 

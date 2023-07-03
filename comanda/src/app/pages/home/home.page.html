@@ -243,6 +243,7 @@
     <div *ngIf="usuario.perfil == 'supervisor' || usuario.perfil == 'duenio'" style="color: rgb(99, 99, 99)">
       <p style="font-size: 13vw; color: rgb(255, 109, 92); font-weight: 700; margin-left: 5%;">Bienvenido</p>
       <p style="font-size: 8vw; color: white; margin-top: -8%; font-weight: 600; margin-left: 5%;">{{usuario.nombre}}</p>
+      <ion-button (click)="irAltaMesa()" style="--background: salmon; width: 90%; margin: auto;">Dar de alta mesa</ion-button>
 
       <!--<div *ngFor="let u of usuarios" style="height: 10vh; width: 90%;border: 2px salmon solid; background-color: rgba(255, 255, 255, 0.486);">
 
@@ -296,6 +297,8 @@
 
     <div *ngIf="usuario.perfil == 'metre'">
       <p style="font-size: 8vw; color: white;  font-weight: 600; margin-left: 5%;">{{usuario.nombre}} {{usuario.apellido}}</p>
+
+
 
       <div style="width: 90%; margin: auto; text-align: center;">
       <div  *ngFor="let u of usuarios; let i = index" style="margin-bottom: 5%;">

@@ -475,6 +475,12 @@ sendPush(msj: string, tlt: string) {
   }
 
 
+  irAltaMesa(){
+    this.router.navigateByUrl('/alta-mesa');
+
+  }
+
+
 
   confirmarPedido(){
     let pedido: any;

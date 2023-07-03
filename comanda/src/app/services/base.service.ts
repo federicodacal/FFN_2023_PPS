@@ -235,4 +235,14 @@ export class BaseService {
     return collectionData(colRef, {idField: 'id'}) as Observable<any[]>;
   }
 
+
+
+
+  //MESAS
+
+  addMesa(mesa:any) {
+    const colRef = collection(this.bd, 'mesas');
+    return addDoc(colRef, mesa);
+  }
 }
+
