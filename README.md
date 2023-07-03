@@ -118,19 +118,19 @@
 <img src="comanda/src/assets/qrEntrada.JPG" width=230>
 
 * QR Mesas:
-Mesa 1:
+* Mesa 1:
 <img src="comanda/src/assets/mesa1.png" width=230>
 
-Mesa 2:
+* Mesa 2:
 <img src="comanda/src/assets/mesa2.png" width=230>
 
-Mesa 3:
+* Mesa 3:
 <img src="comanda/src/assets/mesa3.png" width=230>
 
-Mesa 4:
+* Mesa 4:
 <img src="comanda/src/assets/mesa4.png" width=230>
 
-Mesa 5:
+* Mesa 5:
 <img src="comanda/src/assets/mesa5.png" width=230>
 
 * QR Propina:
