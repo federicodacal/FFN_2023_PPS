@@ -125,7 +125,7 @@
 * Seguimiento de pedido.
 * Al terminar de preparar el plato y/o bebida se le avisa al mozo, que luego confirma la entrega del pedido.
 
-:calendar: 02/07/23:
+:calendar: 03/07/23:
 * Generacion de QRs de propina. Modificaciones de cuenta y propina.
 * Generación de QRs de nuevas mesas.
 * Alta de mesas.
