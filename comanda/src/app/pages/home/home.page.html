@@ -334,6 +334,11 @@
     <div *ngIf="this.usuario.perfil == 'chef'" style="margin-bottom: 5%;">
       <ion-button (click)="altaPlato()" class="boton-altaProducto">Alta plato</ion-button>
     </div>
+
+    <div *ngIf="this.usuario.perfil == 'bartender'" style="margin-bottom: 5%;">
+      <ion-button (click)="altaBebida()" class="boton-altaProducto">Alta bebida</ion-button>
+    </div>
+
     <div *ngIf="this.usuario.perfil == 'chef' || this.usuario.perfil =='bartender'" style="margin-top: 5%;">
       <div *ngFor="let p of pedidos" style="color: rgb(80, 80, 80); 
       background-color: rgba(255, 255, 255, 0.808); width: 90%; border: 2px solid salmon; border-radius: 15px;

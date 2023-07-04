@@ -449,6 +449,10 @@ sendPush(msj: string, tlt: string) {
     this.router.navigate(['/alta-plato']);
   }
 
+  altaBebida() {
+    this.router.navigate(['/alta-bebida'])
+  }
+
   async presentToast(position: 'top' | 'middle' | 'bottom', msj:string, color: string, duration:number=1000) {
     const toast = await this.toastController.create({
       message: msj,

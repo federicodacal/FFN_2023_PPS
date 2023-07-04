@@ -17,6 +17,7 @@
 * Cliente realiza pedido. Importe y tiempo estimado.
 * Mozo entrega pedido y confirmación de cliente. Confirmación de pago.
 * Push notification.
+* Alta mesa. Generación de QRs nuevas mesas.
 
 ## Nicolas Caretti
 * Diseño Login.
@@ -27,6 +28,7 @@
 * Interacción cliente y mozo.
 * QR Propina, detalle de la propina y confirmación de pago.
 * Push notification.
+* Diseño y Alta plato de chef con fotos.
 
 ## Federico Dacal
 * Supervisor acepta o rechaza registro.
@@ -38,6 +40,7 @@
 * Encuesta de satisfacción cliente.
 * Gráficos de la encuesta de clientes.
 * Push notification.
+* Alta bebida de bartender con fotos.
 
 ### :pushpin: Planificación:
 
@@ -112,6 +115,25 @@
 * Diseño del logo.
 * Splash estático y splash dinámico
 
+***
+
+### :mag_right: Detalles de trabajo semana 3:
+
+:calendar: 02/07/23:
+* Modificaciones en diseño UI.
+* Correciones del flujo para cliente anónimo.
+* Seguimiento de pedido.
+* Al terminar de preparar el plato y/o bebida se le avisa al mozo, que luego confirma la entrega del pedido.
+
+:calendar: 02/07/23:
+* Generacion de QRs de propina. Modificaciones de cuenta y propina.
+* Generación de QRs de nuevas mesas.
+* Alta de mesas.
+* Alta de platos.
+* Alta bebidas.
+
+***
+
 ### :iphone: Códigos QR:
 
 * QR Entrada:
@@ -134,4 +156,19 @@
 <img src="comanda/src/assets/mesa5.png" width=230>
 
 * QR Propina:
-<img src="comanda/src/assets/qrPropina.png" width=230>
+* Excelente (20%):
+<img src="comanda/src/assets/qr_propina_excelente.png" width=230>
+
+* Muy bueno (15%):
+<img src="comanda/src/assets/qr_propina_muybueno.png" width=230>
+
+* Bueno (10%):
+<img src="comanda/src/assets/qr_propina_bueno.png" width=230>
+
+* Regular (5%):
+<img src="comanda/src/assets/qr_propina_regular.png" width=230>
+
+* Malo (0%):
+<img src="comanda/src/assets/qr_propina_malo.png" width=230>
+
+***

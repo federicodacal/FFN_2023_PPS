@@ -1,0 +1,45 @@
+.contenedor-fotos{
+    display: flex;
+    justify-content: space-around;
+}
+
+.contenedor-general{ 
+    // background-color: rgb(32, 46, 46); 
+    margin-left: 5%; 
+    margin-right: 5%;
+    border: 2px solid black;
+    border-radius: 5px;
+    padding-bottom: 5%;
+    background-color: rgba(255,255,255, 0.4);
+}
+
+
+.foto{
+    border: 2px solid black;
+    border-radius: 5px;
+    text-align: center;
+    background-color: rgba(255, 109, 92, 0.4);
+}
+
+
+.spinner{
+    position: absolute;
+    margin-top: 5%;
+    left: 47%;
+}
+
+.inputs{
+    border: 2px solid black;
+    border-radius: 5px;
+    background-color: rgba(255, 109, 92, 0.4);
+    margin: 1%;
+    padding: 5px;
+}
+
+.boton-subirPlato{
+    --ion-color-primary: rgb(255, 109, 92);
+    color: black;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-weight: 700;
+}
