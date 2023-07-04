@@ -117,7 +117,7 @@
 
 ***
 
-### :mag_right: Detalles de trabajo semana 3:
+### :mag_right: Detalles de trabajo semana 4:
 
 :calendar: 02/07/23:
 * Modificaciones en diseño UI.
