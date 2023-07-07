@@ -1,0 +1,19 @@
+
+<ion-content [fullscreen]="true" style="--background: rgb(255, 184, 176)">
+<br>
+<br>
+<div style="text-align: center;">
+<p style="font-size: 10vw; font-weight: 600; color: salmon">Hacer reserva</p>
+<br><br>
+<div style="text-align: center;">
+  <ion-datetime style="--background: rgb(255, 184, 176); color: white;" size="cover" [(ngModel)]="time" presentation="time" [min]="minimo" [max]="maximo" displayFormat="hh:mm" pickerFormat="HH:mm"></ion-datetime>
+</div>
+
+<br>
+<br>
+<br>
+
+  <ion-button style="--background: salmon" class="boton-rapido" (click)="hacerReserva()">Hacer reserva</ion-button>
+</div>
+
+</ion-content>

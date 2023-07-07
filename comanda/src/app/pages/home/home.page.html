@@ -15,6 +15,11 @@
         <ion-icon *ngIf="audio" name="volume-high-outline"></ion-icon>
         <ion-icon *ngIf="!audio" name="volume-mute-outline"></ion-icon>
       </ion-fab-button>
+
+
+      <ion-fab-button *ngIf="usuario.perfil == 'cliente'" (click)="audio = !audio" style="height: 50px; width: 50px;">
+        <ion-icon (click)="redirect('hacer-reserva')" name="volume-mute-outline"></ion-icon>
+      </ion-fab-button>
     </ion-fab-list>
   </ion-fab>
 
@@ -47,6 +52,9 @@
       <p *ngIf="usuario.mesa != -1 && usuario.estadoQrMesa=='ninguno'" style="font-size: 5vw; color: white; margin-top: -8%; font-weight: 600;">Tiene una mesa asignada. Escanee el QR para ver el menú.</p>
 
       <p *ngIf="usuario.mesa != -1 && usuario.estadoQrMesa == 'pedidoCargado'" style="font-size: 5vw; color: white; margin-top: -8%; font-weight: 600;">Pedido confirmado. Escanee el QR para acceder al estado del pedido o responder nuestra encuesta.</p>
+<br>
+      <p *ngIf="reservas.length != 0 && reservas[0].confirmada" style="font-size: 5vw; color: white; margin-top: -8%; font-weight: 600;">Tiene una reserva confirmada para las {{reservas[0].hora}}</p>
+
 
       <div style="text-align: center;">
         <ion-button style="--background: rgb(255, 109, 92); margin: auto; margin-top: 10%; height: 40vh; width: 80vw;"><img src="../../../assets/escaner-de-codigo-de-barras.png" (click)="scanQRMesa()"></ion-button>
@@ -54,7 +62,7 @@
        
        
         <ion-button (click)=" testScanQRMesa('listadoDeEsperaMesa')" style="margin-top: 3%;" >Lsita espera (test)</ion-button><br>
-        <ion-button (click)=" testScanQRMesa('1')" style="margin-top: 3%;" >HacerPedido (test)</ion-button><br>
+        <ion-button (click)=" testScanQRMesa('4')" style="margin-top: 3%;" >HacerPedido (test)</ion-button><br>
         <ion-button routerLink="/menu-opciones" style="margin-top: 3%;" >Opciones (test)</ion-button><br>
         <ion-button *ngIf="pedidoClienteLogeado != null && pedidoClienteLogeado.estado == 'entregado'" (click)="confirmarPedido()" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Confirmar recepción de pedido</ion-button><br>
   
@@ -243,41 +251,66 @@
     <div *ngIf="usuario.perfil == 'supervisor' || usuario.perfil == 'duenio'" style="color: rgb(99, 99, 99)">
       <p style="font-size: 13vw; color: rgb(255, 109, 92); font-weight: 700; margin-left: 5%;">Bienvenido</p>
       <p style="font-size: 8vw; color: white; margin-top: -8%; font-weight: 600; margin-left: 5%;">{{usuario.nombre}}</p>
-      <ion-button (click)="irAltaMesa()" style="--background: salmon; width: 90%; margin: auto;">Dar de alta mesa</ion-button>
 
-      <!--<div *ngFor="let u of usuarios" style="height: 10vh; width: 90%;border: 2px salmon solid; background-color: rgba(255, 255, 255, 0.486);">
+      <ion-menu contentId="main-content">
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Menú</ion-title>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>     
+          <ion-button (click)="pantalla = 'alta-mesa'" style="--background: salmon; width: 90%; margin: auto; margin-top: 5%;">Dar de alta mesa</ion-button><br>
+          <ion-button (click)="pantalla = 'verSolicitudes'" style="--background: salmon; width: 90%; margin: auto;margin-top: 5%;">Ver solicitudes</ion-button> <br>
+          <ion-button (click)="pantalla = 'ver-reservas'" style="--background: salmon; width: 90%; margin: auto;margin-top: 5%;">Ver reservas</ion-button><br>
+  
+        </ion-content>
+      </ion-menu>
+      <div class="ion-page" id="main-content">
+        <ion-header>
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-menu-button></ion-menu-button>
+            </ion-buttons>
+            <ion-title>Menu de opciones</ion-title>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content style="--background: rgb(255, 180, 171);">
 
-        <div *ngIf="u.estadoUsuario == 0">
-
-          <img style="max-height: 15vh;" [src]="u.foto">
-          <p style="font-size: 5vw; color: white; margin-top: -8%; font-weight: 600;"><b>Nombre:</b> {{u.nombre}} {{u.apellido}}</p><br>
-          <div *ngIf="u.perfil == 'cliente'"></div>
-          <p style="font-size: 5vw; color: white; margin-top: -8%; font-weight: 600;"><b>DNI:</b> {{u.dni}}</p>
 
 
-        </div>
-      </div>-->
-      <div style="width: 90%; margin: auto; text-align: center;">
-      <div  *ngFor="let u of usuarios; let i = index" style="margin-bottom: 5%;">
-        <div *ngIf="u.estadoUsuario == 0"  style="background-color: rgba(255, 255, 255, 0.575); color: salmon; border-radius: 10px; border: 2px salmon solid; width: 100%;">
-          
-          <img id="" style="position: relative; height: 70px;" [src]="u.foto">
-          <p style="font-size: 5vw;font-weight: 600;">{{u.nombre}}{{u.apellido}}</p>
-          <div *ngIf="u.perfil == 'cliente'">
-            <p style="font-size: 5vw; font-weight: 600;"><b>DNI:</b> {{u.dni}}</p>
+          <div *ngIf="pantalla == 'ver-reservas'">
+            <app-ver-reservas></app-ver-reservas>
           </div>
-          <div style="display: flex; justify-content: center;">
-            <ion-button color="danger" (click)="rechazarCliente(u)">Rechazar</ion-button>
-            <ion-button color="success" (click)="aceptarCliente(u)">Aceptar</ion-button>
-          </div>
-          <br>
-        <!-- <p style="color: black; border:solid 1px black;">{{imagesBd[i].perfil}}</p> -->
           
-          
+          <div *ngIf="pantalla == 'alta-mesa'">
+          <app-alta-mesa></app-alta-mesa>
         </div>
-      </div>
+          <div *ngIf="pantalla == 'verSolicitudes'" style="width: 90%; margin: auto; text-align: center;">
+            <div  *ngFor="let u of usuarios; let i = index" style="margin-bottom: 5%;">
+              <div *ngIf="u.estadoUsuario == 0"  style="background-color: rgba(255, 255, 255, 0.575); color: salmon; border-radius: 10px; border: 2px salmon solid; width: 100%;">
+                
+                <img id="" style="position: relative; height: 70px;" [src]="u.foto">
+                <p style="font-size: 5vw;font-weight: 600;">{{u.nombre}}{{u.apellido}}</p>
+                <div *ngIf="u.perfil == 'cliente'">
+                  <p style="font-size: 5vw; font-weight: 600;"><b>DNI:</b> {{u.dni}}</p>
+                </div>
+                <div style="display: flex; justify-content: center;">
+                  <ion-button color="danger" (click)="rechazarCliente(u)">Rechazar</ion-button>
+                  <ion-button color="success" (click)="aceptarCliente(u)">Aceptar</ion-button>
+                </div>
+                <br>
+              <!-- <p style="color: black; border:solid 1px black;">{{imagesBd[i].perfil}}</p> -->
+                
+                
+              </div>
+            </div>
+            
+            </div>
       
+       
+      </ion-content>
       </div>
+
     </div>
 
 

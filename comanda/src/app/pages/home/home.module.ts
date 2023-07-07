@@ -13,6 +13,9 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 import { ListosEntregarComponent } from 'src/app/components/listos-entregar/listos-entregar.component';
+import { AltaMesaComponent } from 'src/app/components/alta-mesa/alta-mesa.component';
+import { QRCodeModule } from 'angularx-qrcode';
+import { VerReservasComponent } from 'src/app/components/ver-reservas/ver-reservas.component';
 
 
 @NgModule({
@@ -20,9 +23,11 @@ import { ListosEntregarComponent } from 'src/app/components/listos-entregar/list
     CommonModule,
     FormsModule,
     IonicModule,
-    HomePageRoutingModule,
+    HomePageRoutingModule,    
+    QRCodeModule 
 
   ],
-  declarations: [HomePage, ConsultaComponent, MenuComponent, VerPedidosComponent, PedidosPagosComponent, ListosEntregarComponent]
+  declarations: [HomePage, ConsultaComponent, MenuComponent, VerPedidosComponent, PedidosPagosComponent, 
+    ListosEntregarComponent, AltaMesaComponent, VerReservasComponent]
 })
 export class HomePageModule {}

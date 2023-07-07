@@ -10,6 +10,7 @@ import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Firestore, doc, setDoc, updateDoc } from '@angular/fire/firestore';
 import { PushNotificationService } from 'src/app/services/push-notification.service';
+import { Console } from 'console';
 
 @Component({
   selector: 'app-home',
@@ -35,6 +36,9 @@ export class HomePage implements OnInit {
 
   audio = true;
 
+
+  reservas: any[] = [];
+
   constructor(private userActivo : UserActivoService, private bd: BaseService, private auth: AuthService, private mail:MailService, 
     private authFire : Auth, private barcodeScanner: BarcodeScanner, private toastController:ToastController, private router:Router, 
     private fs:Firestore, private pn: PushNotificationService) {}
@@ -48,6 +52,9 @@ export class HomePage implements OnInit {
     // ]).then((usrs) => {
     //   this.usuarios = usrs;
     // });
+
+
+
 
     //Con esta anduvo att:Nico
     this.consultas = this.bd.getDatosConsulta()/*.subscribe((data) =>{*/
@@ -89,8 +96,53 @@ export class HomePage implements OnInit {
       });*/
     });
 
+
+    this.bd.getReservas().subscribe(reservas => {
+      reservas.forEach(r => {
+        this.bd.getUsuario(r.uidCliente).then(usr => {
+          console.log('Rompe?')
+          let fecha = new Date(r.dia +',' + r.hora)
+          console.log(fecha)
+          console.log(this.calcularDiferenciaReservaParametro(fecha))
+          if(this.calcularDiferenciaReservaParametro(fecha) > 2){
+            this.bd.caducarTiempoReserva(r.id, usr);
+          }
+          console.log('NO')
+
+        })
+      });
+    })
+
+
     if(this.userActivo.uActivo == "")
     {
+
+      this.bd.getReservasUid(this.auth.getUid()!).subscribe(reservas => {
+        this.reservas = reservas;
+
+        if(reservas.length != 0){
+          let testHora = new Date('2023/5/4, 8:30')
+          console.log(testHora);
+
+
+          //ARREGLAR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+          /*let horaActual = new Date('7/7/2023, ' + new Date(Date.now()).getHours() + ':' + new Date(Date.now()).getMinutes())
+          let horaReserva = new Date(this.reservas[0].dia +',' +this.reservas[0].hora)
+          console.log(horaActual);
+          console.log(horaReserva);
+          let diferencia = (horaActual.getTime() - horaReserva.getTime()) / 1000;
+          diferencia /= 60;
+          let dif = Math.abs(Math.round(diferencia));*/
+          //console.log(dif)
+
+          if((this.calcularDiferenciaReserva() > 2 && this.reservas[0].confirmada)){
+            this.bd.caducarTiempoReserva(this.reservas[0].id, this.usuario);
+          }
+        }
+        
+      })
+
       console.log(this.auth.getUid()!);
       
       this.bd.getUsuarioCollection(this.auth.getUid()!).subscribe((response) => {
@@ -164,35 +216,49 @@ export class HomePage implements OnInit {
 
 
 
+  calcularDiferenciaReserva(){
+    //let horaActual = new Date('7/7/2023, ' + new Date(Date.now()).getHours() + ':' + new Date(Date.now()).getMinutes())
+    let horaActual = new Date(Date.now())
+    let horaReserva = new Date(this.reservas[0].dia +',' +this.reservas[0].hora)
 
-irA(path: string){
-  console.log(path);
-  this.pantalla = path;
-}
-
-
-//TEST PUSH NOTIF
-sendPush(msj: string, tlt: string) {
-  this.pn
-    .sendPushNotification({
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      registration_ids: [
-        // eslint-disable-next-line max-len
-        'cBSDGcohSXiAPoeeq1MpnI:APA91bHHcJUEO3vc09FmBfa3EHmsDn-i1MYIUBiQYESbcd9pJzk5KV3ZQH21xY4vqT-Fz-oxEdlWb6c8hXCrY8iICHrGKp5OUIEnJeI-ZEan4u5ak_KREW4XyvtFVA1uNyq6MWyCunRh'
-      ],
-      notification: {
-        title: tlt,
-        body: msj,
-      },
-    })
-    .subscribe((data: any) => {
-      console.log(data);
-    });
-}
-
-///////////////////////
+    console.log(horaActual);
+    console.log(horaReserva);
+    let diferencia = (horaActual.getTime() - horaReserva.getTime()) / 1000;
+    diferencia /= 60;
+    return diferencia;
+  }
 
 
+  irA(path: string){
+    console.log(path);
+    this.pantalla = path;
+  }
+
+
+  redirect(path: string){
+    this.router.navigate([path], {replaceUrl: true});
+  }
+
+  //TEST PUSH NOTIF
+  sendPush(msj: string, tlt: string) {
+    this.pn
+      .sendPushNotification({
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        registration_ids: [
+          // eslint-disable-next-line max-len
+          'cBSDGcohSXiAPoeeq1MpnI:APA91bHHcJUEO3vc09FmBfa3EHmsDn-i1MYIUBiQYESbcd9pJzk5KV3ZQH21xY4vqT-Fz-oxEdlWb6c8hXCrY8iICHrGKp5OUIEnJeI-ZEan4u5ak_KREW4XyvtFVA1uNyq6MWyCunRh'
+        ],
+        notification: {
+          title: tlt,
+          body: msj,
+        },
+      })
+      .subscribe((data: any) => {
+        console.log(data);
+      });
+  }
+
+  ///////////////////////
 
 
 
@@ -205,6 +271,18 @@ sendPush(msj: string, tlt: string) {
 
 
 
+
+  calcularDiferenciaReservaParametro(horaReserva: Date){
+    //let horaActual = new Date('7/7/2023, ' + new Date(Date.now()).getHours() + ':' + new Date(Date.now()).getMinutes())
+    let horaActual = new Date(Date.now())
+
+    console.log(horaActual);
+    console.log(horaReserva);
+    let diferencia = (horaActual.getTime() - horaReserva.getTime()) / 1000;
+    diferencia /= 60;
+    console.log(diferencia)
+    return diferencia;
+  }
 
 
 
@@ -242,22 +320,31 @@ sendPush(msj: string, tlt: string) {
 
         console.log('usuario bd', this.usuario);
         //data = 'listadoDeEsperaMesa'
-        if(data == 'listadoDeEsperaMesa') {
-          if(this.usuario.estadoQrEspera == 'escaneado') {
-            if(this.usuario.completoEncuesta == false){
-              this.presentToast('bottom', 'Todavía no completó la encuesta', 'warning')
-            }
-            else{
-              this.sendPush('¡Estoy esperando!', this.usuario.nombre);
-              this.router.navigateByUrl('/encuesta');
-            }
-          }
-          if(this.usuario.estadoQrEspera == undefined) {
-            this.usuario.mesa = 0;
-            this.usuario.estadoQrEspera = 'escaneado'
-            this.bd.updateMesaUsuario(this.usuario);
-            this.presentToast("middle", 'Pronto se te asignará una mesa. Gracias!', 'success', 2000);
-          }
+
+        
+          if(data == 'listadoDeEsperaMesa') {
+            if(this.reservas.length == 0){
+              if(this.usuario.estadoQrEspera == 'escaneado') {
+                if(this.usuario.completoEncuesta == false){
+                  this.presentToast('bottom', 'Todavía no completó la encuesta', 'warning')
+                }
+                else{
+                  this.sendPush('¡Estoy esperando!', this.usuario.nombre);
+                  this.router.navigateByUrl('/encuesta');
+                }
+              }
+              if(this.usuario.estadoQrEspera == undefined) {
+                this.usuario.mesa = 0;
+                this.usuario.estadoQrEspera = 'escaneado'
+                this.bd.updateMesaUsuario(this.usuario);
+                this.presentToast("middle", 'Pronto se te asignará una mesa. Gracias!', 'success', 2000);
+              }
+       
+           }
+           else{
+            this.presentToast("middle", 'Ya hizo una reserva.', 'warning', 2000);
+           }
+      
           
 
         }
@@ -265,11 +352,39 @@ sendPush(msj: string, tlt: string) {
 
         //data = 'listadoProductos';
         //mesa asignada y qr de mesa
-        if(this.usuario.mesa > 0 && ''+this.usuario.mesa == data && /*data == 'listadoProductos' &&*/ this.usuario.estadoQrMesa == 'ninguno')
-        {
-          this.pantalla = 'hacerPedido';
-          //this.router.navigateByUrl('/menu')
-        }
+        /*let horaActual = new Date(new Date(Date.now()).getHours() + ':' + new Date(Date.now()).getMinutes())
+        let horaReserva = new Date(new Date(this.reservas[0].hora))
+        let diferencia = (horaActual.getTime() - horaReserva.getTime()) / 1000;
+        diferencia /= 60;
+        let dif = Math.abs(Math.round(diferencia));*/
+
+        let horaActual = new Date(Date.now())
+        let horaReserva = new Date(this.reservas[0].dia +',' +this.reservas[0].hora)
+
+        //A PROBAR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+          if(this.usuario.mesa > 0 && ''+this.usuario.mesa == data && /*data == 'listadoProductos' &&*/ this.usuario.estadoQrMesa == 'ninguno')
+          {
+            if(this.reservas.length == 0){
+              this.pantalla = 'hacerPedido';
+            }
+            else if(this.calcularDiferenciaReserva() > 2 && this.reservas[0].confirmada){
+              this.presentToast('bottom', 'Se pasó el tiempo de espera tolerado.', 'danger');
+              this.bd.caducarTiempoReserva(this.reservas[0].id, this.usuario);
+            }
+            else if(horaActual >= horaReserva && !this.reservas[0].confirmada){
+              this.presentToast('bottom', 'La reserva no se confirmó.', 'danger');
+              this.bd.caducarTiempoReserva(this.reservas[0].id, this.usuario);
+            }
+            else if(horaActual <= horaReserva){
+              this.presentToast('bottom', 'Todavía no es la hora.', 'warning');
+            }
+            else{
+              this.pantalla = 'hacerPedido';
+
+            }
+          }
+        
         if(this.usuario.mesa == -1 && ''+this.usuario.mesa == data){
           this.presentToast('bottom', 'No tiene una mesa asignada', 'warning');
         }
@@ -328,11 +443,53 @@ sendPush(msj: string, tlt: string) {
 
       //data = 'listadoProductos';
       //mesa asignada y qr de mesa
-      if(this.usuario.mesa > 0 && ''+this.usuario.mesa == data && this.usuario.estadoQrMesa == 'ninguno')
+      /*if(this.usuario.mesa > 0 && ''+this.usuario.mesa == data && this.usuario.estadoQrMesa == 'ninguno')
       {
         this.pantalla = 'hacerPedido';
         //this.router.navigateByUrl('/menu')
-      }
+      }*/
+
+      let horaActual = new Date(Date.now())
+      console.log(new Date(this.reservas[0].dia))
+      let horaReserva = new Date(this.reservas[0].dia +',' +this.reservas[0].hora)
+      console.log(horaActual)
+      console.log(horaReserva)
+        //A PROBAR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+          if(this.usuario.mesa > 0 && ''+this.usuario.mesa == data && /*data == 'listadoProductos' &&*/ this.usuario.estadoQrMesa == 'ninguno')
+          {
+            if(this.reservas.length == 0){
+              this.pantalla = 'hacerPedido';
+            }
+            else if(this.calcularDiferenciaReserva() > 2 && this.reservas[0].confirmada){
+              this.presentToast('bottom', 'Se pasó el tiempo de espera tolerado.', 'danger');
+              this.bd.caducarTiempoReserva(this.reservas[0].id, this.usuario);
+            }
+            
+            console.log(horaActual >= horaReserva)
+           
+            if(horaActual <= horaReserva){
+              this.presentToast('bottom', 'Todavía no es la hora.', 'warning');
+            }
+            if(horaActual >= horaReserva && this.calcularDiferenciaReserva() <= 2){
+              this.pantalla = 'hacerPedido';
+
+            }
+          }
+
+          if(horaActual <= horaReserva){
+            this.presentToast('bottom', 'Todavía no es la hora.', 'warning');
+          }
+
+          if(horaActual >= horaReserva && this.usuario.mesa == -1){
+            this.presentToast('bottom', 'La reserva no se confirmó.', 'danger');
+            this.bd.caducarTiempoReserva(this.reservas[0].id, this.usuario);
+          }
+
+
+
+
+
       if(this.usuario.mesa == -1 && ''+this.usuario.mesa == data){
         this.presentToast('bottom', 'La mesa se encuentra libre', 'warning');
       }

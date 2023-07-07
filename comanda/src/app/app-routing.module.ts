@@ -42,17 +42,22 @@ const routes: Routes = [
   {
     path: 'splash',
     loadChildren: () => import('./pages/splash/splash.module').then( m => m.SplashPageModule)
-  },  {
+  },
+  {
     path: 'alta-plato',
     loadChildren: () => import('./pages/alta-plato/alta-plato.module').then( m => m.AltaPlatoPageModule)
   },
   {
-    path: 'alta-mesa',
-    loadChildren: () => import('./pages/alta-mesa/alta-mesa.module').then( m => m.AltaMesaPageModule)
-  },
-  {
     path: 'alta-bebida',
     loadChildren: () => import('./pages/alta-bebida/alta-bebida.module').then( m => m.AltaBebidaPageModule)
+  },
+  {
+    path: 'hacer-reserva',
+    loadChildren: () => import('./pages/hacer-reserva/hacer-reserva.module').then( m => m.HacerReservaPageModule)
+  },
+  {
+    path: 'ver-reserva',
+    loadChildren: () => import('./pages/ver-reserva/ver-reserva.module').then( m => m.VerReservaPageModule)
   },
 
 

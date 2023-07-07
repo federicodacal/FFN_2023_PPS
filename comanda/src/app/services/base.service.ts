@@ -55,6 +55,11 @@ export class BaseService {
     return updateDoc(usrRef, {mesa:usr.mesa, estadoQrEspera:usr.estadoQrEspera});
   }
 
+  updateMesaUsuarioReserva(usr:any) {
+    const usrRef = doc(this.bd, `usuarios/${usr.uid}`);
+    return updateDoc(usrRef, {mesa:usr.mesa});
+  }
+
   updateSoloMesaUsuario(usr:any) {
     const usrRef = doc(this.bd, `usuarios/${usr.uid}`);
     return updateDoc(usrRef, {mesa:usr.mesa});
@@ -244,5 +249,73 @@ export class BaseService {
     const colRef = collection(this.bd, 'mesas');
     return addDoc(colRef, mesa);
   }
+
+  getMesaNumero(numero: any){
+    const colRef = collection(this.bd, 'mesas');
+    const q = query(colRef, where('numero', '==', numero))
+    return collectionData(q, {idField: 'uid'});
+  }
+
+
+
+  //RESERVAS
+  addReserva(reserva:any) {
+    const colRef = collection(this.bd, 'reservas');
+    return addDoc(colRef, reserva);
+  }
+
+  
+  getReservas(){
+    let fecha = new Date(Date.now())
+    const resRef = collection(this.bd, 'reservas');
+    console.log(fecha.getDay() +'/'+ (fecha.getMonth() + 1) + '/' + fecha.getFullYear());
+    const q = query(resRef, where('confirmada', '==', false), 
+                            where('dia', '==',  (fecha.getMonth() + 1) + '/' + fecha.getDate() +'/'+ fecha.getFullYear()),
+                            where('hora', '>=', fecha.getHours() + ':' + fecha.getMinutes()));
+
+    return collectionData(q, {idField: 'id'});
+  }
+
+  
+
+  updateReserva(id: string){
+    //console.log(pedido.id)
+    const ref = doc(this.bd, 'reservas', id);
+    return setDoc(ref, {confirmada: true}, {merge: true});
+  }
+
+  getReservasUid(uid: string){
+    const resRef = collection(this.bd, 'reservas');
+    const q = query(resRef, where('uidCliente', '==', uid))
+    return collectionData(q, {idField: 'id'});
+  }
+
+
+
+
+
+
+
+  caducarTiempoReserva(idReserva:string, cliente: any) {
+    const resRef = doc(this.bd, 'reservas/', idReserva);
+    deleteDoc(resRef);
+
+    let m: any;
+    this.getMesaNumero(cliente.mesa).subscribe(mesas => {
+      mesas[0].libre = true;
+      m = mesas[0];
+      console.log(mesas[0])
+
+      
+    })
+    setTimeout(()=>{
+      this.updateEstadoMesa(m).then(m => {
+        cliente.mesa = -1;
+        this.updateSoloMesaUsuario(cliente);
+      });
+    },2000)
+    
+  }
+
 }
 

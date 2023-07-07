@@ -35,4 +35,25 @@ export class MailService {
       console.log('Email error', err);
     });
   }
+
+  sendConfirmationEmailReserva(user:any) {
+
+    let message;
+    message = 'Su reserva fue confirmada. Sea puntual'; 
+
+    const params = {
+      to_name: user.nombre,
+      message: message,
+      user_email: user.correo,
+      from_name: 'FFN Restaurante'
+    }
+
+    emailjs.send('service_xnuuwrz', 'template_d9knm2k', params)
+    .then(res => {
+      console.log('Email enviado', res.status, res.text)
+    })
+    .catch(err => {
+      console.log('Email error', err);
+    });
+  }
 }

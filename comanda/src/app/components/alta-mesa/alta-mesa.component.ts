@@ -7,16 +7,15 @@ import {Filesystem, Directory} from '@capacitor/filesystem'
 import {Platform} from '@ionic/angular'
 import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
 import { Storage, getDownloadURL, ref, uploadBytes } from '@angular/fire/storage';
-import { UserPhoto } from '../alta-usuario/alta-usuario.page';
+import { UserPhoto } from 'src/app/pages/alta-usuario/alta-usuario.page';
 
 
 @Component({
   selector: 'app-alta-mesa',
-  templateUrl: './alta-mesa.page.html',
-  styleUrls: ['./alta-mesa.page.scss'],
+  templateUrl: './alta-mesa.component.html',
+  styleUrls: ['./alta-mesa.component.scss'],
 })
-export class AltaMesaPage implements OnInit {
-
+export class AltaMesaComponent  implements OnInit {
   nroMesa: any | undefined;
   foto: string = '';
   //test = 'hola la puta madre';
@@ -127,4 +126,5 @@ export class AltaMesaPage implements OnInit {
     
     this.photos.unshift(savedImageFile);
   }
+
 }

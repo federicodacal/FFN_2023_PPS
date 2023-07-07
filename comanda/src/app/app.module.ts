@@ -14,11 +14,11 @@ import { provideStorage,getStorage } from '@angular/fire/storage';
 import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
 import { HttpClientModule } from '@angular/common/http';
 
-
+import { IgxTimePickerModule } from 'igniteui-angular';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [ HttpClientModule,BrowserModule, IonicModule.forRoot(), AppRoutingModule, provideFirebaseApp(() => initializeApp(environment.firebase)), provideAuth(() => getAuth()), provideFirestore(() => getFirestore()), provideStorage(() => getStorage())],
+  imports: [IgxTimePickerModule ,HttpClientModule,BrowserModule, IonicModule.forRoot(), AppRoutingModule, provideFirebaseApp(() => initializeApp(environment.firebase)), provideAuth(() => getAuth()), provideFirestore(() => getFirestore()), provideStorage(() => getStorage())],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, [BarcodeScanner]],
   bootstrap: [AppComponent],
 })
