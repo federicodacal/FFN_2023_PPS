@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { BaseService } from 'src/app/services/base.service';
 import { MailService } from 'src/app/services/mail.service';
+import { PushNotificationService } from 'src/app/services/push-notification.service';
 
 @Component({
   selector: 'app-ver-reservas',
@@ -14,7 +15,8 @@ export class VerReservasComponent  implements OnInit {
   usuarioReserva : any[] = [];
   mesas: any[] = []
 
-  constructor(private bd: BaseService, private toastController: ToastController, private mailService: MailService) { }
+  constructor(private bd: BaseService, private toastController: ToastController, private mailService: MailService,
+    private pn: PushNotificationService) { }
 
   ngOnInit() {
     this.bd.getReservas().subscribe(reservas => {
@@ -64,5 +66,7 @@ export class VerReservasComponent  implements OnInit {
 
     await toast.present();
   }
+
+
 
 }

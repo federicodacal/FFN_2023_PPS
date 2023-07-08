@@ -258,6 +258,25 @@ export class HomePage implements OnInit {
       });
   }
 
+
+  sendPushFran(msj: string, tlt: string) {
+    this.pn
+      .sendPushNotification({
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        registration_ids: [
+          // eslint-disable-next-line max-len
+          'fm4xlg-sSq68XxRByM4_B5:APA91bG3Goa409xLoflRTRMQw9DZRfL8p_KfMSmsn00If23uaJAaDD6oq-4Gf17BpX8USwC11bT6bwidKtqKdaqbH_dpijGaWpG-RXOqDDeY1GrYMTR8oNcQvhLmwe_QR5hWuNdUiM4v'
+        ],
+        notification: {
+          title: tlt,
+          body: msj,
+        },
+      })
+      .subscribe((data: any) => {
+        console.log(data);
+      });
+  }
+
   ///////////////////////
 
 
@@ -357,33 +376,45 @@ export class HomePage implements OnInit {
         let diferencia = (horaActual.getTime() - horaReserva.getTime()) / 1000;
         diferencia /= 60;
         let dif = Math.abs(Math.round(diferencia));*/
-
         let horaActual = new Date(Date.now())
+        console.log(new Date(this.reservas[0].dia))
         let horaReserva = new Date(this.reservas[0].dia +',' +this.reservas[0].hora)
-
-        //A PROBAR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-          if(this.usuario.mesa > 0 && ''+this.usuario.mesa == data && /*data == 'listadoProductos' &&*/ this.usuario.estadoQrMesa == 'ninguno')
-          {
-            if(this.reservas.length == 0){
-              this.pantalla = 'hacerPedido';
+        console.log(horaActual)
+        console.log(horaReserva)
+          //A PROBAR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  
+            if(this.usuario.mesa > 0 && ''+this.usuario.mesa == data && /*data == 'listadoProductos' &&*/ this.usuario.estadoQrMesa == 'ninguno')
+            {
+              if(this.reservas.length == 0){
+                this.pantalla = 'hacerPedido';
+              }
+              else 
+              {
+                if(this.calcularDiferenciaReserva() > 2 && this.reservas[0].confirmada){
+                  this.presentToast('bottom', 'Se pasó el tiempo de espera tolerado.', 'danger');
+                  this.bd.caducarTiempoReserva(this.reservas[0].id, this.usuario);
+                }
+                
+                console.log(horaActual >= horaReserva)
+              
+                if(horaActual <= horaReserva){
+                  this.presentToast('bottom', 'Todavía no es la hora.', 'warning');
+                }
+                if(horaActual >= horaReserva && this.calcularDiferenciaReserva() <= 2){
+                  this.pantalla = 'hacerPedido';
+    
+                }
+              }
             }
-            else if(this.calcularDiferenciaReserva() > 2 && this.reservas[0].confirmada){
-              this.presentToast('bottom', 'Se pasó el tiempo de espera tolerado.', 'danger');
-              this.bd.caducarTiempoReserva(this.reservas[0].id, this.usuario);
+  
+            if(horaActual <= horaReserva){
+              this.presentToast('bottom', 'Todavía no es la hora.', 'warning');
             }
-            else if(horaActual >= horaReserva && !this.reservas[0].confirmada){
+  
+            if(horaActual >= horaReserva && this.usuario.mesa == -1){
               this.presentToast('bottom', 'La reserva no se confirmó.', 'danger');
               this.bd.caducarTiempoReserva(this.reservas[0].id, this.usuario);
             }
-            else if(horaActual <= horaReserva){
-              this.presentToast('bottom', 'Todavía no es la hora.', 'warning');
-            }
-            else{
-              this.pantalla = 'hacerPedido';
-
-            }
-          }
         
         if(this.usuario.mesa == -1 && ''+this.usuario.mesa == data){
           this.presentToast('bottom', 'No tiene una mesa asignada', 'warning');
@@ -414,6 +445,8 @@ export class HomePage implements OnInit {
         }
       });
   }
+
+
 
   testScanQRMesa(test: string){
     let data = test;
@@ -448,44 +481,55 @@ export class HomePage implements OnInit {
         this.pantalla = 'hacerPedido';
         //this.router.navigateByUrl('/menu')
       }*/
+      let horaActual: any;
+      let horaReserva: any;
+      if(this.reservas.length != 0){
+        horaActual = new Date(Date.now())
+        console.log(new Date(this.reservas[0].dia))
+        horaReserva = new Date(this.reservas[0].dia +',' +this.reservas[0].hora)
+        console.log(horaActual)
+        console.log(horaReserva)
+      }
 
-      let horaActual = new Date(Date.now())
-      console.log(new Date(this.reservas[0].dia))
-      let horaReserva = new Date(this.reservas[0].dia +',' +this.reservas[0].hora)
-      console.log(horaActual)
-      console.log(horaReserva)
         //A PROBAR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
           if(this.usuario.mesa > 0 && ''+this.usuario.mesa == data && /*data == 'listadoProductos' &&*/ this.usuario.estadoQrMesa == 'ninguno')
           {
+            console.log(this.reservas.length)
             if(this.reservas.length == 0){
               this.pantalla = 'hacerPedido';
             }
-            else if(this.calcularDiferenciaReserva() > 2 && this.reservas[0].confirmada){
-              this.presentToast('bottom', 'Se pasó el tiempo de espera tolerado.', 'danger');
-              this.bd.caducarTiempoReserva(this.reservas[0].id, this.usuario);
-            }
+            else {
             
-            console.log(horaActual >= horaReserva)
-           
-            if(horaActual <= horaReserva){
+              if(this.calcularDiferenciaReserva() > 2 && this.reservas[0].confirmada){
+                this.presentToast('bottom', 'Se pasó el tiempo de espera tolerado.', 'danger');
+                this.bd.caducarTiempoReserva(this.reservas[0].id, this.usuario);
+              }
+              
+              if(this.reservas.length != 0){
+                console.log(horaActual! >= horaReserva!)
+              
+                if(horaActual! <= horaReserva!){
+                  this.presentToast('bottom', 'Todavía no es la hora.', 'warning');
+                }
+                if(horaActual! >= horaReserva! && this.calcularDiferenciaReserva() <= 2){
+                  this.pantalla = 'hacerPedido';
+
+                }
+              }
+            }
+          }
+
+          if(this.reservas.length != 0){
+            if(horaActual! <= horaReserva!){
               this.presentToast('bottom', 'Todavía no es la hora.', 'warning');
             }
-            if(horaActual >= horaReserva && this.calcularDiferenciaReserva() <= 2){
-              this.pantalla = 'hacerPedido';
 
+            if(horaActual! >= horaReserva! && this.usuario.mesa == -1){
+              this.presentToast('bottom', 'La reserva no se confirmó.', 'danger');
+              this.bd.caducarTiempoReserva(this.reservas[0].id, this.usuario);
             }
           }
-
-          if(horaActual <= horaReserva){
-            this.presentToast('bottom', 'Todavía no es la hora.', 'warning');
-          }
-
-          if(horaActual >= horaReserva && this.usuario.mesa == -1){
-            this.presentToast('bottom', 'La reserva no se confirmó.', 'danger');
-            this.bd.caducarTiempoReserva(this.reservas[0].id, this.usuario);
-          }
-
 
 
 

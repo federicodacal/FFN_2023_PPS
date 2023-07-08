@@ -18,7 +18,7 @@
 
 
       <ion-fab-button *ngIf="usuario.perfil == 'cliente'" (click)="audio = !audio" style="height: 50px; width: 50px;">
-        <ion-icon (click)="redirect('hacer-reserva')" name="volume-mute-outline"></ion-icon>
+        <ion-icon routerLink="/hacer-reserva" name="volume-mute-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
   </ion-fab>
@@ -61,9 +61,9 @@
         <ion-button *ngIf="usuario.mesa > 0" (click)="irA('consulta')" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Consultar al mozo</ion-button><br>
        
        
-        <ion-button (click)=" testScanQRMesa('listadoDeEsperaMesa')" style="margin-top: 3%;" >Lsita espera (test)</ion-button><br>
-        <ion-button (click)=" testScanQRMesa('4')" style="margin-top: 3%;" >HacerPedido (test)</ion-button><br>
-        <ion-button routerLink="/menu-opciones" style="margin-top: 3%;" >Opciones (test)</ion-button><br>
+        <!--<ion-button (click)=" testScanQRMesa('listadoDeEsperaMesa')" style="margin-top: 3%;" >Lsita espera (test)</ion-button><br>
+        <ion-button (click)=" testScanQRMesa('3')" style="margin-top: 3%;" >HacerPedido (test)</ion-button><br>
+        <ion-button routerLink="/menu-opciones" style="margin-top: 3%;" >Opciones (test)</ion-button><br-->
         <ion-button *ngIf="pedidoClienteLogeado != null && pedidoClienteLogeado.estado == 'entregado'" (click)="confirmarPedido()" style="--background: rgb(255, 109, 92); margin-top: 3%;" >Confirmar recepción de pedido</ion-button><br>
   
       </div>

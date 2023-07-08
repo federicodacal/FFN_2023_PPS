@@ -4,6 +4,7 @@ import { ToastController } from '@ionic/angular';
 import { PickerInteractionMode } from 'igniteui-angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { BaseService } from 'src/app/services/base.service';
+import { PushNotificationService } from 'src/app/services/push-notification.service';
 @Component({
   selector: 'app-hacer-reserva',
   templateUrl: './hacer-reserva.page.html',
@@ -16,7 +17,8 @@ export class HacerReservaPage implements OnInit {
   minimo: string;
   maximo: string;
 
-  constructor(private bd: BaseService, private auth: AuthService, private toastController: ToastController, private router: Router) { 
+  constructor(private bd: BaseService, private auth: AuthService, private toastController: ToastController, private router: Router,
+    private pn: PushNotificationService) { 
     let fecha = new Date(Date.now());
     
     this.minimo = fecha.getFullYear().toString().padStart(2, '0') + '-' + fecha.getMonth().toString().padStart(2, '0') + '-' + 
@@ -48,12 +50,13 @@ export class HacerReservaPage implements OnInit {
       cliente: this.usuario.nombre + ' ' + this.usuario.apellido,
       confirmada: false,
       uidCliente: this.auth.getUid()!
-    })/*.then(() => {
+    }).then(() => {
+      this.sendPush('Un cliente realizó una reserva.', 'Nueva reserva')
       this.presentToast('bottom', 'La solicitud de reserva se realizó con éxito', 'success')
       setTimeout(()=>{
         this.router.navigateByUrl('/home');
       },1500)
-    })*/
+    })
   }
 
 
@@ -70,4 +73,21 @@ export class HacerReservaPage implements OnInit {
   }
 
 
+  sendPush(msj: string, tlt: string) {
+    this.pn
+      .sendPushNotification({
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        registration_ids: [
+          // eslint-disable-next-line max-len
+          'cDpi2f59SvyRng9UzR9zaD:APA91bE2NGs1ThHvoYHKinSansPJ1_NIWkIipj8gBiGZdLpYiw0Sqstx-QTuilSvO3u3YfJ1_vC7BuOZQYO1u4YhwbIPbitvwdDFuH3j-x-X0uJGeB_H77rxp5mr4ohwHa5RM7GAe4gE'
+        ],
+        notification: {
+          title: tlt,
+          body: msj,
+        },
+      })
+      .subscribe((data: any) => {
+        console.log(data);
+      });
+  }
 }

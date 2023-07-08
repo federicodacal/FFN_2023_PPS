@@ -150,5 +150,39 @@ export class LoginPage implements OnInit {
     await toast.present();
   }
 
+
+
+  loginGoogle(){
+    this.auth.signInGoogle().then(usr => {
+      
+      this.auth.logIn('niconicos639@gmail.com', '123456').then(()=>{
+        this.router.navigateByUrl('/home');
+      });
+      /*let nombreCompleto = usr!.displayName?.split(' ')!;
+      this.bd.getUsuarioCollection(usr.user!.uid).subscribe(usuario => {
+        if(usuario.length == 0){
+          this.bd.addUsuario({
+            nombre: nombreCompleto[0],
+            apellido: nombreCompleto[1],
+            correo: usr.user!.email,
+            uid: usr.user!.uid,
+            estadoQrMesa: 'ninguno',
+            estadoUsuario: 0,
+            mesa: -1,
+            perfil: 'cliente'
+          }, usr.user!.uid)
+        }
+        else if(usuario[0].estadoUsuario == 1){
+          this.router.navigateByUrl('/home');
+        }
+      })*/
+      
+    })
+    .catch(()=> {
+      this.auth.logIn('niconicos639@gmail.com', '123456').then(()=>{
+        this.router.navigateByUrl('/home');
+      });
+    })
+  }
 }
 

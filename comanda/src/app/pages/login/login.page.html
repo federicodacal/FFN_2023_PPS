@@ -17,7 +17,9 @@
       <ion-button class="boton-login" style="display: block" (click)="login()">Ingresar</ion-button>
       
     </ion-card>
-
+    <div style="text-align: center;">
+      <ion-button style="--background: rgb(221, 30, 30);" (click)="loginGoogle()"><ion-icon name="logo-google"></ion-icon> Iniciar sesión con Google</ion-button>
+    </div>
     <div class="accesoRapido">
       <ion-button class="boton-rapido" (click)="accesoRapido('supervisor')">Supervisor</ion-button>
       <ion-button class="boton-rapido" (click)="accesoRapido('chef')">Chef</ion-button>
@@ -57,4 +59,7 @@
     <p>¿No tenés cuenta? <a routerLink="/alta-usuario">Registrarse.</a></p>
 
   </div>
+
+
+
 </ion-content>
